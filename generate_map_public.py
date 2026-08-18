@@ -27,7 +27,7 @@ COULEURS = {
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
     "Start-up ou TPE":                              "#9BC045", #vert
-    "PME et entreprises":                           "#00EBF5", #bleu ciel
+    "PME et entreprises":                           "##23C0F1", #bleu ciel
     "Association":                                  "#FFC27F", #orange pa^le
     "Projet collaboratif":                          "#E8873A", #orange
     "Autre":                                        "#888888", #gris
