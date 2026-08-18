@@ -935,5 +935,5 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 # ==================================
 # 6. AFFICHAGE / EXPORT
 # ==================================
-m.save("carte_public.html")
+m.save("carte_public.html") 
 
