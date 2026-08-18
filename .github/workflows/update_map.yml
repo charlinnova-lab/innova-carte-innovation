@@ -30,23 +30,24 @@ jobs:
           python-version: '3.10'
 
       - name: Installer les dépendances
-         run: |
-           python -m pip install --upgrade pip
-           pip install folium requests markdown
+        run: |
+          python -m pip install --upgrade pip
+          pip install folium requests markdown pandas jinja2
 
       - name: Générer la carte HTML
         env:
+          PYTHONIOENCODING: utf-8
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python generate_map_public.py
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Televerser l'artefact HTML
+      - name: Téléverser l'artefact HTML
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
 
-      - name: Deployer sur GitHub Pages
+      - name: Déployer sur GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
