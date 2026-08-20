@@ -51,8 +51,9 @@ def get_couleur(taille_valeur):
 # ==================================
 # 2. RECUPERATION ET PARSING AIRTABLE
 # ==================================
-
 def fetch_acteurs():
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
     records, offset = [], None
     while True:
         params = {"pageSize": 100}
@@ -72,10 +73,9 @@ def fetch_acteurs():
             break
             
     return records
-    
-    # Airtable renvoie les enregistrements sous la clé "records"
-    return data.get("records", [])
-    
+  # "public"   -> email masque, renvoie vers un mailto generique (contact@innov-a.com)
+# "adherent" -> email reel de la structure affiche
+
 def get_text(record, *keys, default=""):
     for key in keys:
         if key in record and record[key] is not None:
@@ -841,8 +841,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
-                <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-items:stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column; height:570px;">{bloc_photo}</div>
+                <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
                         <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">{bloc_logo}</div>
@@ -948,6 +948,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 # ==================================
 nom_fichier = f"carte_{MODE}.html"
 m.save(nom_fichier)
+print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
+
+m
 print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
 
 m
