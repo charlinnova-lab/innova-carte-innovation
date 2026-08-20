@@ -4,13 +4,17 @@ import folium
 import markdown  # pip install markdown --break-system-packages
 from urllib.parse import quote
 from collections import defaultdict
+import requests
+
+# Appel sécurisé via le Worker
+WORKER_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/"
+response = requests.get(WORKER_URL)
+data = response.json()
 
 # ==================================
 # 1. CONFIGURATION AIRTABLE & COULEURS
 # ==================================
 
-TOKEN = "pat2mbTiss6cuDl8V.539e127c9e144a9e49cca6dc434e3b6a542cab10a220b20844c21874a6916c7d"
-BASE_ID = "appYiCeAAMfIjdMv6"
 TABLE = "Cartographie"
 
 # "public"   -> email masque, renvoie vers un mailto generique (contact@innov-a.com)
@@ -27,7 +31,7 @@ COULEURS = {
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
     "Start-up ou TPE":                              "#9BC045", #vert
-    "PME et entreprises":                           "#23C0F1", #bleu ciel
+    "PME et entreprises":                           "#00EBF5", #bleu ciel
     "Association":                                  "#FFC27F", #orange pa^le
     "Projet collaboratif":                          "#E8873A", #orange
     "Autre":                                        "#888888", #gris
@@ -830,8 +834,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
-                <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;">{bloc_photo}</div>
+                <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-items:stretch;">
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column; height:570px;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
                         <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">{bloc_logo}</div>
@@ -935,5 +939,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 # ==================================
 # 6. AFFICHAGE / EXPORT
 # ==================================
-m.save("carte_public.html") 
+nom_fichier = f"carte_{MODE}.html"
+m.save(nom_fichier)
+print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
 
+m
