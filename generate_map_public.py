@@ -912,15 +912,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             """
             folium.Marker(location=coords_second, icon=folium.DivIcon(html=sub_marker_html, icon_size=(0, 0))).add_to(m)
 
-
 # ==================================
 # 6. AFFICHAGE / EXPORT
 # ==================================
-nom_fichier = f"carte_{MODE}.html"
-m.save(nom_fichier)
-print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
-
-m
-print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
-
-m
+git add carte_public.html index.html
