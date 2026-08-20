@@ -4,35 +4,32 @@ import folium
 import markdown  # pip install markdown --break-system-packages
 from urllib.parse import quote
 from collections import defaultdict
-import requests
 
-# Appel sécurisé via le Worker
+# ==================================
+# 1. CONFIGURATION WORKER & COULEURS
+# ==================================
+
+# Appel sécurisé via le Worker Cloudflare
 WORKER_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/"
-response = requests.get(WORKER_URL)
-data = response.json()
-
-# ==================================
-# 1. CONFIGURATION AIRTABLE & COULEURS
-# ==================================
 
 TABLE = "Cartographie"
 
-# "public"   -> email masque, renvoie vers un mailto generique (contact@innov-a.com)
-# "adherent" -> email reel de la structure affiche
+# "public"   -> email masqué, renvoie vers un mailto générique (contact@innov-a.com)
+# "adherent" -> email réel de la structure affiché
 MODE = "public"
 
 CONTACT_PUBLIC_EMAIL = "contact@innov-a.com"
 CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
 
 COULEURS = {
-    "Etablissement médical":                         "#2D3277", #bleu marine
+    "Etablissement médical":                        "#2D3277", #bleu marine
     "Etablissement de formation":                    "#845EC2", #violet
     "Laboratoire ou activité de recherche":          "#FBC9D4", #rose pâle
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
     "Start-up ou TPE":                              "#9BC045", #vert
     "PME et entreprises":                           "#00EBF5", #bleu ciel
-    "Association":                                  "#FFC27F", #orange pa^le
+    "Association":                                  "#FFC27F", #orange pâle
     "Projet collaboratif":                          "#E8873A", #orange
     "Autre":                                        "#888888", #gris
 }
@@ -49,18 +46,16 @@ def get_couleur(taille_valeur):
     return COULEURS["Autre"]
 
 # ==================================
-# 2. RECUPERATION ET PARSING AIRTABLE
+# 2. RECUPERATION ET PARSING WORKER
 # ==================================
 def fetch_acteurs():
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE}"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
     records, offset = [], None
     while True:
         params = {"pageSize": 100}
         if offset:
             params["offset"] = offset
         
-        # Appel vers le Worker Cloudflare au lieu d'Airtable
+        # Appel vers le Worker Cloudflare
         res = requests.get(WORKER_URL, params=params)
         res.raise_for_status()
         
@@ -73,8 +68,6 @@ def fetch_acteurs():
             break
             
     return records
-  # "public"   -> email masque, renvoie vers un mailto generique (contact@innov-a.com)
-# "adherent" -> email reel de la structure affiche
 
 def get_text(record, *keys, default=""):
     for key in keys:
@@ -92,9 +85,8 @@ def get_text(record, *keys, default=""):
 
 def get_rich_text_html(record, *keys, default=""):
     """
-    Comme get_text, mais conserve les sauts de ligne (necessaires pour que le
-    Markdown d'Airtable - gras **texte**, listes a puces "- item" - soit
-    interprete) et convertit le resultat en HTML (gras, listes, italique...).
+    Comme get_text, mais conserve les sauts de ligne (nécessaires pour le Markdown Airtable)
+    et convertit le résultat en HTML.
     """
     for key in keys:
         if key in record and record[key] is not None:
@@ -111,17 +103,6 @@ def get_rich_text_html(record, *keys, default=""):
     return default
 
 def _nettoyer_marqueurs_gras_casses(text):
-    """
-    Corrige les '**' mal formes issus d'Airtable (ex: 'Partenariats: **' ou
-    '** **' au lieu de '**Partenariats:**'). Pour qu'un '**' soit reconnu
-    comme du gras par Markdown, il doit coller directement au mot qu'il
-    entoure, sans espace ni saut de ligne. Quand ce n'est pas le cas, le
-    marqueur reste affiche tel quel au lieu d'etre interprete.
-    On retire donc d'abord les '**' "flottants" (espace/saut de ligne des
-    deux cotes, donc de toute facon non fonctionnels), puis, s'il en reste
-    un nombre impair (donc non appariable), on retire tous les '**' restants
-    plutot que de laisser un asterisque isole a l'affichage.
-    """
     text = re.sub(r'(?<!\S)\*\*(?!\S)', '', text)
     if text.count("**") % 2 != 0:
         text = text.replace("**", "")
@@ -131,13 +112,6 @@ def get_liste_trls_record(record):
     return get_liste_valeurs(record, "TRL_scale", "TRL")
 
 def get_liste_valeurs(record, *keys):
-    """
-    Extrait une liste de valeurs pour un champ Airtable de type Multiple Select
-    (ou tout champ pouvant contenir plusieurs valeurs). Contrairement a get_text(),
-    ne fusionne pas les valeurs en une seule chaine : chaque valeur reste un
-    element separe de la liste retournee, ce qui permet de filtrer correctement
-    quand un acteur appartient a plusieurs filieres/TRL a la fois.
-    """
     for key in keys:
         if key in record and record[key] is not None:
             val = record[key]
@@ -221,11 +195,8 @@ def parse_gps(gps_str):
 # ==================================
 
 acteurs = fetch_acteurs()
-print(f"✅ {len(acteurs)} acteurs récupérés depuis Airtable")
+print(f"✅ {len(acteurs)} acteurs récupérés depuis le Worker")
 
-# Garde-fou : on ne garde que les fiches relues et validées (case "Checked" cochee).
-# Note : dans l'API Airtable, une case a cocher non cochee est carrement absente
-# du champ (et non "False"), d'ou le test "is True" plutot que "not a.get(...)".
 nb_avant_filtre = len(acteurs)
 acteurs = [a for a in acteurs if a.get("Checked") is True]
 print(f"✅ {len(acteurs)}/{nb_avant_filtre} fiches conservées (case 'Checked' cochée)")
@@ -251,7 +222,6 @@ liste_trls = sorted(list(set_trls), key=tri_trl_key)
 liste_domaines = sorted(set(
     v for a in acteurs for v in (get_liste_valeurs(a, "Filières", "Filiere", "Domaine") or ["Autre"])
 ))
-
 # ==================================
 # 4. INITIALISATION CARTE & UI
 # ==================================
