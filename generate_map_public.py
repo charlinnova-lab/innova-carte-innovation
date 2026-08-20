@@ -915,4 +915,15 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 # ==================================
 # 6. AFFICHAGE / EXPORT
 # ==================================
+==================================
+# 6. AFFICHAGE / EXPORT
+# ==================================
+nom_fichier = f"carte_{MODE}.html"
+m.save(nom_fichier)
+print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
+
+# Sauvegarde aussi sous index.html pour GitHub Pages
+m.save("index.html")
+print("✅ Carte exportée : index.html (pour la racine GitHub Pages)")
+
 git add carte_public.html index.html
