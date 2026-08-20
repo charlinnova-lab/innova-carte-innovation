@@ -53,22 +53,13 @@ def get_couleur(taille_valeur):
 # ==================================
 
 def fetch_acteurs():
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE}"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    records, offset = [], None
-    while True:
-        params = {"pageSize": 100}
-        if offset:
-            params["offset"] = offset
-        res = requests.get(url, headers=headers, params=params)
-        res.raise_for_status()
-        data = res.json()
-        records += [r["fields"] for r in data.get("records", [])]
-        offset = data.get("offset")
-        if not offset:
-            break
-    return records
-
+    response = requests.get(WORKER_URL)
+    response.raise_for_status()  # Déclenche une erreur si le Worker renvoie un statut d'erreur
+    data = response.json()
+    
+    # Airtable renvoie les enregistrements sous la clé "records"
+    return data.get("records", [])
+    
 def get_text(record, *keys, default=""):
     for key in keys:
         if key in record and record[key] is not None:
