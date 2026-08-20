@@ -53,9 +53,25 @@ def get_couleur(taille_valeur):
 # ==================================
 
 def fetch_acteurs():
-    response = requests.get(WORKER_URL)
-    response.raise_for_status()  # Déclenche une erreur si le Worker renvoie un statut d'erreur
-    data = response.json()
+    records, offset = [], None
+    while True:
+        params = {"pageSize": 100}
+        if offset:
+            params["offset"] = offset
+        
+        # Appel vers le Worker Cloudflare au lieu d'Airtable
+        res = requests.get(WORKER_URL, params=params)
+        res.raise_for_status()
+        
+        data = res.json()
+        records += [r["fields"] for r in data.get("records", [])]
+        
+        # Gestion de la pagination pour la page suivante
+        offset = data.get("offset")
+        if not offset:
+            break
+            
+    return records
     
     # Airtable renvoie les enregistrements sous la clé "records"
     return data.get("records", [])
