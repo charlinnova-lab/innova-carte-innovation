@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write    # Modifié : nécessaire pour autoriser le git push des images
   pages: write
   id-token: write
 
@@ -34,11 +34,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install folium requests markdown pandas jinja2
 
-      - name: Générer la carte HTML
+      - name: Générer la carte HTML et télécharger les images
         env:
           PYTHONIOENCODING: utf-8
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python generate_map_public.py
+
+      - name: Sauvegarder les images et données sur le dépôt (Git Push)
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add assets/images/ *.html
+          git diff --staged --quiet || git commit -m "Auto-update map & downloaded images"
+          git push
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
