@@ -9,7 +9,6 @@ from collections import defaultdict
 # ==================================
 # 0. CONFIGURATION
 # ==================================
-# 1. CONFIGURATION
 WORKER_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/"
 TABLE = "Cartographie"
 MODE = "public"
@@ -18,42 +17,6 @@ CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
 
 # Dossier d'accueil des images
 os.makedirs("assets/images", exist_ok=True)
-
-# 2. RÉCUPÉRATION DES DONNÉES DEPUIS CLOUDFLARE
-response = requests.get(WORKER_URL)
-data = response.json()
-records = data.get("records", [])
-
-# 3. TRAITEMENT DES DONNÉES ET GÉNÉRATION DE LA CARTE
-for record in records:
-    fields = record.get("fields", {})
-    record_id = record.get("id")
-    
-    # GESTION DU LOGO / IMAGE
-    img_src = ""
-    attachments = fields.get("Logo", []) # Vérifie le nom exact de ta colonne
-    
-    if attachments:
-        airtable_img_url = attachments[0].get("url")
-        # Récupérer l'extension d'origine (.png, .jpg, etc.)
-        filename = attachments[0].get("filename", "")
-        ext = filename.split(".")[-1] if "." in filename else "png"
-        
-        local_path = f"assets/images/{record_id}.{ext}"
-        
-        # Téléchargement local
-        try:
-            img_res = requests.get(airtable_img_url, timeout=10)
-            if img_res.status_code == 200:
-                with open(local_path, "wb") as f:
-                    f.write(img_res.content)
-                img_src = local_path # Utilisé ensuite dans le HTML de la popup
-        except Exception as e:
-            print(f"Erreur téléchargement {record_id}: {e}")
-            
-# ==================================
-# 1. CONFIGURATION COULEURS
-# ==================================
 
 COULEURS = {
     "Etablissement médical":                        "#2D3277", #bleu marine
@@ -79,6 +42,54 @@ def get_couleur(taille_valeur):
             return couleur
     return COULEURS["Autre"]
 
+# ==================================
+# 1. HELPER POUR TÉLÉCHARGEMENT LOCAL DES IMAGES
+# ==================================
+def download_airtable_image(record_id, field_value, prefix="img"):
+    """
+    Télécharge une image Airtable en local dans assets/images/ 
+    et retourne son chemin d'accès local pour le HTML.
+    """
+    if not field_value:
+        return ""
+    
+    airtable_url = ""
+    filename = ""
+    
+    if isinstance(field_value, list) and len(field_value) > 0:
+        if isinstance(field_value[0], dict):
+            airtable_url = field_value[0].get("url", "")
+            filename = field_value[0].get("filename", "")
+        else:
+            airtable_url = str(field_value[0])
+    elif str(field_value).startswith("http"):
+        airtable_url = str(field_value)
+    else:
+        match = re.search(r"\((https://[^)]+)\)", str(field_value))
+        if match:
+            airtable_url = match.group(1)
+
+    if not airtable_url:
+        return ""
+
+    ext = filename.split(".")[-1] if "." in filename else "png"
+    # Nettoyage de l'extension au cas où
+    ext = ext.split("?")[0].lower()
+    if ext not in ["jpg", "jpeg", "png", "gif", "webp", "svg"]:
+        ext = "png"
+
+    local_path = f"assets/images/{record_id}_{prefix}.{ext}"
+
+    try:
+        res = requests.get(airtable_url, timeout=10)
+        if res.status_code == 200:
+            with open(local_path, "wb") as f:
+                f.write(res.content)
+            return local_path
+    except Exception as e:
+        print(f"⚠️ Erreur téléch. {prefix} ({record_id}) : {e}")
+
+    return ""
 
 # ==================================
 # 2. RECUPERATION ET PARSING WORKER
@@ -90,14 +101,17 @@ def fetch_acteurs():
         if offset:
             params["offset"] = offset
         
-        # Appel vers le Worker Cloudflare
         res = requests.get(WORKER_URL, params=params)
         res.raise_for_status()
         
         data = res.json()
-        records += [r["fields"] for r in data.get("records", [])]
         
-        # Gestion de la pagination pour la page suivante
+        # Conserver la structure avec l'ID du record
+        for r in data.get("records", []):
+            rec_fields = r.get("fields", {})
+            rec_fields["_record_id"] = r.get("id") # Injecter l'ID interne
+            records.append(rec_fields)
+        
         offset = data.get("offset")
         if not offset:
             break
@@ -119,10 +133,6 @@ def get_text(record, *keys, default=""):
     return default
 
 def get_rich_text_html(record, *keys, default=""):
-    """
-    Comme get_text, mais conserve les sauts de ligne (nécessaires pour le Markdown Airtable)
-    et convertit le résultat en HTML.
-    """
     for key in keys:
         if key in record and record[key] is not None:
             val = record[key]
@@ -170,21 +180,7 @@ def parse_nom(nom_brut):
         return match.group(1).strip(), match.group(2).strip()
     return nom_brut, nom_brut
 
-def get_image_url(field_value):
-    if not field_value:
-        return ""
-    if isinstance(field_value, list) and len(field_value) > 0:
-        if isinstance(field_value[0], dict):
-            return field_value[0].get("url", "")
-        return str(field_value[0])
-    match = re.search(r"\((https://[^)]+)\)", str(field_value))
-    if match:
-        return match.group(1)
-    if str(field_value).startswith("http"):
-        return str(field_value)
-    return ""
-
-def get_media_url_and_type(video_field, second_illu):
+def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
         val_str = ""
         if isinstance(video_field, list) and len(video_field) > 0:
@@ -203,18 +199,10 @@ def get_media_url_and_type(video_field, second_illu):
             if val_str.lower().endswith(('.mp4', '.webm', '.ogg')) or '.mp4?' in val_str.lower():
                 return val_str, "video"
     if second_illu:
-        img_url = ""
-        if isinstance(second_illu, list) and len(second_illu) > 0:
-            if isinstance(second_illu[0], dict):
-                img_url = second_illu[0].get("url", "")
-            else:
-                img_url = str(second_illu[0])
-        else:
-            match = re.search(r"\((https://[^)]+)\)", str(second_illu))
-            img_url = match.group(1) if match else str(second_illu)
-        img_url = img_url.strip()
-        if img_url.startswith("http"):
-            return img_url, "image"
+        local_second_img = download_airtable_image(record_id, second_illu, prefix="second")
+        if local_second_img:
+            return local_second_img, "image"
+            
     return "", ""
 
 def parse_gps(gps_str):
@@ -228,7 +216,6 @@ def parse_gps(gps_str):
 # ==================================
 # 3. COLLECTE DES VALEURS UNIQUES
 # ==================================
-
 acteurs = fetch_acteurs()
 print(f"✅ {len(acteurs)} acteurs récupérés depuis le Worker")
 
@@ -257,10 +244,10 @@ liste_trls = sorted(list(set_trls), key=tri_trl_key)
 liste_domaines = sorted(set(
     v for a in acteurs for v in (get_liste_valeurs(a, "Filières", "Filiere", "Domaine") or ["Autre"])
 ))
+
 # ==================================
 # 4. INITIALISATION CARTE & UI
 # ==================================
-
 INITIAL_ZOOM = 14
 m = folium.Map(location=[49.89, 2.30], zoom_start=INITIAL_ZOOM, tiles="CartoDB Positron")
 
@@ -327,7 +314,7 @@ display:flex; flex-wrap:wrap; gap:6px; align-items:center;
     __HTML_BOUTONS_FILIERE__
 </div>
 
-<!-- PANNEAU RECHERCHE (masque par defaut) -->
+<!-- PANNEAU RECHERCHE -->
 <div id="panel-search" style="
 display:none; position:fixed; top:calc(50% - 52px); left:68px; width:260px;
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -341,7 +328,7 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif;
     ">
 </div>
 
-<!-- PANNEAU FILTRES (masque par defaut) -->
+<!-- PANNEAU FILTRES -->
 <div id="panel-filter" style="
 display:none; position:fixed; top:calc(50% + 8px); left:68px; width:280px; max-height: calc(50vh - 30px);
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -437,7 +424,6 @@ function toggleAccordion(contentId) {
 function togglePanel(panelId, iconId) {
     var panel = document.getElementById(panelId);
     var isOpen = panel.style.display === 'block';
-    // Ferme tous les panneaux avant d'ouvrir celui demande
     document.querySelectorAll('#panel-search, #panel-filter').forEach(function(p) {
         p.style.display = 'none';
     });
@@ -489,7 +475,6 @@ function applyFilters() {
         return vals.indexOf(selectedFiliere) !== -1;
     }
 
-    // Traitement par groupe (Hôte + ses dépendants)
     document.querySelectorAll('.marker-wrapper-host').forEach(function(hostEl) {
         if (hostEl.getAttribute('data-hub-opened') === 'true') return;
 
@@ -509,7 +494,6 @@ function applyFilters() {
         var hostVisible = (matchTaille && matchTrl && matchSearch && matchFiliere);
         hostEl.style.display = hostVisible ? 'flex' : 'none';
 
-        // Gérer uniquement les sous-marqueurs de CET hôte spécifique
         if (hubClass) {
             document.querySelectorAll('.sub-' + hubClass).forEach(function(subEl) {
                 var subRawTaille = cleanTaille(subEl.getAttribute('data-taille'));
@@ -524,14 +508,12 @@ function applyFilters() {
                 var subMatchSearch = matchesSearch(subActorId);
                 var subMatchFiliere = matchesFiliere(subEl);
 
-                // Affiche les dépendances de cet hôte uniquement si l'hôte est masqué ET que le dépendant passe ses filtres
                 var shouldShow = (!hostVisible || searchQuery) && subMatchTaille && subMatchTrl && subMatchSearch && subMatchFiliere;
                 subEl.style.display = shouldShow ? 'flex' : 'none';
             });
         }
     });
 
-    // Cas des marqueurs hôtes isolés (sans sous-marqueurs)
     document.querySelectorAll('.marker-wrapper-host:not([class*="hub-marker-"])').forEach(function(el) {
         if (el.getAttribute('data-hub-opened') === 'true') return;
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
@@ -562,10 +544,6 @@ function fitGroupToVisible(hubClass, hoteLat, hoteLng) {
     var sidebarEl = document.getElementById('sidebar');
     var sidebarWidth = sidebarEl ? sidebarEl.offsetWidth : 0;
 
-    // fitBounds englobe l'hote + tous ses dependants (meme s'ils sont
-    // actuellement masques par un filtre), avec une marge qui reserve
-    // la place de la fiche a droite et des icones/de la barre filiere en haut,
-    // et un zoom maximal pour ne pas trop serrer si un seul point.
     mapObject.flyToBounds(L.latLngBounds(pts), {
         paddingTopLeft: [70, 140],
         paddingBottomRight: [sidebarWidth + 50, 70],
@@ -697,9 +675,6 @@ m.get_root().html.add_child(folium.Element(ui_and_sidebar_html))
 # ==================================
 # 5. REGROUPEMENT PAR GPS & GENERATION
 # ==================================
-# Affiche les valeurs réelles lues dans votre base Airtable pour debug
-print("Valeurs Ancrage_label détectées :", set(get_text(a, "Ancrage_label", "Ancrage_Label") for a in acteurs))
-
 MAP_ANCRAGE = {
     "droite": "right",
     "bas": "bottom",
@@ -708,36 +683,26 @@ MAP_ANCRAGE = {
 }
 
 def get_style_ancrage(actor, couleur):
-    # Récupération de la valeur (si vide ou absente -> 'haut')
     raw = get_text(actor, "Ancrage_label", "Ancrage_Label", default="haut")
     if isinstance(raw, list):
         raw = raw[0] if raw else "haut"
     
     val = str(raw).strip().lower()
-    
-    # Si la case est vide (''), on force 'haut' par défaut
     if not val:
         val = "haut"
         
     direction = MAP_ANCRAGE.get(val, "top")
     
     if direction == "bottom":
-        # Bas : étiquette sous le point GPS
         label_pos = "top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse;"
         arrow_style = f"border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid {couleur};"
-        
     elif direction == "left":
-        # Gauche : étiquette à gauche du point GPS
         label_pos = "right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row;"
         arrow_style = f"border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid {couleur};"
-        
     elif direction == "right":
-        # Droite : étiquette à droite du point GPS
         label_pos = "left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse;"
         arrow_style = f"border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid {couleur};"
-        
     else:
-        # Haut (par défaut si vide, 'haut', ou non renseigné)
         label_pos = "bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column;"
         arrow_style = f"border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid {couleur};"
         
@@ -767,6 +732,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
     # --- FICHES INDIVIDUELLES (SIDEBAR) ---
     for pos_in_group, (idx, actor) in enumerate(groupe):
+        rec_id = actor.get("_record_id", f"rec_{idx}")
         is_host_attr = "true" if (pos_in_group == 0 and nb_dependants > 0) else "false"
         nom_brut = get_text(actor, "Nom", default="Sans nom")
         nom_court, nom_detail = parse_nom(nom_brut)
@@ -791,15 +757,16 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         site_web = get_text(actor, "Website", "Site Web", default="#")
         url_interview = get_text(actor, "ITW", "Interview", default="#")
 
-        logo_url = get_image_url(actor.get("Logo"))
-        photo_url = get_image_url(actor.get("Main illustration"))
+        # TÉLÉCHARGEMENT ET ATTRIBUTION DES IMAGES LOCALES
+        logo_url = download_airtable_image(rec_id, actor.get("Logo"), prefix="logo")
+        photo_url = download_airtable_image(rec_id, actor.get("Main illustration"), prefix="main")
 
         bloc_photo = f'<img src="{photo_url}" style="width:100%; height:100%; object-fit:cover; display:block;" />' if photo_url else '<div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div>'
         bloc_logo = f'<img src="{logo_url}" style="max-width:110px; max-height:50px; object-fit:contain;" />' if logo_url else 'LOGO'
 
         video_raw = actor.get("Video") or actor.get("Vidéo") or actor.get("Lien_video")
         second_illu_raw = actor.get("Second_illustration") or actor.get("SecondIllustration") or actor.get("Illustration_secondaire") or actor.get("Second illustration")
-        media_url, media_type = get_media_url_and_type(video_raw, second_illu_raw)
+        media_url, media_type = get_media_url_and_type(rec_id, video_raw, second_illu_raw)
 
         if media_type in ["youtube", "vimeo"]:
             bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; position:relative; padding-bottom:56.25%; height:0; overflow:hidden;"><iframe src="{media_url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>'
@@ -954,7 +921,5 @@ nom_fichier = f"carte_{MODE}.html"
 m.save(nom_fichier)
 print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
 
-# Sauvegarde aussi sous index.html pour la racine GitHub Pages
 m.save("index.html")
 print("✅ Carte exportée : index.html (pour la racine GitHub Pages)")
-
