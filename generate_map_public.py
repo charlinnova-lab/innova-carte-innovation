@@ -5,21 +5,51 @@ import markdown  # pip install markdown --break-system-packages
 from urllib.parse import quote
 from collections import defaultdict
 
-# ==================================
-# 1. CONFIGURATION WORKER & COULEURS
-# ==================================
-
-# Appel sécurisé via le Worker Cloudflare
+# 1. CONFIGURATION
 WORKER_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/"
-
 TABLE = "Cartographie"
-
-# "public"   -> email masqué, renvoie vers un mailto générique (contact@innov-a.com)
-# "adherent" -> email réel de la structure affiché
 MODE = "public"
-
 CONTACT_PUBLIC_EMAIL = "contact@innov-a.com"
 CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
+
+# Dossier d'accueil des images
+os.makedirs("assets/images", exist_ok=True)
+
+# 2. RÉCUPÉRATION DES DONNÉES DEPUIS CLOUDFLARE
+response = requests.get(WORKER_URL)
+data = response.json()
+records = data.get("records", [])
+
+# 3. TRAITEMENT DES DONNÉES ET GÉNÉRATION DE LA CARTE
+for record in records:
+    fields = record.get("fields", {})
+    record_id = record.get("id")
+    
+    # GESTION DU LOGO / IMAGE
+    img_src = ""
+    attachments = fields.get("Logo", []) # Vérifie le nom exact de ta colonne
+    
+    if attachments:
+        airtable_img_url = attachments[0].get("url")
+        # Récupérer l'extension d'origine (.png, .jpg, etc.)
+        filename = attachments[0].get("filename", "")
+        ext = filename.split(".")[-1] if "." in filename else "png"
+        
+        local_path = f"assets/images/{record_id}.{ext}"
+        
+        # Téléchargement local
+        try:
+            img_res = requests.get(airtable_img_url, timeout=10)
+            if img_res.status_code == 200:
+                with open(local_path, "wb") as f:
+                    f.write(img_res.content)
+                img_src = local_path # Utilisé ensuite dans le HTML de la popup
+        except Exception as e:
+            print(f"Erreur téléchargement {record_id}: {e}")
+            
+# ==================================
+# 1. CONFIGURATION COULEURS
+# ==================================
 
 COULEURS = {
     "Etablissement médical":                        "#2D3277", #bleu marine
@@ -44,6 +74,7 @@ def get_couleur(taille_valeur):
         if nom_taille.lower() in val_str.lower():
             return couleur
     return COULEURS["Autre"]
+
 
 # ==================================
 # 2. RECUPERATION ET PARSING WORKER
