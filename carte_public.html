@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_cc9cd4fc01fabec9ca72261311a18af8 {
+                #map_468ae8c4d53cf70157b54e0699e7df55 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -88,7 +88,7 @@ display:flex; flex-wrap:wrap; gap:6px; align-items:center;
     <button onclick="filterFiliere('all', this)" class="filter-btn active" style="background:#2D3277; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Toutes</button><button data-value="Autre" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Autre</button><button data-value="Energie" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Energie</button><button data-value="Industries Culturelles et Créatives" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Industries Culturelles et Créatives</button><button data-value="Santé" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Santé</button><button data-value="Sciences Humaines et Sociales" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Sciences Humaines et Sociales</button><button data-value="Sciences de l'ingénieur" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Sciences de l'ingénieur</button><button data-value="Tech" onclick="filterFiliere(this.getAttribute('data-value'), this)" class="filter-btn" style="background:#EAEAEA; color:#333; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">Tech</button>
 </div>
 
-<!-- PANNEAU RECHERCHE (masque par defaut) -->
+<!-- PANNEAU RECHERCHE -->
 <div id="panel-search" style="
 display:none; position:fixed; top:calc(50% - 52px); left:68px; width:260px;
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -102,7 +102,7 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif;
     ">
 </div>
 
-<!-- PANNEAU FILTRES (masque par defaut) -->
+<!-- PANNEAU FILTRES -->
 <div id="panel-filter" style="
 display:none; position:fixed; top:calc(50% + 8px); left:68px; width:280px; max-height: calc(50vh - 30px);
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -198,7 +198,6 @@ function toggleAccordion(contentId) {
 function togglePanel(panelId, iconId) {
     var panel = document.getElementById(panelId);
     var isOpen = panel.style.display === 'block';
-    // Ferme tous les panneaux avant d'ouvrir celui demande
     document.querySelectorAll('#panel-search, #panel-filter').forEach(function(p) {
         p.style.display = 'none';
     });
@@ -250,7 +249,6 @@ function applyFilters() {
         return vals.indexOf(selectedFiliere) !== -1;
     }
 
-    // Traitement par groupe (Hôte + ses dépendants)
     document.querySelectorAll('.marker-wrapper-host').forEach(function(hostEl) {
         if (hostEl.getAttribute('data-hub-opened') === 'true') return;
 
@@ -270,7 +268,6 @@ function applyFilters() {
         var hostVisible = (matchTaille && matchTrl && matchSearch && matchFiliere);
         hostEl.style.display = hostVisible ? 'flex' : 'none';
 
-        // Gérer uniquement les sous-marqueurs de CET hôte spécifique
         if (hubClass) {
             document.querySelectorAll('.sub-' + hubClass).forEach(function(subEl) {
                 var subRawTaille = cleanTaille(subEl.getAttribute('data-taille'));
@@ -285,14 +282,12 @@ function applyFilters() {
                 var subMatchSearch = matchesSearch(subActorId);
                 var subMatchFiliere = matchesFiliere(subEl);
 
-                // Affiche les dépendances de cet hôte uniquement si l'hôte est masqué ET que le dépendant passe ses filtres
                 var shouldShow = (!hostVisible || searchQuery) && subMatchTaille && subMatchTrl && subMatchSearch && subMatchFiliere;
                 subEl.style.display = shouldShow ? 'flex' : 'none';
             });
         }
     });
 
-    // Cas des marqueurs hôtes isolés (sans sous-marqueurs)
     document.querySelectorAll('.marker-wrapper-host:not([class*="hub-marker-"])').forEach(function(el) {
         if (el.getAttribute('data-hub-opened') === 'true') return;
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
@@ -323,10 +318,6 @@ function fitGroupToVisible(hubClass, hoteLat, hoteLng) {
     var sidebarEl = document.getElementById('sidebar');
     var sidebarWidth = sidebarEl ? sidebarEl.offsetWidth : 0;
 
-    // fitBounds englobe l'hote + tous ses dependants (meme s'ils sont
-    // actuellement masques par un filtre), avec une marge qui reserve
-    // la place de la fiche a droite et des icones/de la barre filiere en haut,
-    // et un zoom maximal pour ne pas trop serrer si un seul point.
     mapObject.flyToBounds(L.latLngBounds(pts), {
         paddingTopLeft: [70, 140],
         paddingBottomRight: [sidebarWidth + 50, 70],
@@ -449,10 +440,10 @@ function closeSidebar() {
         <div id="fiche-acteur-0" data-is-host="true" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/mybrcg3O0QHZgu4oSIB1cw/H_EbaiH5gQrv2e7hxyXdnCKHTjz3CMSsVMpHuNnyKE46AYVl5na19AILGzt0WS58X7gtokNIfS5IUNEVdKFv3Bd_4UmtSri69lXOj4tLmEOdHT4MYCt7rXtTa4tFHpdZR2wmy5rrTarDo04YLla55g/4DJqT-0muX3yFY_wCWtXt2D0p6x0GiVrJzlt2wKfK2Y" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/rec5SUo2r7aX5dObh_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#2D3277; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/omRA6TUu1GfznXc6YtlIpA/xPr2WMPM-6JZMv-Wi6GspUQ81gZQ_rYtvObFq64JCO0X3U_HmroYlTyCzDgQ-5brDRbmW0kR7B6pvin_PMPG5FYqjK8p9J-HJ28pnKBQzifDJ5TmhViW8WUibskqKe831cC_PAx01-qmXCtxz-tGYQ/FCH7Zyf3sfnR3UXMTaGGkMZXG0LALm2blKAMrAX9KeQ" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/rec5SUo2r7aX5dObh_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="CHU Amiens Picardie">CHU Amiens Picardie</h1>
                         <div style="color:#2D3277; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Autre<br>
@@ -486,7 +477,7 @@ function closeSidebar() {
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/vd48JnGPbfOjWcMyU3fsWQ/2e1yM2vEbetfbKTo7HXp20H-7hCgo0yNah0VlF02cXyETUy2CZLKZ3pAXYDKoOtO_HQ2MdwtLgrbx8lOtC-8CGrOgimLZ5yIJjf6nVuouLpUQV8tIeBHRA-fdzMvqElsMl6SveLPV5k9M7e3EjBa4Q/cM0PUnGrHgNaZOnCh8OcY_INqbLl_TzK0o-mwpuw7H0" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/rec5SUo2r7aX5dObh_second.jpg" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -494,10 +485,10 @@ function closeSidebar() {
         <div id="fiche-acteur-7" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/oK4MNbzAk_IrYATi7qjUIA/7gayk1JqjGTU7v7shNV86FylJxWoZ8Hl7y2UuMwEnDDvRqAZRpUx_RlyrPfz0wYSEKenh3_YhsAM9V3zI0NjibBgRKhoEbseClgM7mV3zieeRRkx6lHQSG9-7ACFG2IKvGLr8Ll5U_NKxd5sTWVYhnUlCUHPJX70XeBKUNWG8MHCqKP4xx-vaDZ2HZGgfmoh-5gxuqBhj_SeUgIwQlR9VLOOW9V4o0UV30r6ruzKGO3nSL7HSsVEXHEMBnvkcq3wVfmI3962HUvbifsQvdRpHxQLXwmpoivc4269bmfnUfFBLYxl7WgYVUgrGimXGsYMveNH4aXMxvD8_jJaGLv2T881ZrAhXSbMTKntiE6HKFjKI-YbVeHG99mc12i6CZmd/-c0o15WDhYeErcXYjJFP9_0lF4GidXO35bLAgfzuLcY" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recIpsEBjZyPjyj7F_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FBC9D4; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/q1xpqsV8TASzHlDTRyp_RQ/GmQLnaVESM1MPm52ZFJJEx5qaPmy4ivnkwXijaQ52NUhhEMS9TYc90Lioxv4JpdGJ1uT13dsLiC9Pb3gvpA85Fd8IVtiAkAjxK90eSdO5tWVXTGSKu8qt2YbkFl23CBFgbpN-8ZGGt-L57Zfe2ceQWtypDLh3VCK8Xo648BRu1Q/uMHsSWwRzLytfg_7PorPg0JoO--D_J-2Bzyzsx_7y6Y" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recIpsEBjZyPjyj7F_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Tumorothèque de Picardie">Tumorothèque de Picardie</h1>
                         <div style="color:#FBC9D4; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Biologie Humaine<br>
@@ -546,10 +537,10 @@ function closeSidebar() {
         <div id="fiche-acteur-13" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/cZK2F-g9xZEp-j2W2v67Ww/jtYQUe2WI-rwjEiGX3coIA6tjq6r10OHFMn-yxvCaGLp2XYAoyl_aIQ7yHgCcEvN1NrjYyfekA-tF1POvIusk3uKxpT4t9YbVK89oEVtPAp3kZlneo41I7ouyayjyvwUqylzc5x32yo3topbc0DpXw/WNXtuUKVsrNBYP6J5tjeGW3rVUQw4Cv9HQp6Mm4qyus" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recaxZOMNR4jealCx_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#E8873A; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/ln8DSBcN70UP-TLt7EKAjg/a7Gziw4Z5z1yYNqAv0lKIlh_qwL-hY8IcB188oFUX6J5UOcKJ_wYhb8bgygpO6S2-E1qzL6IuNIz6eHWT1Zsh9tvlITakD312nNGZQSJQj3AIOAG8wl45Df6CeKLo1PqoDyhX4wcKkZEG1hbKRtmso4DKRQZj18T_6sSOgT5sTE/rAzkqmvKZko29MDxM9QvUeCO5N5-JmAkYnf-NDOFM2s" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recaxZOMNR4jealCx_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="GRECO EXPER">GRECO EXPER</h1>
                         <div style="color:#E8873A; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -599,10 +590,10 @@ function closeSidebar() {
         <div id="fiche-acteur-23" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Y-Y4vD1aTe9A81YHo2tx8g/qz8UMF0KFuZ6VnxzN7DeoFcTj5R5gm_Csd_Fd0Xecl9Gq853JiFra6LdsmOTrxHJ20ueQhfs_8AbNv6eDSoaVRuXtaA8msQCpTIf5PRvvRHyrqqVptSThKHeSY3jHyhQymSuok6Bd12BAWsrVnXEk8wJ--nKEoBvXSTe4w-Ggakg0IXq9xYEqH8UyHyKtqOj/qmkTcgjTqjn1cNY5L6RjaXOkNkB9-oUhIv2hrmBqPv0" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recpMwg07UKrP3FK7_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FBC9D4; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/D7_4vM_R6BZ7n5k_3jwfXA/Q_GBuw_oKsW9pcN3g0lKby0RkpHjFgjnCCbADaMUp4U3ZjnmxG2CEnWKHBjKllYclfDPp_wRJbh2HBUYlREBl-vRVRF3ZJHkf2Pn_yR2NUG0HPWnbcsx2Ndd7BLIBWpoZRuwwW56ru8a_nVlpkUhnJt5DXp9zRnl4EHxHI6P5Rc/zPv90oz6SJ63n4-3gKbm-VRoIkG0mok4e3QwxS6qaLE" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recpMwg07UKrP3FK7_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="CRB - Biobanque de Picardie">CRB - Biobanque de Picardie</h1>
                         <div style="color:#FBC9D4; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Biotech (biothérapies, ...)<br>
@@ -666,7 +657,7 @@ Compétences Spécifiques :<br />
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/9oc8WZRMezTnzjQFhu0WvA/ang44XFzQBTtLjOIbHcouNAumGOFxUkj7prq-2KL1Nwor7x2GjawDBDm2rA5tUimYpdSJK8cO-bhIr7wQt90tyvk_JtaqSkGuvwgfVB6r3Ztv3LSAM4sY7taQ3_dwP1MS15kfmgDgqoeJHeVuhrwPQ/xKcPm8aukaZkqH8c-4BamgDfFC39j-BldwIt4rs1wfk" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recpMwg07UKrP3FK7_second.jpg" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -674,10 +665,10 @@ Compétences Spécifiques :<br />
         <div id="fiche-acteur-27" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/RW8WZzZHnaxCnVsFWKDYWQ/1X24jSNInxPCv3oYPXHbxiFxo-FX7V9zANzT1y_YYkcA3n1fqIszxMYYDrHkGfRJAbTpGagl5Mlf-E6O0sMV9r0plj4ITn6UU_CFMJh8th5bXTCh1u0wqAwdVPKa5O19W56Fn7TiAGwD9O2o6FgAcT3VVCLrHr3da_xBgqJXf1SoiHSvsRPqdAyEFdQ9ZoK8/IU08BQD5tS6UhbjpEQhdyYklHLwLW-8bw4jlkN0UVcc" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recyWeMN4zAmTNV0f_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#E8873A; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/uhpQ-ty2xsYRhEZr-9MQYg/cJFCDpRFLPQUcXt3Cp7wkPxm-JTKngEmMnwXdJebx1OOWSztvUaLA_BtMc9RFzD3mZsTjVig9fvdeAkfTZqZuKpYr_GqeXkh20L3awdyXkkFVqd00QYyqStuZ8bkaaJeQJVXaXm1OPxOste8rDTmJcTPnZU30FwbSPck8sPy-70/-ttYxK6D1IgCPMLKXX5kHvt7qqHE4Shlbt9LiisaQkA" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recyWeMN4zAmTNV0f_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="RHU RAUC">RHU RAUC</h1>
                         <div style="color:#E8873A; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -720,10 +711,10 @@ Compétences Spécifiques :<br />
         <div id="fiche-acteur-1" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/96Yr4tPe7SRQMbOl7F8TNg/xecFDRXvMFGyNPPRl5exuIWgqK2d0xHFDUVOwYJY3Qc0ScTKVxSE6WgLm4q97rKcAwSvMSHx9LrIn2JissXkv2KjLIs76I_4rS_00YBjUkCyhWIUwKXlT2R6WZPCWToQKkoC1LgIZiZPyUY8ksmO_jYOxQUUMVhgHijt2hkEMU9xX-ZRC_IKnPu2hlXsO0dZFh1GUr1InTzE5QiBQZgRyg/Zv6xMRBc2_3FSMzmReHP_-awsNe_kIFTZArDfgkaWd0" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/rec5rKF0Ybdm1AXAI_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/5c3giXSKkGBg3vxZKBU9xg/YwCKjfg-y1fLKlvwvEhpZE0N6RPh8WWcoVe9nvGTYwuEElprtPmOS6vvAph8hRvh3y2VtEF6BVZuYudINQ4v2sbfseMXlFvJZi7BFFmLDI-6nTCMTDRCXB-IW5du_7-9wRcMRKRz7L3RqNaQg_mnyqav9Z0E_QlGOH--UHqoIy4/mXXTPQ-3tT_kQipjqZj_OPmXsYgmBgnq70HimYyUuO4" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/rec5rKF0Ybdm1AXAI_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Apotekisto">Apotekisto</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -759,7 +750,7 @@ Compétences Spécifiques :<br />
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/8KTI7OPhOPuKyo8Vc1VyrQ/h2z09Z9qgN07hhsHH4eXgFrTP_qZBFH-EUTMrXamt80rzY71wIPsuU6fU8dgPDLF0PEuLy63bZQrkSaSK1kLGc6KSjrEUO2ytzDdxKOzFsxE4YYPOWP99nu6Ymu2iNdb1ZDOomgFnSVPNt595yAdbH_s_VillplTesBGgOAZ5x0_ZrzJQ142zARmGpRFrhpEP8Y9z515zJitAF-076NpEA/vmBgnje0XCNwZwXColJCslq7CJ6eLt0-eiuhk27QQBk" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/rec5rKF0Ybdm1AXAI_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -767,10 +758,10 @@ Compétences Spécifiques :<br />
         <div id="fiche-acteur-2" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/ZO6_r5so-dAM2ae7-AHd4g/-sdyPaNwIzf2kyvLbgwhLfJSZ6OwqPacZkXGvr3mIbgLDi36xG8hzFou0X38am8wq_PMVcj1S_JIr3BI23LRMbOmayCeN3Aavep0K2RVZE1ab6I8rIOHvQqvEyynwDxaKMgNzRLD43h4HvHEzRzH-CFDqhjf-KjmEpB5HlNTT3H-5UAOxam3Vga0rGUTdTkb/r9Q4pvgD5vIEFGVdsA5kssQ0Uzuvp8bAHS4CbTcIH_4" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/rec7JNTmTeGtTG8X7_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Wjt5-oi1BLp9qtraDfe2kA/5w0KUAQhnlk17hmFfnrFgWUlhHB8GtCvHw183Aus6xSPzCHwh0XhEHaeHYcVa5UY-uNOGQJkdZ0yORVdYSd9JC1tKfMzn8d2QG-3G5nVaqGtEVIIEu5QyCqKITJOCljGHtCwjlWvPT00pRDTs4lRBgFUrvdKp8sj35XIuO_lukn1IZzHLPS8cVYCc0Ha_vfL/WCGxxt4aTyIrfwu_LG9kn6oHTW1RMGDm9Lj8NrMRHn8" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/rec7JNTmTeGtTG8X7_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Surgitec Robotics">Surgitec Robotics</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -807,7 +798,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/1XpaZ_GbwTNJ8UfcuuBTKQ/5emZ2h7pjVjkbKRN8EzP25NNtT8P4G0R6tOP9_wobVFb1I5RfApbjJT6MusvcMnHwEUhkLJmr6QyEAEM3-jc7kP90QRmrAh7WjuhmC64SuBPjsibot6sZW7lQSAStJc2DRjIaDjeqvrmmLxGsWT7SAMLTJqgM1pKbJ6rWS6dDuz4EugLTA5KAS8cx6vao-SzUjCRz1UyJIKag2UBjS0T2A/t11MgjP0cGO0sz8HUxYIOUAVCKFwJTVO-Sw3U_Uq_BQ" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/rec7JNTmTeGtTG8X7_second.jpg" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -815,10 +806,10 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
         <div id="fiche-acteur-3" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/pLhuXvgareuLNC5MC8dAuQ/SPQ4o5TG4GSPWdiCTF8V7BwRSKwplusZdbE0WxA8ATcHrf6-706Vm1xZZufVMD4bdlvkmU0gwZQh53VnvNLDHqPALA5FpyE3EXBNtKcsi8IajuLPyUgjE58ww6WrwYT1sZmIigfXIpJNm721CkZ3bYSlBkICaXI7ykaVBbwYBimU9qIw045Eek4ivRlGhpq7/1KQMw1supsT4AB3ksFbr7T1pMCcjdeeXc-mWu_P5hfo" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/rec84lZ3gwCf5cCHy_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#845EC2; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/MhlePqG8Svuwr0VxhmHgsw/o8VQ5hfCa758Z8RPNZpst5vybQ7H6PrKlxVC5D7L1r-cHEk8Z97RofnYEBLnVBxEyvoFUT3HrCAotXQ-QMvscAPBd6GyHNAEjwBVrMFa_4XJq8WebXiJ_rWvOepH4d4qgqjH_XvDxRqdsALf6Q1cBA/hfxzRxTA0CHRLM4lX7FMTffIMxsRzCDZKxLYSDNcjmE" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/rec84lZ3gwCf5cCHy_logo.svg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Campus Santé">Campus Santé</h1>
                         <div style="color:#845EC2; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Autre<br>
@@ -853,10 +844,10 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
         <div id="fiche-acteur-11" data-is-host="true" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/cQ7ORmWSHSsHAXU2BjYGIg/exyJlqOfZKdYc6dAz-MOeVHwnR4-QBlcS-bAaNUK84f5yV1TPh042pT7_lhTTHxsjd2mi2wn93sOCn8BEF8ALCOHtRv6Mslt1cMoCV7LvQ-cD9c_4lUMSD_-kkRhmm9C3sPcnFQObzEvcJ_lzo1Yub9yKKGB4K-pN1fmH52F7mKwWvnX3TPlHZ1j-i4UjRdl/3ULNw_nRc42aLpiETW0cKacqtxjf5s5jt4nq-0jOaXQ" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recV9KIKKcClGpf02_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FBC9D4; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/MhlePqG8Svuwr0VxhmHgsw/o8VQ5hfCa758Z8RPNZpst5vybQ7H6PrKlxVC5D7L1r-cHEk8Z97RofnYEBLnVBxEyvoFUT3HrCAotXQ-QMvscAPBd6GyHNAEjwBVrMFa_4XJq8WebXiJ_rWvOepH4d4qgqjH_XvDxRqdsALf6Q1cBA/hfxzRxTA0CHRLM4lX7FMTffIMxsRzCDZKxLYSDNcjmE" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recV9KIKKcClGpf02_logo.svg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Centre Unirversitaire Recherche en Santé">CURS</h1>
                         <div style="color:#FBC9D4; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ OneHealth<br>
@@ -891,10 +882,10 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
         <div id="fiche-acteur-4" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/qn0XgYTCdk6Ga5UOri7hoA/TzbnNvdczIxHXlK8omQSwostkWkUK8-TMX2Vk1DUgT2Bac2h8gNUjfuWF0aDFhqh2Kpw8lxnU4C1NAmT8BXuXbxAuAuvsD_3XEVpYvC9c9E-sDSc2AJeIG5fGP_BCGVBmqVUeeYtAfpF3ATrwnXX-_Tau7Wf4HVDs_-JKBV7bGE/kvHNgekNUoomrQs-QmoQdQqZUnWB_GSBFMZwIgOxIpY" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recBu2nZxgrbrIqM9_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FB6F92; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/2SEvKXI9dgkTL5ngvU5aOA/hJFeeebJIuA7uT5IVuUtwwYVEoJQbYyDQuCjZdK_1Arz-ZafvrQL4CZh1nsWioFOJbldXKGdowAz2GM67C_9_m9dnwGLHIb1ThKdPdvxu4R_igT4Jmkp6KAphw3fiwYXZJhXPK9E2ttq6Ol8XLpPYkS2mRu9qGge7mpviGxAAn0/ELX17fuBXhY2vxHc5rPR0Cq-KjC8NoGr10XapnlZjZc" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recBu2nZxgrbrIqM9_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Plateforme PlatAnN">Plateforme PlatAnN</h1>
                         <div style="color:#FB6F92; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Nutrition<br>
@@ -943,10 +934,10 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
         <div id="fiche-acteur-12" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/chqdwqZh-5OB4GRZaS_2Ww/QpXtmMbueY5FubAyMfqXob3mk5CS-F-vws4h4KQ5RMi3WHuFxnQU1lI912igDcPramF_TYz1KDWijnCzruY3VUXGMUVdI37Y6ALGmRlpkvyS7ngbOxwvfPBrnAupp5UbwjwcdpRAqHJue-Nu33e7CecM4Cn73WP3QDXSPb_10yn9bFtOKVRaY_fGa8Io4CLS/V1POsEyaO3qA2RhoX9UeU_ki0UlhVJzS_wgwA79bQds" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recaMZrc2tUm5SZ7I_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FB6F92; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/eLmAOc48vgt83BJ8XBqDjQ/DjrCmsumcmDS_xbeFkKDXWvSXjZYC20eZNaanuMgsHLMiwbbqaPn2PdvvkULytaT_-HFqNfHfXuPv-comfRfCiDVi6oYByJ0HniEE2RNopSANdL9StJVPM5Z4pMYceYyN9PWe0Tk4zgHIuTtTyNJyg/M6NjDTUMSZ15IA8tb7-MwsMHeh2NDF8DEKPCqVImyT4" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recaMZrc2tUm5SZ7I_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Plateforme ICAP">Plateforme ICAP</h1>
                         <div style="color:#FB6F92; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -1004,7 +995,7 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/gI3yJS0ScubPhvYj-qKRkA/1WfsMiYf0ZUqC3e-eJvHKEF3qJv8qlSfZ_XJVbN6CXe-C5GlNtIzQDkFm-3Dm7mzOO_C3M-SXn1bxNwVfJKv4MkCwlCsv2V2BDbDlAX3pP5JKmtj9iqEiZqEF6OQjMaQHbRF3xnWIXZ9NIr9kdzu_gcqYg2DOChe0rhY1PpBKEUdr91GnIgHWVWXPksSCG9S/jg2exgD_TnZ8s_xsWyKjgaKyD019kj5SLbmMQ8EcK-U" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recaMZrc2tUm5SZ7I_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1012,10 +1003,10 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
         <div id="fiche-acteur-5" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/ttyf5ejGsq4iUxvSZhyRHg/RX0Aou-Hsm3uFyLsKfi8h9OvFsBMO5E-cYwN2QUXltQcbr93hHEwvDbMcCpzSN6DxYHKmbwl5twGIvM4dRZUoaeH6lsL1orqRAoJQ2kap6NmrnHFEhS-FribyP2CLcDib04_ma8aGSDlS4nCX4scumojk230xQEcoqukjGMUudU/fhDAhvA7k_e_wYa10FftclJlYmj0IM5vtsbENetE3so" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recDr0JAHMP5WBfGG_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#845EC2; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/R8-wiHKqxXeooTDukr9CZw/O2LJpjTOjEm_6lcVx8IG_3PwEgFr4RSDWG8LW5ghBbXqdq06ywp4yaKkboivFZs_RAFdv4oZ04XuGxro_VKXJ_3eL8gZjUvEeBqT_KHvFZ5kR4JV1kYQQ-B7uhhxse6yo66UJYFKs45ix7pVzwV0NPKL2BVUYpornXbXd9Qu1rg/gwuNOf-WOBfu9Z9mEwFn_FUdk5MCfrTA30Sa4JiOqOs" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recDr0JAHMP5WBfGG_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="École d'Ingénieurs Jules Verne">École d'Ingénieurs Jules Verne</h1>
                         <div style="color:#845EC2; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             👩‍💻 Santé, Cybersécurité, énergie<br>
@@ -1058,10 +1049,10 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
         <div id="fiche-acteur-6" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/YIRpyxRxI04o3S4S3TWmfA/JfJziMcGVixPlroxVQc3zuBquEsIO6TSgHDNXqUVS-m5UAijykQlfaH7Mv2E8v0ATiGEk3pfSy6hBvhqDsHwWzw3ilpEVO722Mp-D9tW7Y-n3efjF5vVrOgaB-gnS2Odpvmcoq-t8JxXLeSSm7YnnkBc-BXZBT5ei5sKobcNHwUJk_x-5ThXoO3kZetccOgF9Pvkr-AsXnJt9rnHr8sekL44LKU_jvWulCdJOPFJ2f4/PtPx0O2uAwECRII8IWid9EQJOkSdeNatHIQunHDO6dg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recE8M315yTMAxwUM_main.webp" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FFC27F; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/P2I2mqi07fFDqPfJwdvZoQ/N-z6KD-BeR7QzlmrnRoIE5mPjQvFM48fh7Dto-bXJlGHbbHPNJNyVVDdcM4k_BiRrjCgnr9qkiUOUxRSiFvk58o2UYwvooDmVtPjO7cw-MNSyJSYxAw1DwTR_EgoLg3PwzqEiMEdLU1H6EMDSCmciZIJja4W04f8QI_9CIJa510/2kkDcms6MWPAu2qOGt0nv5J3cU2nwo1PZLb7ZI7ougc" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recE8M315yTMAxwUM_logo.jpg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Gérontopôle Hauts-de-France">Gérontopôle Hauts-de-France</h1>
                         <div style="color:#FFC27F; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Prévention<br>
@@ -1108,7 +1099,7 @@ Convention de partenariat avec  innov'a, Eurasanté et ClubsterNSL</p>
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/1HxKohdisuxrS0O-4HTb-w/bG1mXPX94tGsw8_hC4eT5jmXTc4f8NT00B27SvObMWq-RaEfWlCFUaz2k5na1dODbfW8mnwvla9FR4MjCzGeh9iFG6vOwgz8TDGyu6RdwORtIsAjAF_v0S19xiKGO16VMwmG_KBAep0Ri2EoZrxxOU_c2OOnAv-hmLkN8ToZuGO3a0C5kgkjneAX_XWx70wV/cMMYW5LiPhmuVkBsJtSkV2GcaiL4Yj9t6UB9RTch01k" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recE8M315yTMAxwUM_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1116,10 +1107,10 @@ Convention de partenariat avec  innov'a, Eurasanté et ClubsterNSL</p>
         <div id="fiche-acteur-8" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/RPgppsaQ-bY22brALqRqUw/Kg0WqaioeB5WJOeRYEA3PoNghNZLWf2lY4tOS8VX0f4IHr-ep5gz3y8F__8UwUjF_6QJM-dG9aFq5OMVukbDEpbWeCFkc1CCxlQydtJrHj-oZBGdjeLzzr8iUgXQLoGB44VeqQsButY6MXYWEA13roFfG6Y4Cs8ddrvAPMaMQacm0mXrnaJ4Q9IH2HL0F5Ai/3OLjLX2ZwQg8Zfi-9fmSWth_Z3H3aKrCX-zZCXskJVo" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recQFYgvtx8TecIPo_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/nI5ErB_b4MOxnAq4HOyP5g/K1oq6gd71PLMSO5mF12M8uedhDRHc6bC6mAGOpcarrC5Im-vFwRPQMt4w0LtzFVyzDSHz8uww7SbG_G9QBYweMS7e7wwHLDczSV0TimE9TyGhsPiDpAKz70x4wdgKFRc8cj0xMimHlduMd1PJlYg-jkdgB4sp56AQ_L_0L5tnLM/72WfCQhuVM6-8g6RShEVIwrNrrHKZ3WAZTmWQOHCbX8" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recQFYgvtx8TecIPo_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="GLYX THERAPEUTICS">GLYX THERAPEUTICS</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Biotech (biothérapies, ...)<br>
@@ -1155,7 +1146,7 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/oyYmozVbTAaKp7S0DHXG2A/96bJzmmpaeKuh698n1kEAbY189yWIXJUsGbkvwmTcLWREnhX4TsGlWkjLzbUXCLc6vann7ysqP-8TPYcF0dXUla4qecILVloTy8RGytmE3qloi4VhwX6y38s3nuxHRCU5B0xWpV8yAsAnal_eJ6omcJZ6w8MtUGRjn4aptHW_Vp7Iw03AWGJGcQQzdl9YGKY/hzL5gd4zpdL3qThSNeSfhzTnyi66bqh_sgyaMNG5xv8" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recQFYgvtx8TecIPo_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1163,7 +1154,7 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
         <div id="fiche-acteur-9" data-is-host="true" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/eanuBhDjV7h1PqXeeK4RnQ/7C6ITVMclijdqZaOxuFc6TYGLV-QscmYZRiYlmJ4yn-hBMHHBsKCbko_MbCraJAUIC8zMZp0TmXPraQfNrOL5gnF2KkvsnDjSMi48mNYStxLl7w45JmiaIWn-HUMx-Eo6zTicfRZm-yuiiOsIH7FAa_ADz_IKppO3x-pboU7qwD6B8WCvlKTrAFFiVfICqwv/a-dNgP0sdBif9QyvIb2Yq0xvVeERata0f8imj-sVtVQ" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recSY19CgjPeFkTsD_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FDC500; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
                         <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">LOGO</div>
@@ -1224,10 +1215,10 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
         <div id="fiche-acteur-10" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/8qZOMXNdQlFhBdRKrOeWzA/g2SpOl8Kmskqs_i1mgzDoGvNYjLbn_tmXK99CU7JAdpO-uNrk-nS9-tQmGyX14SkT2YMxFqQkU_k4_0yw8fl1hz6ZqWHCj_xI-qiDOnBSj8ZENKhfMz3ZYKa0grFPFew2zL-nFGfTsOqgaioAT9PPUZWVME4-vvs7O9L4BSbk44/H1Fdbt2f9xOV2kidt0CrUMheRSnvAspgvFu8kfOwmMM" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recStofM82VPqWAds_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/fKb_WFXO2WkHGTla8BS1Fg/4JeuiUaD8sQAw3CLbNixH5B2TxUxQJagQzY22021McLiA4IvIW1Uo3BJIt9FRdDBpoahohMYkaVLoHqfbjErdhYWnjGYFD6tdsVt_2iGWAhWfVbUKFjO50uH0RPtxNCiPxa2CN4_w662rW_5yaQriz5GUHAO-EVcJ1ZPT7PqF5CrAkekvfFEH6cpwfJC4HYe/05VSU-rS0aPE6n9VtatOAXKE3nr622CaR8TBGNKpOqc" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recStofM82VPqWAds_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Dyscoveri">Dyscoveri</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -1266,7 +1257,7 @@ Dyscoveri a été financée par la Région Hauts-de-France, Initiative Somme Fra
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Iz3EH0CxGHD7XCe0BADifA/NICf3iMN4uF3FiwixbHIqVXTsI_L8_Jjyw2JQTjyAePnvTCfLj7GUrbLuu4EBiAmFg8qsfC5dkaHugS7j5SCfWEI_DuPc0S0FuWtpuVOH5Vn-dtoaCctFUHEjQUGPJ8BydPHr61AIVuK3U-FqAFbq9RXAYNdx5yOd9Us3V7ULHfnvYFH6weKGiZWPp1dqIAf7HjE0YIbxFQOwqsKC6oSLw/G-1Wxe3Vru84eKpMSyzEm-qKBjHsJnv9AePT5B3FFKE" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recStofM82VPqWAds_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1274,10 +1265,10 @@ Dyscoveri a été financée par la Région Hauts-de-France, Initiative Somme Fra
         <div id="fiche-acteur-22" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/w1LNIp3glbRhhykmQ1zuUA/gmm6TRhoxMynb3b2KlCD_pPQYe6bcbVA0nLiDDeougZwoL0qm866la1ZNSv0r8knq37Nb5CasuAzHyHDtPu_DyfymHUy1HY6ZDcB8LKlhP4d8VrsT18LICF17zend-zWcUZKXsGC64DENFKj4-aGiGuC1JkUbmDX1ncBaolKg8hl10b4ODNC3cFFv-sFkwuT/EmA1gVgJamkVTA388oziAldrQnTxjza3dsAM9reB8kY" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recmpvXSJeb9yeZK0_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/LGDbaT7hlVzz4lp-Nx6BXw/4aDaWPwrPg57-yBeIWbEao4AXBk7eltys2VJBT7qVrHXVA2opXunv4MA7NtSm9RH9Os6YaQ3_dyrv3hY8je71toZbBxU7L1lDDPDdasjpzQ-VIIw_rn5wQ7G5pE3VqavWnuKJ-NqgEWtvPnjtsoz1smqPBmPnFncJCSveDJehCg/O0ZhwJrRf5hsKbLb2ZQ4JhFjapV97_uEwvB07sRYKw4" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recmpvXSJeb9yeZK0_logo.jpeg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Capoupa">Capoupa</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Prévention<br>
@@ -1318,7 +1309,7 @@ Des formats mobilisables seuls ou combinés, selon les besoins de chaque structu
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/8NzBwxnlT2nDCyk3P7R3DQ/5Zjt3DaWHufyL_eSEXZis02qWyxbTwMzaKg8lOhExYNYHxrdsVHN77OWbjGreGKOmq1KPIAGonCRkEHIQIWWPUowuJvzmSOhtJ9RZwjFoUuW9CIV_vKeZgP0_IYkdoYRBowhukBpEIFQUXV2OklQTESxqd02fcZ0JH61_pYr21Y/HAzyYpJnPX_SUlS1goNQf8WZl2MA3JWdniMYxiIgxOk" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recmpvXSJeb9yeZK0_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1326,10 +1317,10 @@ Des formats mobilisables seuls ou combinés, selon les besoins de chaque structu
         <div id="fiche-acteur-26" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/w3EPThMtHg26FRizQ9LhHw/JW5eMNOh116fQT2J6oO6i6HgVB-ljqhkUqa0IZn-_HfyiBCG889E8g0nfXhvqZhxtKTysQhIUqjhPW-W9QIBHb4ISJiuaulhPOKDepI_EX2YJKCoUnEdAUwg8qO8GXFZSLGA8ZbCvYgCJMm6RFlD806hgmI40MXEzY_jvT9EykvFvhY6Jjnrja3x6-SWKzgw/IzMtMYCsAVM5nLwf8YGmhW17UVZlVeDXS2oy1l63aXk" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recwvDCrdiaC8GkkJ_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/q3Ecxbxx9UytG3L-MY6VAg/LGnFhw_bqfzuUwNq2Mp_Ml7QkRmJuJKufJZWmRUOEvToxIkf1O0SNroAopiWt_fQRNcK4vNte5_XNwe7bRYs6afhm_5zOm8k6TLbsWJs6zosZB-cZ8b6Zjj4Tz6Ps47we-sUbZqfhvrmp0eMsOPFgCqT276U6D8xai2epOwSM7g/Qz4-xkh91HNcy-8bbIGFRxJvZsf18L-UhlNGzyw2EwI" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recwvDCrdiaC8GkkJ_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="SIGO">SIGO</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -1365,7 +1356,7 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/sSGNP77UyxbOWu9boAsjhQ/gxoxrbg04X_KYqfZUSc1pkGxWjFMlAr_EXjyJEusFQfRuTDJ7_YHcQ_N0XsB9GQZNPrB2reFFg-6cjJTSp5Zfut0FmgSIa95k1oKPn8YTmO9qQ_UCjN5pGmjs85oIeYNbauPz9Vu540XLhjA0MC2Uh0rp2Jl80raUeZxrmI06KM/7QPdFavXXWFMcKiqTpGwud1TRtDX-aLNkG-vUMjAHCM" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recwvDCrdiaC8GkkJ_second.jpg" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1373,10 +1364,10 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
         <div id="fiche-acteur-14" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/L5CmFVhteIwac63va-g5_A/GbfqYomnBBvqlEAQSGOJ7FggpQdJxXCqjVwjCdmdlKRqMqkJU_-lFA3YeRm7iaIfQyMaP2gEhbt8jxt9annIvsGFUPDxiTc-5PK_L-kcixsWI8fDWcQ4HKQk-F6NO44cidjj9gvAzvcJezEHR172Yntyx3SXWxpiuWSWHCripJA/nffLUphlJCAW7YaYeHlzENPD3kHtLq0Nr-pZ0aUnSxo" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recb2ENxNoriErWgA_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/LGSGMteFAH1YqgGWt_4qcA/MIlHiLR-Qi2BZZeILNeWl5U5osUPTPFC9Q2wFhagmE3RZ6xVmZq1bsFI1h8Eg6AxSSMIMPz9FGU0anrcABjloWX9qka86fNXNeCmrFZsms8pa4wD8q9CPUGkSurmTKDysPIfLYdZEEw2ScRtYdzdQg8qgUG3cAUclWUnjFmloWM/AROzwJ7ybseluTTHZzfbaxh_LgREh1Ios46CX0pISaU" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recb2ENxNoriErWgA_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="WE REV'ART">WE REV'ART</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -1422,10 +1413,10 @@ Partenariats et expérimentations en Hauts-de-France.</p>
         <div id="fiche-acteur-15" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Sd1ywe8VtXp1jdoZ2Qso9A/IoDkhjGw0_jpkTNecWh7mMmaTHCydrnaYo8jvq0lKaZ2_ZI6OF8k8Q1XE07Zn7Sq37fmsN7sr9xSGIJyEAa2gsJy0IOwTYyIdI3zC5twzzeW6Xveuqxge4j-0bXQ6OlqlvgGTzl6-XtcarNz-sORKO8PDUxzyQq90HJLK8Dnlfw/r_D003Pzc9BeN-ErVY0br0xcrsbfmy-AClbgmOJQBZo" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recc9krb4fuupmz7M_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/3KH8QGJ8Bk_NTKIfbZQQRQ/SGtpS-iPlq8f6FuWDdP0e40msM268-HEKy0Ma4-HtozUBTQjtmHSDAF3fO0g8Hxle4lA4HsxZz8JyeexpjXYAmJHG3wpXumRe1ypM5svd0ZJPXYcold0z6aBpIQ_yzNOVPV6a0AHykH28MCZ9zoZKXg2KDiBJhoVzjqAV4nXJfE/zq4knMUn_VwwCZ2jzK2F1Is3BGeYKpmKMgxzM6dxMPI" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recc9krb4fuupmz7M_logo.jpg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Hékia">Hékia</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -1473,10 +1464,10 @@ Développement d’outils pour l’ostéoporose et la maladie de Crohn, créatio
         <div id="fiche-acteur-16" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/l00v9UbZTHGBZl1nlzWkHQ/l9VUmusVVivGg8TnbuCYu6niLEjE8vh-tQi7lm9kVbh__LjwdIbJuCgTs0F5J1nvVdy1njc1BWWDi26NtFHihWBcH1pi4MgAvf3HZ50ek-AidrAjFykHmoVxglQM4_Mg3ZcdLQcyh-ySYtJW8ABtXnlmDivxhePDMbtH_boPSU4/DY2jfxww3UqkK8yKSfK4JREajTCAigTOa_ZfdmKHACE" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recfu6LHVVoZ0D7Dc_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#888888; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/XBA6VBcLlCPBGydRyENEyQ/lAxOOG20I8mR8_kKQyEuyinkijcH-1bLz7ZDAMRGUD1G1YjErunQidHkZoQC8xt4p-3y7Qe4LZdUHYJhfV470o8cjvyhXOM3jmUibpo_j0hwRXhGOBHrt6geQMi73gZdbN0aFD1DJworwN4HxvXnorbYRfKFBJ6IYx29hCRA874/vtgCnM8T-VUUpZ6Yfp67beow-A5bgz6bmX4WDS84na8" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recfu6LHVVoZ0D7Dc_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="GRADeS Inéa">GRADeS Inéa</h1>
                         <div style="color:#888888; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -1525,10 +1516,10 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
         <div id="fiche-acteur-17" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/KI5iVhUvZo4Pm2jIzeJvCw/syqmDScCno0b7KtqOvdsQyx73u2LL19ZVGEsaTQKnzhur3EzqTncmqO46vAMyT7iWYdo17dqS_dfkWmG9Bk9CfcnyeVaYMEd45jlDBgWNQUsIp69L7GjKrEy6icAOrk99-dX9STLfy9wlPDJHZcEP-1akx1_3vgCz6jeF_CB01X4Tltt9PksHYY-cn5UE9Ua/RiBFJ0fh9LhdyvY3a3bl1o9MfEc0dKhRMwZUnnLc2Ok" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recgBRQj3MMthXMfH_main.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#00EBF5; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/zSCBLP046EVOqAUyJxlVxg/vg_-j24nlr9IVQnnNN9N9el7BrO-OjQtBEQ4pUomJ9I71NJiHPGloQeTmvDI6Iay-b2YsgaABUVDKN0yrH8WjcoyUQ8CiF-rxAt4bguSv5abA3hqZ3o9T38aQQrDt0J_C5l93x22sc1El6A9ZLKIfvRK5suRqjlC3VusFUu5DUE00HyJjnXQV1nJ9k9R_evp/bI0NkNkBQ-Ev3_Vh-WGFqBV9JlhToDL3gKHn2EJ-gWY" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recgBRQj3MMthXMfH_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Numih France">Numih France</h1>
                         <div style="color:#00EBF5; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -1563,10 +1554,10 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
         <div id="fiche-acteur-18" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Cp8MfI6JRhWJkOZWR546cg/5GzCSNtgvbj0hzEKxd6oLqBJrUwOPu_DkiQgyrGCHGrb672pM5hcI4dzqcIpwQD7U5jwDW_g8qKYE1stYSOaxH643wyNgAkMRXUxxtu4Wz7louG6NHiMAVyZ9JLQDW04s7O_h-v3I_pQt7aFfDObQaNImlBIn4nmMOuATxgPr-8kfUmYoyj079DTcBDvlDgC/yKM-iX-EyjQpxaOgKQk1OSDw4ce0bS5UhNfNoXb1Jz0" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recizgCsbvefFWdoc_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/HFizPHGoV6xNWDm7SkTVqQ/Cj_GF0Gyr5g06JFk0wQAo7m90CVmad9XicI3WMxEhn6afUiYh-uOYy8ghqCKEGCkQ7ingJt718TPhUQzmdWILaM97Jjul02q8YVMPpwzzXQJlj8qdgrUQQqaC7EXfbCE1nZakYC4ztNta0oRZ8EyXItZSx2gd3NJW5gGN3ITLHuqX9fgaiIOoJGARPcNOiN6/V6NAdZpYt0fRMOtWcqQOz2iq1dHL3Ph3txwhUNOQcOA" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recizgCsbvefFWdoc_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="SPORTOPIA">SPORTOPIA</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ Santé Numérique (e-Santé, IoT, capteurs, )<br>
@@ -1601,7 +1592,7 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/AjoKYMN2NVh5FETf20jW2w/WsCcnFMAZU_oT41Aoxj2j4uSy9H3FztwSeKj7wdy9nlyfo4Rc_oi1yCRMrwopLlMS9aKmrYaGF7J4slZEw4I8TOHNV1Vm7Qx6T_lTsGphhCmLEs993IchbWBwo2wuQ_VSj5Xv4q7LbiAHvh8k10nA6P7xarsEG2mvQ692lzSWKk/xQElzLfWDGuT-kjcjq15lzrEJlNNLoeuvqZBya1Qhrk" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recizgCsbvefFWdoc_second.png" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1609,10 +1600,10 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
         <div id="fiche-acteur-19" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/ts6UTwTydw9llnT4ATb2zw/smtinf3xBBFT21zGIo8M0MVXfWFQW-iAkUDSrFz-3hwoIzSGAy-J4hSvUHS-l3HLTyERdpldV69ZI_Rltjpft-XQGGaXVV8d_u9CKOexKN0mGr39-5ZvUjlEiVyZ8DjDdiRCkMXsbhsXkUGgjaJTNv5B1N-dlIbAznOQ20VtN0aVbUM9eGASj3q3Y1W7ESg7/CWrsolhPpDOq-B8kR__tvi_0BDmp-yvc-0atn6F1jEw" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recjwEIqLPId6NxK3_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#888888; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/AZtQo0HaHmHiR3PFmYUwrw/Ub8qB0GGSUQyu4HgfVLFEYGa9cU9Z3LZnDcNnA6X5s2Z1hriuX049vQoWGZGzyDP7GS7pl8rxJCTYcvZFEnwa1puGB-hJ6NwKecJmeWSL121uFZ2j-GMrwJsQ4-pOQYQvMD4I0wM-vBOuldykx3jIMkVFEjY14hDd-7AlSnGa5STVP657T_LaE1xXQFn4XC5a-Mb2OSsreMXOabm0-hUyA/X7UG92sTW6N8eey5-b_DAMcGZM2FNOEzGEuDonnkhgw" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recjwEIqLPId6NxK3_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Caisse d'Epargne">Caisse d'Epargne</h1>
                         <div style="color:#888888; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             🏦 Banque<br>
@@ -1664,7 +1655,7 @@ bancarisation financement prise de participation</p></div>
                     <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#FDC500; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/1po3j7MZ_qXkdv0DS9UFow/GEA1eUYuiaDwZTwOYpwxNbx3FExWthdpVEWPwE5JiJT7ooAxgZKQr_YOO9XHaN-f8mnJbyuRckM9czlp9x9LE9cTK07pznUpWx4iCh8I2xDzxFvgIR_USm8ivKZoMMy2_exz0Zg-KBf9dLalsUWmnA/Fb5hNwpROPf9M5gAKMZTQvY6RZEcOn94Am-UMPwQG_s" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recksXhJxAiOKL3IO_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="innov'a">innov'a</h1>
                         <div style="color:#FDC500; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ♟️ Autre<br>
@@ -1711,10 +1702,10 @@ Nous déployons 3 missions principales :<br />
         <div id="fiche-acteur-21" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/KL7FMh9-WDL4jGqABD5olg/9QWkdr-FEpgM_JMMPFTrz9aM7L6FuC9mJAGshO2KgDOfme9t71LpK1IGkWSO_GnUIRmyy6PEZrrwWURWCcasvq38sgKoxGEKjp0D1rqXZ49BZWCExY_dLlIzle4mk6Ibfrtu-XZVKYYy9jScEN6R065RHD2blm7q5gKdCsvrLA0/6HlJcS4_uPdtdz-1EdDWiGaaFqk-kVe9_ANqNGWe1Lo" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/reclKYrJaKunL258T_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#9BC045; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/Rw7uLFC40ucoF_8m4GX4ag/l9dHsF_3UtGqrlp7N4tl19KkxDAaXwEFqpe6k1gjSPskANkqhm-w7mlNZQOeLcFyZdY8sg0VA1Xvgt60elZACoMD4LrmntNKvhu2N4amzbDHQMR54Ygr7C6xDhFnM14E8ruz0f59lmkZLtosgMVc-Q7UJgRSNkotQWFByXfqlm8/LGeUMmyRIPxIe6W5vBALRPk23Ck0H4_NB40SQsfxS0U" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/reclKYrJaKunL258T_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="SIDONY">SIDONY</h1>
                         <div style="color:#9BC045; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ♟️ Conseil R&D Innovation et Durabilité<br>
@@ -1760,10 +1751,10 @@ Sidony est référencée pour les prestations Diag Bpifrance.</p>
         <div id="fiche-acteur-24" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/jw66f7C5VcyF0W2qYZOwPA/qWhYzYeXzchjnXib8x31F6iO1OS34ZZ9E24PcoCyrOPW57ACII5OUOp7P_sg4zL1OhXb8KHgQFfKmRqmk5jmrti6k7_h85KOBIAcUordWgefTUgYeYQWJr-vluT6fC7lPiYe2HVfASQhuWC_hfx8OA/hP2S7jDFdM_po6tvfrqdY5m4_uohu36S5OqQkyzf5Ko" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/recqjJEt0f1H68SU9_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#00EBF5; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/mgJdUEUTzIhZSvQOU2UayQ/NEo5Cpq9fWVUWxPQfBinb4ZyUEKXa1Ga7wOy0h98S5XR5fS3lW9s5Gty2MhlMs6-zsbXaBRo0badFlcGVt6xhlb19INDb7drXcKYkXhUuva_7tKBGIQ1TlD_qcBoke5AqnvHMF7xnW03u9TMu1QhDvIjEIoM60hR3h-xqUfIVQI/UEJaxYVC026_13bG8LogIRTYGaILjTO9tOszdc4OxCM" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/recqjJEt0f1H68SU9_logo.jpg" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="NovaSpine">NovaSpine</h1>
                         <div style="color:#00EBF5; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             ⚕️ MedTech (robotique, DM, imagerie, ...)<br>
@@ -1801,7 +1792,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
                         </div>
                     </div>
                 </div>
-                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/4vpNs_OrcGCBBCiVRC5O8g/xciNOAYeNGXAOFt2ZkQJZI5bpVMqm_aasvFbNjUFBtK-IOpW4aqOQ6BZqahU6ufJ7U6M58KBkniM2iM_XX3Khqh1AvcRFomLQQJ0kywzie4zTMuoGCmdFZL4eoO6ZGgx1OUC-TXHq40C-0yJk100I9sEgR9ITY7SReeu9iJXSaMrdWPoeyjVRX3c2sEj7M69/0yul5mit_qzMsutSConK0vJXN4v9zeAEqoE-i_tA094" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
+                <div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="assets/images/recqjJEt0f1H68SU9_second.jpg" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>
             </div>
         </div>
         
@@ -1809,10 +1800,10 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
         <div id="fiche-acteur-25" data-is-host="false" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
                 <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/fMm7ZiUr_2LBOwuN3uSjGg/jzEagauz6y9NHL9C6qJaN3cz7ihUvbjCwlKK9Tsjme6CDyDRLLWmUouRWOmQZnvYiYqAS0uMFDbceoWEBflJrH20LlP9Xv2XSjM8FDSuzqEMCF3fnE-K9frzDXSCDDUWykNFomLBoB_Du6MVlgo3Na4aLu8XrnD96k8lEDBocY3CGdmmB_TxELYjPfL4uzkn/zgmtdG7cG9hE4tV2OSTt2uvsH9U--1K6M7SavUiw8hg" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;"><img src="assets/images/reculYQgafWwygNRG_main.png" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:#888888; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">SANTÉ</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="https://v5.airtableusercontent.com/v3/u/56/56/1787572800000/E-sH45FXl145PekZWKvN6g/aVWdXuHSFUq95_kQESuJR10VebZRPWhwHofJ_e1aU66D1lWhvGvTFFAHBThQzLeFli2F8kXAkerQP7yH9qehC-m6E9So0_jxUK8IYAsi-126EaLDpwwDwTmJmw9EQq65ZfxqdpaSciPSbOHj9_PHtLA8kzGEJDqAClQU0AcZ1--atn1pUJumQT2R9-Vn2jIlREJ4Cc70u7braIGxasN0cg/wmoQ4ph3CpGW6LFeiL4Dykwqg8ecHr1MLpgESygNjGA" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
+                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;"><img src="assets/images/reculYQgafWwygNRG_logo.png" style="max-width:110px; max-height:50px; object-fit:contain;" /></div>
                         <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="Mutuale">Mutuale</h1>
                         <div style="color:#888888; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             🏦 Prévention<br>
@@ -1852,14 +1843,14 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
         </div>
         
     
-            <div class="folium-map" id="map_cc9cd4fc01fabec9ca72261311a18af8" ></div>
+            <div class="folium-map" id="map_468ae8c4d53cf70157b54e0699e7df55" ></div>
         
 </body>
 <script>
     
     
-            var map_cc9cd4fc01fabec9ca72261311a18af8 = L.map(
-                "map_cc9cd4fc01fabec9ca72261311a18af8",
+            var map_468ae8c4d53cf70157b54e0699e7df55 = L.map(
+                "map_468ae8c4d53cf70157b54e0699e7df55",
                 {
                     center: [49.89, 2.3],
                     crs: L.CRS.EPSG3857,
@@ -1876,7 +1867,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
 
         
     
-            var tile_layer_8f509a9d8f9bfb72db9ad675b0c583a2 = L.tileLayer(
+            var tile_layer_38736fcbc252adebdc936e563473c99e = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -1893,483 +1884,483 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
             );
         
     
-            tile_layer_8f509a9d8f9bfb72db9ad675b0c583a2.addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            tile_layer_38736fcbc252adebdc936e563473c99e.addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var marker_7bdf2bdaab013a242015248ff9aac024 = L.marker(
+            var marker_cae9f84a3ce5a8d10fd38a05f3bbb768 = L.marker(
                 [49.87389, 2.25515],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_34438e5bdeb85f81ffc0dce7077e3c56 = L.divIcon({
+            var div_icon_65b516eee66f961d1c51de2000924814 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-0\" data-actor-id=\"0\" data-group-id=\"0\" data-taille=\"Etablissement m\u00e9dical\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87389, 2.25515, \u0027hub-marker-0\u0027, 0)\" title=\"H\u00f4te : CHU Amiens Picardie (+4 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#2D3277; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2D3277; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CHU Amiens Picardie\n                    \u003cspan style=\"background:#FFF; color:#2D3277; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+4\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2D3277;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_7bdf2bdaab013a242015248ff9aac024.setIcon(div_icon_34438e5bdeb85f81ffc0dce7077e3c56);
+                marker_cae9f84a3ce5a8d10fd38a05f3bbb768.setIcon(div_icon_65b516eee66f961d1c51de2000924814);
             
     
-            var marker_b8ff451376a2874ae208a1df9f1f9a89 = L.marker(
+            var marker_79364167a6c715951767c16a26b59feb = L.marker(
                 [49.87165, 2.25252],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_cb15850224620a88da3bd015161f0128 = L.divIcon({
+            var div_icon_fd98edf78aab0871874a8cc1c973ac32 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"7\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87165\" data-lng=\"2.25252\" onclick=\"openSidebarSingle(7)\" title=\"Tumoroth\u00e8que de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eTumoroth\u00e8que de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_b8ff451376a2874ae208a1df9f1f9a89.setIcon(div_icon_cb15850224620a88da3bd015161f0128);
+                marker_79364167a6c715951767c16a26b59feb.setIcon(div_icon_fd98edf78aab0871874a8cc1c973ac32);
             
     
-            var marker_c954a6102688fe5b4924c174b46f11de = L.marker(
+            var marker_7484a1b4cd9b08f825d903b35463ae52 = L.marker(
                 [49.87409, 2.25327],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_fecf173cfe374c681eaa0e641ab76812 = L.divIcon({
+            var div_icon_6713dc5c895e0bbfcf9e10cb76f2d660 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"13\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87409\" data-lng=\"2.25327\" onclick=\"openSidebarSingle(13)\" title=\"GRECO EXPER\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eGRECO EXPER\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c954a6102688fe5b4924c174b46f11de.setIcon(div_icon_fecf173cfe374c681eaa0e641ab76812);
+                marker_7484a1b4cd9b08f825d903b35463ae52.setIcon(div_icon_6713dc5c895e0bbfcf9e10cb76f2d660);
             
     
-            var marker_4301ce46ff060b4565a28fdceb8a6b27 = L.marker(
+            var marker_b2e6967435d38fb03d0c9d6f61be0b76 = L.marker(
                 [49.87356, 2.25255],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_c52d6cdc86e9fecfadf228e5fd2bc27c = L.divIcon({
+            var div_icon_14dff6b8f196b61f08ca814248f70c19 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"23\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87356\" data-lng=\"2.25255\" onclick=\"openSidebarSingle(23)\" title=\"CRB - Biobanque de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCRB - Biobanque de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_4301ce46ff060b4565a28fdceb8a6b27.setIcon(div_icon_c52d6cdc86e9fecfadf228e5fd2bc27c);
+                marker_b2e6967435d38fb03d0c9d6f61be0b76.setIcon(div_icon_14dff6b8f196b61f08ca814248f70c19);
             
     
-            var marker_307a842d624a7bbb919963c6bc1a3da4 = L.marker(
+            var marker_b3debc15c99ba8552fc8be9c0efcf089 = L.marker(
                 [49.87326, 2.25358],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_cf1c15262b9e84f0f425ef57dad7a350 = L.divIcon({
+            var div_icon_1ff869c150efe88d5e98d62823fe0040 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"27\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87326\" data-lng=\"2.25358\" onclick=\"openSidebarSingle(27)\" title=\"RHU RAUC\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eRHU RAUC\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_307a842d624a7bbb919963c6bc1a3da4.setIcon(div_icon_cf1c15262b9e84f0f425ef57dad7a350);
+                marker_b3debc15c99ba8552fc8be9c0efcf089.setIcon(div_icon_1ff869c150efe88d5e98d62823fe0040);
             
     
-            var marker_e412e3c9ddfa484f514da481061b7ed3 = L.marker(
+            var marker_aba1b1840d5e312a3b2f2e7b20399694 = L.marker(
                 [49.87103, 2.30374],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_19545ccd8af1eab56d3afe5127fc3e93 = L.divIcon({
+            var div_icon_18b5edcc6c3e5d08e8a37ac8186ab13e = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"1\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)\" data-filiere=\"Tech\" onclick=\"openSidebarSingle(1)\" title=\"Apotekisto\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eApotekisto\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e412e3c9ddfa484f514da481061b7ed3.setIcon(div_icon_19545ccd8af1eab56d3afe5127fc3e93);
+                marker_aba1b1840d5e312a3b2f2e7b20399694.setIcon(div_icon_18b5edcc6c3e5d08e8a37ac8186ab13e);
             
     
-            var marker_1b2d789a838da940ba289cd65aab8f93 = L.marker(
+            var marker_bdafe604d67f3624260449cb43a47abb = L.marker(
                 [49.87653, 2.2549],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_c8f4db497664d0a54df9f4c243169fca = L.divIcon({
+            var div_icon_9b57cb0e036a18ca475d62072c1caa69 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"2\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9|||Tech\" onclick=\"openSidebarSingle(2)\" title=\"Surgitec Robotics\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSurgitec Robotics\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_1b2d789a838da940ba289cd65aab8f93.setIcon(div_icon_c8f4db497664d0a54df9f4c243169fca);
+                marker_bdafe604d67f3624260449cb43a47abb.setIcon(div_icon_9b57cb0e036a18ca475d62072c1caa69);
             
     
-            var marker_25fe36bf4ae9df0b104d93f9468208a3 = L.marker(
+            var marker_b35dfbfd7ad084b26722b130ddb313b3 = L.marker(
                 [49.87684, 2.26242],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_1db84bf7835eb88596638a739631335d = L.divIcon({
+            var div_icon_e12f0064e92e0c41c77379418d6a3b7b = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"3\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(3)\" title=\"Campus Sant\u00e9\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCampus Sant\u00e9\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_25fe36bf4ae9df0b104d93f9468208a3.setIcon(div_icon_1db84bf7835eb88596638a739631335d);
+                marker_b35dfbfd7ad084b26722b130ddb313b3.setIcon(div_icon_e12f0064e92e0c41c77379418d6a3b7b);
             
     
-            var marker_a15c618dbc350be47957c9c0a9b1c1c9 = L.marker(
+            var marker_077808b36776e6d9c03b1c80fc5dfe05 = L.marker(
                 [49.87078, 2.2519],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_1b4f99dcb8a9a73a2c3538ec767ffe56 = L.divIcon({
+            var div_icon_9952a84615f667cbe78af551c4aad464 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-4\" data-actor-id=\"11\" data-group-id=\"4\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87078, 2.2519, \u0027hub-marker-4\u0027, 11)\" title=\"H\u00f4te : Centre Unirversitaire Recherche en Sant\u00e9 (+2 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FBC9D4; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FBC9D4; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CURS\n                    \u003cspan style=\"background:#FFF; color:#FBC9D4; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+2\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a15c618dbc350be47957c9c0a9b1c1c9.setIcon(div_icon_1b4f99dcb8a9a73a2c3538ec767ffe56);
+                marker_077808b36776e6d9c03b1c80fc5dfe05.setIcon(div_icon_9952a84615f667cbe78af551c4aad464);
             
     
-            var marker_3f545d15c5c60c9b6e9655305d6a37f6 = L.marker(
+            var marker_8c6b8e2163e2305742fb7ef3dbbf7714 = L.marker(
                 [49.87052, 2.25219],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_535cc630ed196fbee85f269dbc472f3d = L.divIcon({
+            var div_icon_d04105b4be5ec75d5177c5ac3b72fa64 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-4\" data-actor-id=\"4\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87052\" data-lng=\"2.25219\" onclick=\"openSidebarSingle(4)\" title=\"Plateforme PlatAnN\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme PlatAnN\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_3f545d15c5c60c9b6e9655305d6a37f6.setIcon(div_icon_535cc630ed196fbee85f269dbc472f3d);
+                marker_8c6b8e2163e2305742fb7ef3dbbf7714.setIcon(div_icon_d04105b4be5ec75d5177c5ac3b72fa64);
             
     
-            var marker_a9efdf7711234d22afece9cd75e547c4 = L.marker(
+            var marker_941f4310acfb8294c77ccb6bb1b0a741 = L.marker(
                 [49.87077, 2.25199],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_e5cdfe5ebf4e2444380052f1419b1dfe = L.divIcon({
+            var div_icon_1dea30574bacbcf24cb27a9da3bcde11 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-4\" data-actor-id=\"12\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 1 : Principes de base observ\u00e9s|||Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87077\" data-lng=\"2.25199\" onclick=\"openSidebarSingle(12)\" title=\"Plateforme ICAP\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme ICAP\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a9efdf7711234d22afece9cd75e547c4.setIcon(div_icon_e5cdfe5ebf4e2444380052f1419b1dfe);
+                marker_941f4310acfb8294c77ccb6bb1b0a741.setIcon(div_icon_1dea30574bacbcf24cb27a9da3bcde11);
             
     
-            var marker_19433a9de2ba53bacf654c323896264a = L.marker(
+            var marker_a1345b76f0c679e2f33e538e0042530f = L.marker(
                 [49.89922, 2.30011],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_9426692cd81f9918394d01a34651c494 = L.divIcon({
+            var div_icon_321d566dc1f1521389e22fa6069af785 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"5\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sciences de l\u0027ing\u00e9nieur|||Sant\u00e9|||Energie|||Tech\" onclick=\"openSidebarSingle(5)\" title=\"\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003e\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_19433a9de2ba53bacf654c323896264a.setIcon(div_icon_9426692cd81f9918394d01a34651c494);
+                marker_a1345b76f0c679e2f33e538e0042530f.setIcon(div_icon_321d566dc1f1521389e22fa6069af785);
             
     
-            var marker_f70163098cfd5c1bed78916621163d83 = L.marker(
+            var marker_95852c41c1aa4be32389af36ba8be036 = L.marker(
                 [49.89543, 2.3053],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_f4296cd61d14edb74cb4b3c93caad5f6 = L.divIcon({
+            var div_icon_32f14ff270ec34c391b93a2083ef34d9 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"6\" data-taille=\"Association\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" onclick=\"openSidebarSingle(6)\" title=\"G\u00e9rontop\u00f4le Hauts-de-France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FFC27F; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FFC27F; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eG\u00e9rontop\u00f4le Hauts-de-France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FFC27F;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_f70163098cfd5c1bed78916621163d83.setIcon(div_icon_f4296cd61d14edb74cb4b3c93caad5f6);
+                marker_95852c41c1aa4be32389af36ba8be036.setIcon(div_icon_32f14ff270ec34c391b93a2083ef34d9);
             
     
-            var marker_4b99dbbca30a41e526c6880dec2f11a8 = L.marker(
+            var marker_cd9d6153ee9f983c98cd247e97eff837 = L.marker(
                 [49.89048, 2.30183],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_bcd304104e573b115c35bf5a28bb8768 = L.divIcon({
+            var div_icon_e74df7eaf68a6c9aea12ad9073216222 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"8\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(8)\" title=\"GLYX THERAPEUTICS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGLYX THERAPEUTICS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_4b99dbbca30a41e526c6880dec2f11a8.setIcon(div_icon_bcd304104e573b115c35bf5a28bb8768);
+                marker_cd9d6153ee9f983c98cd247e97eff837.setIcon(div_icon_e74df7eaf68a6c9aea12ad9073216222);
             
     
-            var marker_732bb017c5c82ef6e3b4507b86f07d37 = L.marker(
+            var marker_96904d40848e9adead831b85e305a09e = L.marker(
                 [49.87445, 2.27334],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_b4c16214f01870ebd14846ace4b450d5 = L.divIcon({
+            var div_icon_f1596f9f997869693528596a1da8f60e = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-8\" data-actor-id=\"9\" data-group-id=\"8\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-8\u0027, 9)\" title=\"H\u00f4te : Biolab, p\u00e9pin\u00e8re (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FDC500; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Biolab, p\u00e9pin\u00e8re\n                    \u003cspan style=\"background:#FFF; color:#FDC500; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_732bb017c5c82ef6e3b4507b86f07d37.setIcon(div_icon_b4c16214f01870ebd14846ace4b450d5);
+                marker_96904d40848e9adead831b85e305a09e.setIcon(div_icon_f1596f9f997869693528596a1da8f60e);
             
     
-            var marker_684be57081677488acd290eeeb6d6f4f = L.marker(
+            var marker_30de361d115492b5e8418e737bc4ee53 = L.marker(
                 [49.87448, 2.27352],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_cea892a79015beec6b831ed3cd4772dd = L.divIcon({
+            var div_icon_e530993bd0e99d898724584c3a39be28 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-8\" data-actor-id=\"10\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87448\" data-lng=\"2.27352\" onclick=\"openSidebarSingle(10)\" title=\"Dyscoveri\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eDyscoveri\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_684be57081677488acd290eeeb6d6f4f.setIcon(div_icon_cea892a79015beec6b831ed3cd4772dd);
+                marker_30de361d115492b5e8418e737bc4ee53.setIcon(div_icon_e530993bd0e99d898724584c3a39be28);
             
     
-            var marker_ca32d0eecafac60a51ea9e3186122b11 = L.marker(
+            var marker_b47491c7a604426efbcb26293cd7b15d = L.marker(
                 [49.87429, 2.2727],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_506af513a62c35bc299b87262514e40c = L.divIcon({
+            var div_icon_da66b0b2524808d7ff8f10a8c61c790a = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-8\" data-actor-id=\"22\" data-taille=\"Start-up ou TPE\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" data-lat=\"49.87429\" data-lng=\"2.2727\" onclick=\"openSidebarSingle(22)\" title=\"Capoupa\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCapoupa\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_ca32d0eecafac60a51ea9e3186122b11.setIcon(div_icon_506af513a62c35bc299b87262514e40c);
+                marker_b47491c7a604426efbcb26293cd7b15d.setIcon(div_icon_da66b0b2524808d7ff8f10a8c61c790a);
             
     
-            var marker_47d2f53e6787a674a855301860332372 = L.marker(
+            var marker_2d8cd2265b85bd8b641b7f4de70c042e = L.marker(
                 [49.87454, 2.27267],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_9929d9c280035149f72d6f8fbc9d953b = L.divIcon({
+            var div_icon_37bebbbeb895fb635fdee3524b0007fc = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-8\" data-actor-id=\"26\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87454\" data-lng=\"2.27267\" onclick=\"openSidebarSingle(26)\" title=\"SIGO\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eSIGO\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_47d2f53e6787a674a855301860332372.setIcon(div_icon_9929d9c280035149f72d6f8fbc9d953b);
+                marker_2d8cd2265b85bd8b641b7f4de70c042e.setIcon(div_icon_37bebbbeb895fb635fdee3524b0007fc);
             
     
-            var marker_d16d7f5b677acdf278eec8afd5811852 = L.marker(
+            var marker_1e81d2a579906a342b83ebc8c3219bd5 = L.marker(
                 [49.41795, 2.82632],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_340ff9db61eb9fb023fe6ff55b9d6d56 = L.divIcon({
+            var div_icon_9707260bfaaff5e7f6a125e3e55a20dc = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"14\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Industries Culturelles et Cr\u00e9atives|||Tech\" onclick=\"openSidebarSingle(14)\" title=\"WE REV\u0027ART\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eWE REV\u0027ART\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_d16d7f5b677acdf278eec8afd5811852.setIcon(div_icon_340ff9db61eb9fb023fe6ff55b9d6d56);
+                marker_1e81d2a579906a342b83ebc8c3219bd5.setIcon(div_icon_9707260bfaaff5e7f6a125e3e55a20dc);
             
     
-            var marker_8f78ec24568393881674753b79e39b8f = L.marker(
+            var marker_7238eeeab2aa2accfc9294ed5d8d3a16 = L.marker(
                 [49.884, 2.30208],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_9053c05e4c769e5f1a892629b5331fbc = L.divIcon({
+            var div_icon_94f42625b1ba59f3d32e364b6a1089bd = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"15\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Tech\" onclick=\"openSidebarSingle(15)\" title=\"H\u00e9kia\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eH\u00e9kia\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_8f78ec24568393881674753b79e39b8f.setIcon(div_icon_9053c05e4c769e5f1a892629b5331fbc);
+                marker_7238eeeab2aa2accfc9294ed5d8d3a16.setIcon(div_icon_94f42625b1ba59f3d32e364b6a1089bd);
             
     
-            var marker_c467021338591fd89a770281b9a6eeca = L.marker(
+            var marker_bab5ffa0712f0faa6a73e7f34654c5cc = L.marker(
                 [49.89968, 2.25604],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_ba731222b4f97052bfd4d9266af28ad3 = L.divIcon({
+            var div_icon_379d20e07975bb065f67355bd34ab73e = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"16\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(16)\" title=\"GRADeS In\u00e9a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGRADeS In\u00e9a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c467021338591fd89a770281b9a6eeca.setIcon(div_icon_ba731222b4f97052bfd4d9266af28ad3);
+                marker_bab5ffa0712f0faa6a73e7f34654c5cc.setIcon(div_icon_379d20e07975bb065f67355bd34ab73e);
             
     
-            var marker_63c7731dbd6b657eadf216505e2fb623 = L.marker(
+            var marker_df867e0fe1bb95fbe448e35acb3581ce = L.marker(
                 [49.87828, 2.26861],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_f3b8773f614416a007e6fef8e15215eb = L.divIcon({
+            var div_icon_25b088a4795eb3b9f5ca6150aff11d70 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"17\" data-taille=\"PME et entreprises\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(17)\" title=\"Numih France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNumih France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_63c7731dbd6b657eadf216505e2fb623.setIcon(div_icon_f3b8773f614416a007e6fef8e15215eb);
+                marker_df867e0fe1bb95fbe448e35acb3581ce.setIcon(div_icon_25b088a4795eb3b9f5ca6150aff11d70);
             
     
-            var marker_659187e0022e73021fbfc60bed62a1f8 = L.marker(
+            var marker_075951cce759a824c5b74a95dbf67933 = L.marker(
                 [49.87457, 2.35187],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_9b2d32f5ff7380086074e712c86cefe7 = L.divIcon({
+            var div_icon_10c9e92ba900352b2d3e7fd7d65eba4c = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"18\" data-taille=\"Start-up ou TPE\" data-trl=\"TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif|||TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Tech|||Sciences de l\u0027ing\u00e9nieur\" onclick=\"openSidebarSingle(18)\" title=\"SPORTOPIA\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSPORTOPIA\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_659187e0022e73021fbfc60bed62a1f8.setIcon(div_icon_9b2d32f5ff7380086074e712c86cefe7);
+                marker_075951cce759a824c5b74a95dbf67933.setIcon(div_icon_10c9e92ba900352b2d3e7fd7d65eba4c);
             
     
-            var marker_709d8a1450376a949301e846d504cd79 = L.marker(
+            var marker_23e2e2bb679661ef9bccdc20148d5e69 = L.marker(
                 [49.89419, 2.30852],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_f96c7049623fbabe7d58878aa693d5f7 = L.divIcon({
+            var div_icon_1d99a508f27a0b0f0707182df66ff647 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"19\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(19)\" title=\"Caisse d\u0027Epargne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCaisse d\u0027Epargne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_709d8a1450376a949301e846d504cd79.setIcon(div_icon_f96c7049623fbabe7d58878aa693d5f7);
+                marker_23e2e2bb679661ef9bccdc20148d5e69.setIcon(div_icon_1d99a508f27a0b0f0707182df66ff647);
             
     
-            var marker_9212c5c7ae796d252495760e1f6d934e = L.marker(
+            var marker_c2279177e4113bebfc353546b8438a73 = L.marker(
                 [49.89531, 2.30461],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_eef336f205863fedd208e8e8830c87f5 = L.divIcon({
+            var div_icon_f2a5142a02c2fff8ff0464dd4a4226bf = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"20\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Energie|||Tech|||Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(20)\" title=\"innov\u0027a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003einnov\u0027a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_9212c5c7ae796d252495760e1f6d934e.setIcon(div_icon_eef336f205863fedd208e8e8830c87f5);
+                marker_c2279177e4113bebfc353546b8438a73.setIcon(div_icon_f2a5142a02c2fff8ff0464dd4a4226bf);
             
     
-            var marker_a3ba898cb8cb3ee88456aaaabfd4936d = L.marker(
+            var marker_9cad988fe958d3a4358a1777bed2bba8 = L.marker(
                 [50.00053, 2.64591],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_a933b5d8f2450534343376b77c319a3b = L.divIcon({
+            var div_icon_83d71e76d2084fde20d8edb0393d130c = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"21\" data-taille=\"Start-up ou TPE\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(21)\" title=\"SIDONY\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSIDONY\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a3ba898cb8cb3ee88456aaaabfd4936d.setIcon(div_icon_a933b5d8f2450534343376b77c319a3b);
+                marker_9cad988fe958d3a4358a1777bed2bba8.setIcon(div_icon_83d71e76d2084fde20d8edb0393d130c);
             
     
-            var marker_68ddf34181a16aecd38cc444bdc40983 = L.marker(
+            var marker_a07b07a0c9d83f52061dd818d2d29784 = L.marker(
                 [49.87912, 2.25917],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_b34858992a864398dbaf32b6aa74ff0d = L.divIcon({
+            var div_icon_9b5b23fc27ce60b9706c6d262cc5222b = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"24\" data-taille=\"PME et entreprises\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(24)\" title=\"NovaSpine\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNovaSpine\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_68ddf34181a16aecd38cc444bdc40983.setIcon(div_icon_b34858992a864398dbaf32b6aa74ff0d);
+                marker_a07b07a0c9d83f52061dd818d2d29784.setIcon(div_icon_9b5b23fc27ce60b9706c6d262cc5222b);
             
     
-            var marker_b493e37f59832813105a43751172278c = L.marker(
+            var marker_32d106b695e21d73fd59194aefd61922 = L.marker(
                 [49.89504, 2.29186],
                 {
 }
-            ).addTo(map_cc9cd4fc01fabec9ca72261311a18af8);
+            ).addTo(map_468ae8c4d53cf70157b54e0699e7df55);
         
     
-            var div_icon_cad0c9e898cc187f0af49e9bf91a090b = L.divIcon({
+            var div_icon_03c00117a0aa570e198d721844e7243c = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"25\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(25)\" title=\"Mutuale\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMutuale\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_b493e37f59832813105a43751172278c.setIcon(div_icon_cad0c9e898cc187f0af49e9bf91a090b);
+                marker_32d106b695e21d73fd59194aefd61922.setIcon(div_icon_03c00117a0aa570e198d721844e7243c);
             
 </script>
 </html>
