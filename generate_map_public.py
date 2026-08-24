@@ -6,6 +6,9 @@ import markdown  # pip install markdown --break-system-packages
 from urllib.parse import quote
 from collections import defaultdict
 
+# ==================================
+# 0. CONFIGURATION
+# ==================================
 # 1. CONFIGURATION
 WORKER_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/"
 TABLE = "Cartographie"
