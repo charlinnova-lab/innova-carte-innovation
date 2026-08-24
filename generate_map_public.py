@@ -1,3 +1,21 @@
+# =========================================================
+# CARTOGRAPHIE FILERE
+#   innov'a (c) Charlotte Piau
+#   Création : 17 août 2026
+#   Last Modification : 24 aoput 2026
+
+#   Le fichier :
+#   0. interroge le Worker Cloudflare
+#   1  stocke les images pour permettre une visualisation totu au long de la journée
+#   2. associe chaque catégorie à sa couleur
+#   3. récupère les données depuis la base de données Airtable (formulaire de catographie)
+#   4. génère la carte, les filtres, la légende
+#   5. prépare l'affichage et l'ancrage gPS
+#   6. génère la carte
+
+#   IMPORTANT :  Le token Airtable n'est PAS présent ici.   Il est stocké comme secret dans Cloudflare.
+#========================================================= 
+
 import os
 import re
 import requests
