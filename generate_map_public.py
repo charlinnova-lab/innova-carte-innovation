@@ -267,7 +267,12 @@ liste_domaines = sorted(set(
 # 4. INITIALISATION CARTE & UI
 # ==================================
 INITIAL_ZOOM = 14
-m = folium.Map(location=[49.89, 2.30], zoom_start=INITIAL_ZOOM, tiles="CartoDB Positron")
+m = folium.Map(
+    location=[49.89, 2.30],
+    zoom_start=INITIAL_ZOOM,
+    tiles="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    attr="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
+)
 
 html_checkbox_tailles = "".join([
     f'<label style="display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:5px; cursor:pointer;">'
@@ -306,6 +311,8 @@ ui_and_sidebar_html = """
 .tooltip-text p { margin:0 0 6px 0; }
 .tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
 .tooltip-text li { margin-bottom:3px; }
+.tooltip-text { overflow-wrap:break-word; word-break:break-word; max-height:260px; overflow-y:auto; }
+.tooltip-text a { color:#8FD3FF; }
 </style>
 
 <!-- ICONES DECLENCHEURS (recherche / filtres) -->
@@ -667,7 +674,7 @@ function openSidebarSingle(id) {
     var elem = document.getElementById('fiche-acteur-' + id);
     if (elem) {
         var wrapper = document.createElement('div');
-        wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1); overflow:hidden;";
+        wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1);";
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
         wrapper.appendChild(contentNode);
