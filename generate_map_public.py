@@ -306,8 +306,6 @@ ui_and_sidebar_html = """
 .tooltip-text p { margin:0 0 6px 0; }
 .tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
 .tooltip-text li { margin-bottom:3px; }
-.tooltip-text { overflow-wrap:break-word; word-break:break-word; max-height:260px; overflow-y:auto; }
-.tooltip-text a { color:#8FD3FF; }
 </style>
 
 <!-- ICONES DECLENCHEURS (recherche / filtres) -->
