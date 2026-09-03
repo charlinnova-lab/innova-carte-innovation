@@ -266,15 +266,12 @@ liste_domaines = sorted(set(
 # ==================================
 # 4. INITIALISATION CARTE & UI
 # ==================================
-# ==================================
-# 4. INITIALISATION CARTE & UI
-# ==================================
 INITIAL_ZOOM = 14
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
-    tiles="cartodbpositron",
-    max_zoom=20
+    tiles="OpenStreetMap",
+    max_zoom=19
 )
 
 html_checkbox_tailles = "".join([
