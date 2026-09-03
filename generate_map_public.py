@@ -266,12 +266,14 @@ liste_domaines = sorted(set(
 # ==================================
 # 4. INITIALISATION CARTE & UI
 # ==================================
+# ==================================
+# 4. INITIALISATION CARTE & UI
+# ==================================
 INITIAL_ZOOM = 14
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
-    tiles="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attr="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>",
+    tiles="cartodbpositron",
     max_zoom=20
 )
 
