@@ -271,8 +271,8 @@ m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
 #Carte type routard    tiles="OpenStreetMap",
-   tiles="OpenStreetMap",
-    max_zoom=19
+   tiles="CartoDB Positron",
+    max_zoom=18
 )
 
 html_checkbox_tailles = "".join([
