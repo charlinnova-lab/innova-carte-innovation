@@ -42,7 +42,7 @@ COULEURS = {
     "Laboratoire ou activité de recherche":          "#FBC9D4", #rose pâle
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
-    "Start-up ou TPE":                              "#9BC045", #vert
+    "Start-up ou TPE innovantes":                    "#9BC045", #vert
     "PME et entreprises":                           "#00EBF5", #bleu ciel
     "Association":                                  "#FFC27F", #orange pâle
     "Projet collaboratif":                          "#E8873A", #orange
@@ -268,7 +268,7 @@ liste_domaines = sorted(set(
 # ==================================
 CARTO_KEY = "cb1_2w4r_1_3b46deb5d7b181db2c1173a7"
 
-INITIAL_ZOOM = 14
+INITIAL_ZOOM = 13
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
@@ -399,7 +399,7 @@ padding:12px 15px; border-radius:8px; z-index:9999; box-shadow:0 3px 12px rgba(0
 font-family:Arial,sans-serif; max-width:280px; backdrop-filter:blur(4px);
 ">
     <div style="font-weight:bold; font-size:12px; color:#2D3277; margin-bottom:8px; border-bottom:1px solid #DDD; padding-bottom:4px;">
-        🎨 Légende des structures
+         Légende des structures
     </div>
     __HTML_LEGENDE_ITEMS__
 </div>
