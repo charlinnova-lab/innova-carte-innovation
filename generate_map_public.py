@@ -266,13 +266,16 @@ liste_domaines = sorted(set(
 # ==================================
 # 4. INITIALISATION CARTE & UI
 # ==================================
+CARTO_KEY = "cb1_2w4r_1_3b46deb5d7b181db2c1173a7"
+
 INITIAL_ZOOM = 14
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
-#Carte type routard    tiles="OpenStreetMap",
-   tiles="CartoDB Positron",
-    max_zoom=18
+    tiles=f"https://{{s}}.basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={CARTO_KEY}",
+    attr="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>",
+    max_zoom=19,
+    subdomains="abcd"
 )
 
 html_checkbox_tailles = "".join([
