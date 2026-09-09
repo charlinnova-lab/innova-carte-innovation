@@ -42,8 +42,9 @@ COULEURS = {
     "Laboratoire ou activité de recherche":          "#FBC9D4", #rose pâle
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
-    "Start-up ou TPE innovantes":                    "#9BC045", #vert
-    "PME et entreprises":                           "#00EBF5", #bleu ciel
+    "Start-up":                    "#9BC045", #vert
+    "TPE ou PME":                           "#00EBF5", #bleu ciel
+    "Grande entreprise";                            "#2583F2", #bleu moyen
     "Association":                                  "#FFC27F", #orange pâle
     "Projet collaboratif":                          "#E8873A", #orange
     "Autre":                                        "#888888", #gris
