@@ -1,8 +1,8 @@
 # =========================================================
-# CARTOGRAPHIE FILERE
+# CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification : 04 septembre - Add API Carto
+#   Last Modification : 09 septembre - Fix Overflow & Redirections
 
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
@@ -14,6 +14,7 @@
 #   6. génère la carte
 
 #   IMPORTANT :  Le token Airtable n'est PAS présent ici.   Il est stocké comme secret dans Cloudflare.
+#========================================================= 
 #========================================================= 
 
 import os
@@ -60,14 +61,21 @@ def get_couleur(taille_valeur):
             return couleur
     return COULEURS["Autre"]
 
+def format_url(url):
+    """S'assure que l'URL commence par http:// ou https:// pour éviter les erreurs de redirection locale."""
+    if not url:
+        return ""
+    url_clean = str(url).strip()
+    if url_clean in ["#", "", "None", "null"]:
+        return ""
+    if not (url_clean.startswith("http://") or url_clean.startswith("https://") or url_clean.startswith("mailto:")):
+        return f"https://{url_clean}"
+    return url_clean
+
 # ==================================
 # 1. HELPER POUR TÉLÉCHARGEMENT LOCAL DES IMAGES
 # ==================================
 def download_airtable_image(record_id, field_value, prefix="img"):
-    """
-    Télécharge une image Airtable en local dans assets/images/ 
-    et retourne son chemin d'accès local pour le HTML.
-    """
     if not field_value:
         return ""
     
@@ -91,7 +99,6 @@ def download_airtable_image(record_id, field_value, prefix="img"):
         return ""
 
     ext = filename.split(".")[-1] if "." in filename else "png"
-    # Nettoyage de l'extension au cas où
     ext = ext.split("?")[0].lower()
     if ext not in ["jpg", "jpeg", "png", "gif", "webp", "svg"]:
         ext = "png"
@@ -124,10 +131,9 @@ def fetch_acteurs():
         
         data = res.json()
         
-        # Conserver la structure avec l'ID du record
         for r in data.get("records", []):
             rec_fields = r.get("fields", {})
-            rec_fields["_record_id"] = r.get("id") # Injecter l'ID interne
+            rec_fields["_record_id"] = r.get("id")
             records.append(rec_fields)
         
         offset = data.get("offset")
@@ -162,7 +168,9 @@ def get_rich_text_html(record, *keys, default=""):
             val_str = str(val).replace("\r\n", "\n").replace("\r", "\n").strip()
             if val_str:
                 val_str = _nettoyer_marqueurs_gras_casses(val_str)
-                return markdown.markdown(val_str, extensions=["nl2br"])
+                html_rendered = markdown.markdown(val_str, extensions=["nl2br"])
+                html_rendered = re.sub(r'<a\s+href=', r'<a target="_blank" rel="noopener noreferrer" href=', html_rendered)
+                return html_rendered
     return default
 
 def _nettoyer_marqueurs_gras_casses(text):
@@ -312,11 +320,22 @@ ui_and_sidebar_html = """
 .fiche-description ul, .fiche-description ol { margin:2px 0 8px 0; padding-left:16px; break-inside:avoid-column; }
 .fiche-description li { margin-bottom:2px; }
 .fiche-description strong { color:#2C3E50; }
+
+/* FIX OVERFLOW & SCROLL HORIZONTAL POPUP INFO */
+.tooltip-text {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    max-width: min(320px, 80vw) !important;
+    width: max-content;
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+}
 .tooltip-text p { margin:0 0 6px 0; }
 .tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
 .tooltip-text li { margin-bottom:3px; }
-.tooltip-text { overflow-wrap:break-word; word-break:break-word; max-height:260px; overflow-y:auto; }
-.tooltip-text a { color:#8FD3FF; }
+.tooltip-text a { color:#8FD3FF; text-decoration:underline; }
 </style>
 
 <!-- ICONES DECLENCHEURS (recherche / filtres) -->
@@ -681,6 +700,12 @@ function openSidebarSingle(id) {
         wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1);";
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
+        
+        contentNode.querySelectorAll('a').forEach(function(link) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+
         wrapper.appendChild(contentNode);
         container.appendChild(wrapper);
     }
@@ -783,8 +808,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
         email = get_text(actor, "Contacts", "Contact", "Email", default="")
         adresse = get_text(actor, "Adresse", default="")
-        site_web = get_text(actor, "Website", "Site Web", default="#")
-        url_interview = get_text(actor, "ITW", "Interview", default="#")
+        site_web = format_url(get_text(actor, "Website", "Site Web", default=""))
+        url_interview = format_url(get_text(actor, "ITW", "Interview", default=""))
 
         # TÉLÉCHARGEMENT ET ATTRIBUTION DES IMAGES LOCALES
         logo_url = download_airtable_image(rec_id, actor.get("Logo"), prefix="logo")
@@ -809,7 +834,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         bouton_equipement_html = f"""
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 {equipements}
             </div>
@@ -819,7 +844,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         bouton_info_html = f"""
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:{couleur}; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 {elements_add}
             </div>
@@ -857,7 +882,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                         {f'<div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">{chiffre_cle}</div>' if chiffre_cle else ''}
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                {f'<a href="{site_web}" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web not in ["#", ""] else ''}
+                                {f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ''}
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;">{bloc_contact_html}</div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -868,7 +893,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                                     {bouton_equipement_html}
                                     {bouton_info_html}
                                 </div>
-                                {f'<a href="{url_interview}" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>' if url_interview not in ["#", ""] else ''}
+                                {f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>' if url_interview else ''}
                             </div>
                         </div>
                     </div>
