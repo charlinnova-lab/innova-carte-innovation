@@ -15,7 +15,6 @@
 
 #   IMPORTANT :  Le token Airtable n'est PAS présent ici.   Il est stocké comme secret dans Cloudflare.
 #========================================================= 
-#========================================================= 
 
 import os
 import re
@@ -808,7 +807,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
         email = get_text(actor, "Contacts", "Contact", "Email", default="")
         adresse = get_text(actor, "Adresse", default="")
-        site_web = format_url(get_text(actor, "Website", "Site Web", default=""))
+        site_web = format_url(get_text(actor, "Website", "Site Web", "Site_web", default=""))
         url_interview = format_url(get_text(actor, "ITW", "Interview", default=""))
 
         # TÉLÉCHARGEMENT ET ATTRIBUTION DES IMAGES LOCALES
@@ -864,6 +863,10 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             bloc_contact_html = f'<a href="{mailto_public}" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a>'
         bloc_adresse_html = adresse or '<span style="color:#999; font-style:italic;">Non renseignée</span>'
 
+        # FIX BOUTON SITE WEB : alignement strict sur le format fonctionnel d'interview
+        bouton_site_web_html = f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ""
+        bouton_interview_html = f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>' if url_interview else ""
+
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
@@ -882,7 +885,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                         {f'<div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">{chiffre_cle}</div>' if chiffre_cle else ''}
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                {f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ''}
+                                {bouton_site_web_html}
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;">{bloc_contact_html}</div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -893,7 +896,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                                     {bouton_equipement_html}
                                     {bouton_info_html}
                                 </div>
-                                {f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>' if url_interview else ''}
+                                {bouton_interview_html}
                             </div>
                         </div>
                     </div>
