@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_23753245ede7edcd562f60dd151bd998 {
+                #map_e41edd60e20f83723991a86a13078a4f {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -59,11 +59,22 @@
 .fiche-description ul, .fiche-description ol { margin:2px 0 8px 0; padding-left:16px; break-inside:avoid-column; }
 .fiche-description li { margin-bottom:2px; }
 .fiche-description strong { color:#2C3E50; }
+
+/* FIX OVERFLOW & SCROLL HORIZONTAL POPUP INFO */
+.tooltip-text {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    max-width: min(320px, 80vw) !important;
+    width: max-content;
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+}
 .tooltip-text p { margin:0 0 6px 0; }
 .tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
 .tooltip-text li { margin-bottom:3px; }
-.tooltip-text { overflow-wrap:break-word; word-break:break-word; max-height:260px; overflow-y:auto; }
-.tooltip-text a { color:#8FD3FF; }
+.tooltip-text a { color:#8FD3FF; text-decoration:underline; }
 </style>
 
 <!-- ICONES DECLENCHEURS (recherche / filtres) -->
@@ -428,6 +439,12 @@ function openSidebarSingle(id) {
         wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1);";
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
+        
+        contentNode.querySelectorAll('a').forEach(function(link) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+
         wrapper.appendChild(contentNode);
         container.appendChild(wrapper);
     }
@@ -463,7 +480,7 @@ function closeSidebar() {
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Le CHU Amiens-Picardie mobilisé sur 19 des 23 filières maladies rares en France</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.chu-amiens.fr/chiffres-cles-rapport-activite/](http://www.chu-amiens.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.chu-amiens.fr/chiffres-cles-rapport-activite/](http://www.chu-amiens.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20CHU%20Amiens%20Picardie.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -474,7 +491,7 @@ function closeSidebar() {
                                     
                                     
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjaXJtNzgzVWtlNnBDdEIiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjaXJtNzgzVWtlNnBDdEIiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -501,7 +518,7 @@ function closeSidebar() {
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Structure d’appui à la recherche du futur Institut de Cancérologie Universitaire de Picardie certifié ISO 9001.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.chu-amiens.fr/tumorotheque-picardie/](http://www.chu-amiens.fr/tumorotheque-picardie/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.chu-amiens.fr/tumorotheque-picardie/](http://www.chu-amiens.fr/tumorotheque-picardie/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Tumoroth%C3%A8que%20de%20Picardie.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -513,7 +530,7 @@ function closeSidebar() {
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#FBC9D4; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <ul>
 <li>Collecter, documenter, gérer et valoriser des ressources biologiques destinées à la recherche clinique, translationnelle, fondamentale et appliquée.</li>
@@ -553,7 +570,7 @@ function closeSidebar() {
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">5 partenaires, 36 unités de recherche, 1 data center, 4000 m² d'environnement de travail fidèlement reconstitués avec outils pédagogiques de pointe.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.linkedin.com/company/greco-exper](http://www.linkedin.com/company/greco-exper)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.linkedin.com/company/greco-exper](http://www.linkedin.com/company/greco-exper)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20GRECO%20EXPER.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -565,7 +582,7 @@ function closeSidebar() {
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#E8873A; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>- Tester et valider <br />
 - Accès à des environnements cliniques réels <br />
@@ -579,7 +596,7 @@ function closeSidebar() {
         </div>
         
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjSGszOHhZRUpuUkVtbGUiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjSGszOHhZRUpuUkVtbGUiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -606,7 +623,7 @@ function closeSidebar() {
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Equipements de pointe, +30 ans d’expérience, 700m² de locaux, certifié ISO20387 et ISO9001</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.biobanque-picardie.com/](http://www.biobanque-picardie.com/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.biobanque-picardie.com/](http://www.biobanque-picardie.com/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20CRB%20-%20Biobanque%20de%20Picardie.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -617,7 +634,7 @@ function closeSidebar() {
                                     
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 <ul>
 <li>Chariot cryogénique Cryocart MVE, </li>
@@ -640,7 +657,7 @@ function closeSidebar() {
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#FBC9D4; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Labellisation GIS-IBiSA (https://www.ibisa.net/annuaire-crb/biobanque-picardie-185.html)</p>
 <p>Partenariats: <br />
@@ -681,7 +698,7 @@ Compétences Spécifiques :<br />
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Projet multidisciplinaire et multicentrique ayant déjà inclus 680 patients en 1 an.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.chu-amiens.fr/chercheurs/rhu-rauc/](http://www.chu-amiens.fr/chercheurs/rhu-rauc/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.chu-amiens.fr/chercheurs/rhu-rauc/](http://www.chu-amiens.fr/chercheurs/rhu-rauc/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20RHU%20RAUC.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -693,14 +710,14 @@ Compétences Spécifiques :<br />
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#E8873A; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>RAUC rassemble énormément d’acteurs que ce soit académiques, institutionnels ou industriels. Les partenaires du RHU RAUC sont :• Le CHU Amiens Picardie (comprenant le service de chirurgie digestive ; le service d’anesthésie et réanimation ; le service des urgences ; la radiologie ; le CBH ; la DRCI ; la DSN ; SimUSanté).• MEDTRONIC (leader mondial des technologies, services et solutions pour le secteur médical).• RDS (solution multiparamétrique de haute précision pour surveiller en continu les paramètres physiologiques des patients à l'hôpital ou à domicile.).• L’Université de Picardie Jules Verne, avec les unités de recherches SSPC et MIS.</p>
             </div>
         </div>
         
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjc1ZHTnBkYUFtaEtuVVYiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjc1ZHTnBkYUFtaEtuVVYiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -727,7 +744,7 @@ Compétences Spécifiques :<br />
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">10 ans d’expertise, plus de 200 pharmacies accompagnées dans leur digitalisation.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.apotekisto.fr](http://www.apotekisto.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.apotekisto.fr](http://www.apotekisto.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Apotekisto.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -739,7 +756,7 @@ Compétences Spécifiques :<br />
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Notre équipe met à profit plus de 10 ans d’expérience dans le développement web dédié au secteur de la santé. Nous maîtrisons l’ensemble des étapes d’un projet digital : conseil, conception, développement, intégration, maintenance et accompagnement. Notre savoir-faire repose sur une parfaite compréhension des enjeux des pharmacies et des contraintes réglementaires du secteur.</p>
 <p>Avec plus de 200 pharmacies accompagnées, nous avons développé une expertise reconnue dans la création de sites e-commerce performants, sécurisés et adaptés aux besoins des officines. Nous privilégions des solutions sur mesure, une relation de proximité avec nos clients et un accompagnement durable afin de contribuer à leur développement numérique.</p>
@@ -774,7 +791,7 @@ Compétences Spécifiques :<br />
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">+ de 22 000 passages/an en formation. 8 premières mondiales chirurgicales avec le GRECO.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://simusante.com](http://www.simusante.com)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://simusante.com](http://www.simusante.com)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20SimUSant%C3%A9.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -786,11 +803,11 @@ Compétences Spécifiques :<br />
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#845EC2; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
-                <p>Catalogue de formation de SimUSanté : <a href="https://simusante.com/les-formations-simusante/catalogue-de-formation/">https://simusante.com/les-formations-simusante/catalogue-de-formation/</a> <br />
-Epione : <a href="https://simusante.com/epione-campus-sante/">https://simusante.com/epione-campus-sante/</a> <br />
-PRIMANS : <a href="https://simusante.com/primans_programme-innovant-mutualise-apprentissage-numerique-sante/">https://simusante.com/primans_programme-innovant-mutualise-apprentissage-numerique-sante/</a></p>
+                <p>Catalogue de formation de SimUSanté : <a target="_blank" rel="noopener noreferrer" href="https://simusante.com/les-formations-simusante/catalogue-de-formation/">https://simusante.com/les-formations-simusante/catalogue-de-formation/</a> <br />
+Epione : <a target="_blank" rel="noopener noreferrer" href="https://simusante.com/epione-campus-sante/">https://simusante.com/epione-campus-sante/</a> <br />
+PRIMANS : <a target="_blank" rel="noopener noreferrer" href="https://simusante.com/primans_programme-innovant-mutualise-apprentissage-numerique-sante/">https://simusante.com/primans_programme-innovant-mutualise-apprentissage-numerique-sante/</a></p>
             </div>
         </div>
         
@@ -824,7 +841,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Pénétration des robots de chirurgie des tissus durs actuellement <5%</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.surgitec.com/](http://www.surgitec.com/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.surgitec.com/](http://www.surgitec.com/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Surgitec%20Robotics.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -836,14 +853,14 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Surge One ® - le nouveau standard de l’assistant robotique chirurgical - augmenté par l’Intelligence Artificielle et les Technologies de pointe</p>
             </div>
         </div>
         
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjTHY3eHBXNkxCZFZkVXoiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjTHY3eHBXNkxCZFZkVXoiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -870,7 +887,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">+ de 25 formations supérieures dans le domaine des soins/santé, de la licence au doctorat.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.u-picardie.fr/](http://www.u-picardie.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.u-picardie.fr/](http://www.u-picardie.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Campus%20Sant%C3%A9.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -881,7 +898,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                                     
                                     
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjTlpmaGdkcEM3VDZZMEsiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjTlpmaGdkcEM3VDZZMEsiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -946,7 +963,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">1 ingénieure et 2 techniciennes Une vingtaine de dossiers éthiques en cours</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.pluginlabs-hautsdefrance.fr/fiche/plateforme-platann/](http://www.pluginlabs-hautsdefrance.fr/fiche/plateforme-platann/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.pluginlabs-hautsdefrance.fr/fiche/plateforme-platann/](http://www.pluginlabs-hautsdefrance.fr/fiche/plateforme-platann/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Plateforme%20PlatAnN.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -957,7 +974,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                                     
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 <ul>
 <li>Prélèvements et injections faiblement invasifs, </li>
@@ -998,7 +1015,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">+40 projets accompagnés, réseau CHU–université–industriels, ancrage territorial fort</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="<https://www.pluginlabs-hautsdefrance.fr/fiche/ingenierie-cellulaire-et-analyses-des-proteines/>" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://<https://www.pluginlabs-hautsdefrance.fr/fiche/ingenierie-cellulaire-et-analyses-des-proteines/>" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Plateforme%20ICAP.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1009,7 +1026,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                                     
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 <ul>
 <li>Spectrométrie de masse,  </li>
@@ -1029,7 +1046,7 @@ Notre plateforme robotique de pointe associe intelligence artificielle et techno
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#FB6F92; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>La plateforme est labellisée par le GIS iBISA et fait partie de l'INBS (Infrastructure Nationale en Biologie et Santé) PROFI (UAR 2048).</p>
 <p>Compétences<br />
@@ -1067,7 +1084,7 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">4 journées thématiques par an, une par spécialité, dédiées aux entreprises.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.eijv.eu](http://www.eijv.eu)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.eijv.eu](http://eijv.u-picardie.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20%C3%89cole%20d%27Ing%C3%A9nieurs%20Jules%20Verne.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1079,7 +1096,7 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#845EC2; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>L'EIJV répond aux enjeux du territoire sur le secteur dans les domaines émargents.</p>
             </div>
@@ -1114,7 +1131,7 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Membres fondateurs : CARSAT, ARS, Région, CHU de Lille et d’Amiens.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://](https://www.gerontopole-hdf.fr/)[www.gerontopole-hdf.fr/ ](http://www.gerontopole-hdf.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.gerontopole-hdf.fr/ ](http://www.gerontopole-hdf.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20G%C3%A9rontop%C3%B4le%20Hauts-de-France.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1126,7 +1143,7 @@ Avec CHU Amiens-Picardie, UPJV, entreprises medtech/biotech, collectivités, dif
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#FFC27F; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p><strong>Etudes et recherche</strong><br />
 La réalisation et la diffusion du Diagnostic Territorial Partagé<br />
@@ -1171,7 +1188,7 @@ Convention de partenariat avec  innov'a, Eurasanté et ClubsterNSL</p>
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Glyx therapeutics a reçu le soutien de Hodéfi et joint l'association French Care</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.glyxtherapeutics.com/](http://www.glyxtherapeutics.com/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.glyxtherapeutics.com/](http://www.glyxtherapeutics.com/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20GLYX%20THERAPEUTICS.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1183,7 +1200,7 @@ Convention de partenariat avec  innov'a, Eurasanté et ClubsterNSL</p>
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Partenariats <br />
 UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov'a</p>
@@ -1218,7 +1235,7 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
                         
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://pepinieres-amiens.com/biolab/](http://www.pepinieres-amiens.com/biolab/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://pepinieres-amiens.com/biolab/](http://www.pepinieres-amiens.com/biolab/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Biolab%2C%20p%C3%A9pin%C3%A8re.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1229,7 +1246,7 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
                                     
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 <p>**Services mutualisés :  <br />
 - Accueil / Secrétariat  <br />
@@ -1252,7 +1269,7 @@ UPJV; Université de Creteil, Université de Lille, SATT Nord, Eurasanté, Innov
         
                                     
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjcTVmQWtoejZOeXBzRDQiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjcTVmQWtoejZOeXBzRDQiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -1280,7 +1297,7 @@ Dyscours associe famille et professionnels pour adapter, personnaliser et suivre
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Le besoin régulier de CAA concerne 1 personne sur 400, hors allophones ou grand âge</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.dyscoveri.fr/](http://www.dyscoveri.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.dyscoveri.fr/](http://www.dyscoveri.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Dyscoveri.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1292,7 +1309,7 @@ Dyscours associe famille et professionnels pour adapter, personnaliser et suivre
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Dyscoveri collabore avec l’Université de Picardie Jules Verne et trois de ses laboratoires : MIS (Informatique/IA), CRP-CPO (Psychologie du Développement/Ergonomie) et CERCLL (Sciences du Langage).<br />
 Dyscoveri dispose également de soutiens de terrain (IME et EHPAD) avec : La Nouvelle Forge, APAJH de la Somme, Les Papillons Blancs de Lille, La Vie Active et Croix Rouge de la Somme.<br />
@@ -1302,7 +1319,7 @@ Dyscoveri a été financée par la Région Hauts-de-France, Initiative Somme Fra
         </div>
         
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjMGRaZTNKeVFZbElCUmoiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjMGRaZTNKeVFZbElCUmoiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -1329,7 +1346,7 @@ Dyscoveri a été financée par la Région Hauts-de-France, Initiative Somme Fra
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">TMS et RPS causent plus de la moitié des arrêts longs en France (Ayming/WTW 2024).</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://capoupa.fr/](http://www.capoupa.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://capoupa.fr/](http://www.capoupa.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Capoupa.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1341,7 +1358,7 @@ Dyscoveri a été financée par la Région Hauts-de-France, Initiative Somme Fra
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <ul>
 <li>Ateliers équipes, coaching individuel, </li>
@@ -1382,7 +1399,7 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">43 cabines Grand-Via en France et à l'international) ;  études médicales publiées.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.grand-via.fr](http://www.grand-via.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.grand-via.fr](http://www.grand-via.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20SIGO.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1394,7 +1411,7 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Connaissance du secteur médico-social, collaboration avec des professionnels de santé, expérimentation clinique, fabrication, installation et formation des équipes.</p>
             </div>
@@ -1428,7 +1445,7 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">75 % des patients ressentent stress ou anxiété avant une consultation médicale</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[http](https://www.werevart.com)[s://www.werevart.com](http://www.werevart.com)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[http](https://www.werevart.com)[s://www.werevart.com](http://www.werevart.com)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20WE%20REV%27ART.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1440,7 +1457,7 @@ Vocalipsy : Vocalipsy est un projet  de logiciel d’aide aux médecins généra
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Plateforme de diffusion et de programmation artistique sur écrans. <br />
 Playlists personnalisées, curation d’œuvres audiovisuelles et environnements artistiques adaptés aux lieux de santé, médico-sociaux et de bien-être. <br />
@@ -1477,7 +1494,7 @@ Partenariats et expérimentations en Hauts-de-France.</p>
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">IA locale pour Crohn, ostéoporose et annotation médicale intelligente.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.hekia-health.com](http://www.hekia-health.com)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.hekia-health.com](http://www.hekia-health.com)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20H%C3%A9kia.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1489,7 +1506,7 @@ Partenariats et expérimentations en Hauts-de-France.</p>
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Compétences : <br />
 Vision par ordinateur, IA médicale, annotation intelligente, détection et classification d’images, modèles frugaux et sécurisés, déploiement local sans dépendance au cloud, modèles hybrides quantiques-classiques</p>
@@ -1528,7 +1545,7 @@ Développement d’outils pour l’ostéoporose et la maladie de Crohn, créatio
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Le GRADeS propose notamment la plateforme région de coordination et de parcours : Coordin</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.inea.fr/](http://www.inea.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.inea.fr/](http://www.inea.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20GRADeS%20In%C3%A9a.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1540,7 +1557,7 @@ Développement d’outils pour l’ostéoporose et la maladie de Crohn, créatio
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#888888; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Pourquoi entrer en contact avec un GRADeS ? </p>
 <p>Pour connaître l’offre de services, régionale et nationale ;<br />
@@ -1580,7 +1597,7 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">3 Datacenterscertifiés HDS - 1 000 Établissements de santé accompagnés dans leur transformation numérique - 123 GHT équipés d'une de nos solutions</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://numihfrance.fr/](http://www.numihfrance.fr/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://numihfrance.fr/](http://www.numihfrance.fr/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Numih%20France.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1591,7 +1608,7 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
                                     
                                     
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjT01GRnlhanFtaGdBQmkiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjT01GRnlhanFtaGdBQmkiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -1618,7 +1635,7 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">45 % de blessures chez les sportifs de haut niveau et 1/5 fin de carrière. Marché > 20 Md$</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.sportopia.fr](www.sportopia.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.sportopia.fr](http://www.sportopia.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20SPORTOPIA.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1630,7 +1647,7 @@ Pour bénéficier d’un appui dans la recherche de partenaires au niveau local 
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Recherche de collaborations avec enseignants-chercheurs, laboratoires, centres techniques, professionnels de santé, clubs sportifs, fédérations, sportifs et industriels pour faire progresser les connaissances et accélérer le développement de technologies innovantes dédiées à la récupération musculaire ciblée..</p>
             </div>
@@ -1666,7 +1683,7 @@ bancarisation financement prise de participation</p></div>
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">\> 100 entreprises innovantes clientes  > 50 prêts innovation à nos clients  encours 65 M€</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.caisse-epargne.fr/hauts-de-france/professionnels/](http://www.caisse-epargne.fr/hauts-de-france/professionnels/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[https://www.caisse-epargne.fr/hauts-de-france/professionnels/](http://www.caisse-epargne.fr/hauts-de-france/professionnels/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Caisse%20d%27Epargne.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1678,7 +1695,7 @@ bancarisation financement prise de participation</p></div>
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#888888; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <ul>
 <li>une direction santé : santexpert</li>
@@ -1720,7 +1737,7 @@ Nous déployons 3 missions principales :<br />
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Cofinancée par Amiens Métropole et par la Région Hauts-de-France,</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[https://www.innov-a.com](http://www.innov-a.com/)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.innov-a.com/](http://www.innov-a.com/)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20innov%27a.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1732,14 +1749,14 @@ Nous déployons 3 missions principales :<br />
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#FDC500; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
-                <p>Une exposition des acteurs d'innovants at été réalisée et regroupe plus de 4à portraits consultable ici ; <a href="https://www.innov-a.com/linnovation-une-histoire-collective/">https://www.innov-a.com/linnovation-une-histoire-collective/</a></p>
+                <p>Une exposition des acteurs d'innovants at été réalisée et regroupe plus de 4à portraits consultable ici ; <a target="_blank" rel="noopener noreferrer" href="https://www.innov-a.com/linnovation-une-histoire-collective/">https://www.innov-a.com/linnovation-une-histoire-collective/</a></p>
             </div>
         </div>
         
                                 </div>
-                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjUm96Ukg0ak5CUWJyVEUiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
+                                <a href="https://airtable.com/apprRTM0MI96SlRcA/shrPA1ES4trZaUzYz?detail=eyJwYWdlSWQiOiJwYWdEaWNuem83cjhKbkQ1NSIsInJvd0lkIjoicmVjUm96Ukg0ak5CUWJyVEUiLCJzaG93Q29tbWVudHMiOmZhbHNlLCJxdWVyeU9yaWdpbkhpbnQiOnsidHlwZSI6InBhZ2VFbGVtZW50IiwiZWxlbWVudElkIjoicGVsT3N4M2RjWnlaSzN2RzkiLCJxdWVyeUNvbnRhaW5lcklkIjoicGVseTlaSjFtUlgzQ1ZVenQifX0" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>
                             </div>
                         </div>
                     </div>
@@ -1767,7 +1784,7 @@ SIDONY contribue à l’élaboration et la mise en œuvre de la stratégie de d�
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">Une stratégie RSE augmente l'EBITDA de 4-7%, _Sustainability in private markets, BCG, 2025_</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.sidony.fr](http://www.sidony.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.sidony.fr](http://www.sidony.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20SIDONY.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1779,7 +1796,7 @@ SIDONY contribue à l’élaboration et la mise en œuvre de la stratégie de d�
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#9BC045; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>R&amp;D et innovation : accompagnement sur mesure depuis la formalisation de votre stratégie, le positionnement marché, l'élaboration de votre business plan à la recherche de partenaires technologiques, les demandes de financement, le suivi de projet. <br />
 Durabilité : élaboration et mise en oeuvre de la stratégie RSE, bilan carbone<br />
@@ -1816,7 +1833,7 @@ D’abord installée à Salouël et forte de son essor, la société a récemmen
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">NovaSpine est le plus gros fabricant français d'implants pour la chirurgie du dos.</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.novaspine.fr](http://www.novaspine.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.novaspine.fr](http://www.novaspine.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20NovaSpine.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1828,7 +1845,7 @@ D’abord installée à Salouël et forte de son essor, la société a récemmen
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#00EBF5; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Soucieuse de satisfaire l’ensemble de ses clients et afin de leur fournir des produits fiables et de qualité, la société Novaspine est dotée d’un certificat du Système de Management Qualité selon l’ISO 13485 : 2016 &amp; EN ISO 13485 :2016.<br />
 Nos dispositifs médicaux répondent également aux dispositions du règlement Européenne 2017/45 pour l'obtention du marquage CE.<br />
@@ -1864,7 +1881,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
                         <div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">prévention de la santé par l'assiette et l'activité</div>
                         <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
                             <div>
-                                <a href="[www.mutuale.fr](http://www.mutuale.fr)" target="_blank" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
+                                <a href="https://[www.mutuale.fr](http://www.mutuale.fr)" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
                                 <div style="font-size:12px; word-break:break-all; margin-bottom:8px;"><a href="mailto:contact@innov-a.com?subject=Demande%20de%20mise%20en%20relation&body=Bonjour%2C%0A%0AJe%20souhaite%20entrer%20en%20contact%20avec%20%3A%20Mutuale.%0A%0A" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a></div>
                                 <div style="font-size:12px; font-weight:bold;">Adresse</div>
@@ -1876,7 +1893,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
                                     
         <div style="position:relative; display:block;" class="tooltip-container">
             <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#888888; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">➕ INFO</button>
-            <div style="display:none; position:absolute; bottom:110%; left:0; width:260px; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
+            <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Informations complémentaires :</strong>
                 <p>Nous cochons les 17 odd au travers de nos actions locales</p>
             </div>
@@ -1893,14 +1910,14 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
         </div>
         
     
-            <div class="folium-map" id="map_23753245ede7edcd562f60dd151bd998" ></div>
+            <div class="folium-map" id="map_e41edd60e20f83723991a86a13078a4f" ></div>
         
 </body>
 <script>
     
     
-            var map_23753245ede7edcd562f60dd151bd998 = L.map(
-                "map_23753245ede7edcd562f60dd151bd998",
+            var map_e41edd60e20f83723991a86a13078a4f = L.map(
+                "map_e41edd60e20f83723991a86a13078a4f",
                 {
                     center: [49.89, 2.3],
                     crs: L.CRS.EPSG3857,
@@ -1918,7 +1935,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
 
         
     
-            var tile_layer_d4e13d516798bf889cf3d96249b4c982 = L.tileLayer(
+            var tile_layer_11d11e0a6a956ab3f7e1dba58e03085a = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=cb1_2w4r_1_3b46deb5d7b181db2c1173a7",
                 {
   "minZoom": 0,
@@ -1935,590 +1952,590 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
             );
         
     
-            tile_layer_d4e13d516798bf889cf3d96249b4c982.addTo(map_23753245ede7edcd562f60dd151bd998);
+            tile_layer_11d11e0a6a956ab3f7e1dba58e03085a.addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var marker_5ba50d7e1b995ff5ec6c73063df06cbe = L.marker(
+            var marker_25b6996e1a78c92a8a05f58e36e2a781 = L.marker(
                 [49.87389, 2.25515],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_56a03239261d7233f34a307e05c84d32 = L.divIcon({
+            var div_icon_25f02be932957ed666e7bc51db86603f = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-0\" data-actor-id=\"0\" data-group-id=\"0\" data-taille=\"Etablissement m\u00e9dical\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87389, 2.25515, \u0027hub-marker-0\u0027, 0)\" title=\"H\u00f4te : CHU Amiens Picardie (+4 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#2D3277; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2D3277; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CHU Amiens Picardie\n                    \u003cspan style=\"background:#FFF; color:#2D3277; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+4\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2D3277;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_5ba50d7e1b995ff5ec6c73063df06cbe.setIcon(div_icon_56a03239261d7233f34a307e05c84d32);
+                marker_25b6996e1a78c92a8a05f58e36e2a781.setIcon(div_icon_25f02be932957ed666e7bc51db86603f);
             
     
-            var marker_34afa52c99f9d13108d3d02fbb0e0ef9 = L.marker(
+            var marker_d1fbdda0e4939bea5542d442f5dcbbc7 = L.marker(
                 [49.87165, 2.25252],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_c10a3d2d87d013b4a695800c2791140b = L.divIcon({
+            var div_icon_494e395ded2fbf4d2fe98f4f69e5ca60 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"8\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87165\" data-lng=\"2.25252\" onclick=\"openSidebarSingle(8)\" title=\"Tumoroth\u00e8que de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eTumoroth\u00e8que de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_34afa52c99f9d13108d3d02fbb0e0ef9.setIcon(div_icon_c10a3d2d87d013b4a695800c2791140b);
+                marker_d1fbdda0e4939bea5542d442f5dcbbc7.setIcon(div_icon_494e395ded2fbf4d2fe98f4f69e5ca60);
             
     
-            var marker_822ad6e2705a24f11ae7af89ec7c00f3 = L.marker(
+            var marker_8765da6ab984125f10c72d7f59658cec = L.marker(
                 [49.87409, 2.25327],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_115f0ff351be4a63a8f7808411a26be7 = L.divIcon({
+            var div_icon_bc7e14696082b31d0afbefd0f2fbfff3 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"14\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87409\" data-lng=\"2.25327\" onclick=\"openSidebarSingle(14)\" title=\"GRECO EXPER\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eGRECO EXPER\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_822ad6e2705a24f11ae7af89ec7c00f3.setIcon(div_icon_115f0ff351be4a63a8f7808411a26be7);
+                marker_8765da6ab984125f10c72d7f59658cec.setIcon(div_icon_bc7e14696082b31d0afbefd0f2fbfff3);
             
     
-            var marker_de49a84b66e826499bdd38cb96963958 = L.marker(
+            var marker_61625ab2ada89482e2e751ff4d088d85 = L.marker(
                 [49.87356, 2.25255],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_ae68ac552661258717e9ff1f4591843d = L.divIcon({
+            var div_icon_430a981f098e28e805f28458b2a908cb = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"24\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87356\" data-lng=\"2.25255\" onclick=\"openSidebarSingle(24)\" title=\"CRB - Biobanque de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCRB - Biobanque de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_de49a84b66e826499bdd38cb96963958.setIcon(div_icon_ae68ac552661258717e9ff1f4591843d);
+                marker_61625ab2ada89482e2e751ff4d088d85.setIcon(div_icon_430a981f098e28e805f28458b2a908cb);
             
     
-            var marker_c7c024670dbb8297112ac725a0811280 = L.marker(
+            var marker_5e2fe22dc321864b0b65c353c8abcf11 = L.marker(
                 [49.87326, 2.25358],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_33cf29d0768b1bd75026a1b1eb80b4a6 = L.divIcon({
+            var div_icon_ff962d30edfcf053e51ef06cb7da0781 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-0\" data-actor-id=\"28\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87326\" data-lng=\"2.25358\" onclick=\"openSidebarSingle(28)\" title=\"RHU RAUC\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eRHU RAUC\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c7c024670dbb8297112ac725a0811280.setIcon(div_icon_33cf29d0768b1bd75026a1b1eb80b4a6);
+                marker_5e2fe22dc321864b0b65c353c8abcf11.setIcon(div_icon_ff962d30edfcf053e51ef06cb7da0781);
             
     
-            var marker_49491ccf4aeece6ccde47fcd278ec4d5 = L.marker(
+            var marker_ac84fa8c4287e14bb17085376d660f5a = L.marker(
                 [49.87103, 2.30374],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_a3ba39791f126b8038ed6b9690576157 = L.divIcon({
+            var div_icon_890203b1366d5574821f264cad376118 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"1\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)\" data-filiere=\"Tech\" onclick=\"openSidebarSingle(1)\" title=\"Apotekisto\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eApotekisto\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_49491ccf4aeece6ccde47fcd278ec4d5.setIcon(div_icon_a3ba39791f126b8038ed6b9690576157);
+                marker_ac84fa8c4287e14bb17085376d660f5a.setIcon(div_icon_890203b1366d5574821f264cad376118);
             
     
-            var marker_a7bf72f5253a46b6b99917a16ad0cbdf = L.marker(
+            var marker_2b717dcd0d2d98c865664ba6df4f1ab1 = L.marker(
                 [49.87119, 2.25437],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_0e91f840856586c2fcb6b1eef854e356 = L.divIcon({
+            var div_icon_e02e0418401b2497690053d9eb397e59 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"2\" data-taille=\"Etablissement de formation, Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(2)\" title=\"SimUSant\u00e9\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSimUSant\u00e9\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a7bf72f5253a46b6b99917a16ad0cbdf.setIcon(div_icon_0e91f840856586c2fcb6b1eef854e356);
+                marker_2b717dcd0d2d98c865664ba6df4f1ab1.setIcon(div_icon_e02e0418401b2497690053d9eb397e59);
             
     
-            var marker_723e113a2234c1bbaa68d0b77fe09c8b = L.marker(
+            var marker_83caff9401fb61ce0a6ced1b45e4bd40 = L.marker(
                 [49.87653, 2.2549],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_07565f0164bf90293caeaa5cb789b461 = L.divIcon({
+            var div_icon_d00bbcf18f7cdb0040f8257426cda7bb = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"3\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9|||Tech\" onclick=\"openSidebarSingle(3)\" title=\"Surgitec Robotics\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSurgitec Robotics\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_723e113a2234c1bbaa68d0b77fe09c8b.setIcon(div_icon_07565f0164bf90293caeaa5cb789b461);
+                marker_83caff9401fb61ce0a6ced1b45e4bd40.setIcon(div_icon_d00bbcf18f7cdb0040f8257426cda7bb);
             
     
-            var marker_cdb42da070d423a9cf390bb918b7496b = L.marker(
+            var marker_da613eec286d69564aec965beeb70620 = L.marker(
                 [49.87684, 2.26242],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_1db5c14ece7d2389aa4b401a3c183a0e = L.divIcon({
+            var div_icon_9c2f0dcb89e50536ae963b698649fc8f = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"4\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(4)\" title=\"Campus Sant\u00e9\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCampus Sant\u00e9\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_cdb42da070d423a9cf390bb918b7496b.setIcon(div_icon_1db5c14ece7d2389aa4b401a3c183a0e);
+                marker_da613eec286d69564aec965beeb70620.setIcon(div_icon_9c2f0dcb89e50536ae963b698649fc8f);
             
     
-            var marker_07390b87a8e65b1c466d0b43ed96f1cd = L.marker(
+            var marker_5cf95e7e5091eb86f4e771be7d1ceb8d = L.marker(
                 [49.87078, 2.2519],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_161bd11e0a13553b012a45e77d385943 = L.divIcon({
+            var div_icon_dfd0fa1f01493758ad08c906184aba5a = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-5\" data-actor-id=\"12\" data-group-id=\"5\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87078, 2.2519, \u0027hub-marker-5\u0027, 12)\" title=\"H\u00f4te : Centre Unirversitaire Recherche en Sant\u00e9 (+2 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FBC9D4; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FBC9D4; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CURS\n                    \u003cspan style=\"background:#FFF; color:#FBC9D4; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+2\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_07390b87a8e65b1c466d0b43ed96f1cd.setIcon(div_icon_161bd11e0a13553b012a45e77d385943);
+                marker_5cf95e7e5091eb86f4e771be7d1ceb8d.setIcon(div_icon_dfd0fa1f01493758ad08c906184aba5a);
             
     
-            var marker_093a1a381fc4ed463a510409d4d3a2e8 = L.marker(
+            var marker_691d3f2e394a87c257a3a358f7c0cb39 = L.marker(
                 [49.87052, 2.25219],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_e7f243c218ae4b01a016d31d438c75f1 = L.divIcon({
+            var div_icon_31d11bf29627ec506e2b2ac1e671daa4 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"5\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87052\" data-lng=\"2.25219\" onclick=\"openSidebarSingle(5)\" title=\"Plateforme PlatAnN\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme PlatAnN\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_093a1a381fc4ed463a510409d4d3a2e8.setIcon(div_icon_e7f243c218ae4b01a016d31d438c75f1);
+                marker_691d3f2e394a87c257a3a358f7c0cb39.setIcon(div_icon_31d11bf29627ec506e2b2ac1e671daa4);
             
     
-            var marker_2973fbddc91dfefbb2a10f9e878e5f5f = L.marker(
+            var marker_f48391cc89b97302cb4f84f6506ebfb3 = L.marker(
                 [49.87077, 2.25199],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_8a0adf1ce50e7c62d4d8f0c3b6ee0906 = L.divIcon({
+            var div_icon_ffb756b5244a84ba34c6c5f2c5d72d8a = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"13\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 1 : Principes de base observ\u00e9s|||Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87077\" data-lng=\"2.25199\" onclick=\"openSidebarSingle(13)\" title=\"Plateforme ICAP\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme ICAP\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_2973fbddc91dfefbb2a10f9e878e5f5f.setIcon(div_icon_8a0adf1ce50e7c62d4d8f0c3b6ee0906);
+                marker_f48391cc89b97302cb4f84f6506ebfb3.setIcon(div_icon_ffb756b5244a84ba34c6c5f2c5d72d8a);
             
     
-            var marker_6a45676469a3f392b72102b8f98c9eb6 = L.marker(
+            var marker_245f9177cdbb6c425121cf0d151cdd73 = L.marker(
                 [49.89922, 2.30011],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_eebccfd4ecfa5067ed5a164ff24f01d4 = L.divIcon({
+            var div_icon_d51ff09acd9267390bd0a67d62ecc605 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"6\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sciences de l\u0027ing\u00e9nieur|||Sant\u00e9|||Energie|||Tech\" onclick=\"openSidebarSingle(6)\" title=\"\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003e\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_6a45676469a3f392b72102b8f98c9eb6.setIcon(div_icon_eebccfd4ecfa5067ed5a164ff24f01d4);
+                marker_245f9177cdbb6c425121cf0d151cdd73.setIcon(div_icon_d51ff09acd9267390bd0a67d62ecc605);
             
     
-            var marker_50784007bf41027b521f64b10aa2f790 = L.marker(
+            var marker_91f1c9cce81e92a23df3c94e8c0c5820 = L.marker(
                 [49.89543, 2.3053],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_785029ad0c43d715835e3206d44a9055 = L.divIcon({
+            var div_icon_b17e8f995c22a36e0eb4b75a42706c21 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"7\" data-taille=\"Association\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" onclick=\"openSidebarSingle(7)\" title=\"G\u00e9rontop\u00f4le Hauts-de-France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FFC27F; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FFC27F; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eG\u00e9rontop\u00f4le Hauts-de-France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FFC27F;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_50784007bf41027b521f64b10aa2f790.setIcon(div_icon_785029ad0c43d715835e3206d44a9055);
+                marker_91f1c9cce81e92a23df3c94e8c0c5820.setIcon(div_icon_b17e8f995c22a36e0eb4b75a42706c21);
             
     
-            var marker_931c9c1ec22a99167ddec37a47a2e09c = L.marker(
+            var marker_a8409ca8f023580434c3d9f0ad9617b0 = L.marker(
                 [49.89048, 2.30183],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_d532f7c78970966288c4e392125aedff = L.divIcon({
+            var div_icon_07ce10f8aa456a4950703b65d10fbf79 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"9\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(9)\" title=\"GLYX THERAPEUTICS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGLYX THERAPEUTICS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_931c9c1ec22a99167ddec37a47a2e09c.setIcon(div_icon_d532f7c78970966288c4e392125aedff);
+                marker_a8409ca8f023580434c3d9f0ad9617b0.setIcon(div_icon_07ce10f8aa456a4950703b65d10fbf79);
             
     
-            var marker_9f8aa2bd429d3ec1e78785ac23a8ce32 = L.marker(
+            var marker_201f8a7337cd592507bce55ae52cd4ba = L.marker(
                 [49.87445, 2.27334],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_300bbcabb295a84dbda2d0fa85319949 = L.divIcon({
+            var div_icon_12d7d9023aca8a6f7ac4e591887b8f09 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-9\" data-actor-id=\"10\" data-group-id=\"9\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-9\u0027, 10)\" title=\"H\u00f4te : Biolab, p\u00e9pin\u00e8re (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FDC500; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Biolab, p\u00e9pin\u00e8re\n                    \u003cspan style=\"background:#FFF; color:#FDC500; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_9f8aa2bd429d3ec1e78785ac23a8ce32.setIcon(div_icon_300bbcabb295a84dbda2d0fa85319949);
+                marker_201f8a7337cd592507bce55ae52cd4ba.setIcon(div_icon_12d7d9023aca8a6f7ac4e591887b8f09);
             
     
-            var marker_af730636a503d4d65197d28f78f41e14 = L.marker(
+            var marker_370036b3fa3cad64acec6ea331cc63c3 = L.marker(
                 [49.87448, 2.27352],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_d8d9ed351894ce5feb34d55804fc599f = L.divIcon({
+            var div_icon_4765d8d1e7f8618ebcd26e4938595c77 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-9\" data-actor-id=\"11\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87448\" data-lng=\"2.27352\" onclick=\"openSidebarSingle(11)\" title=\"Dyscoveri\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eDyscoveri\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_af730636a503d4d65197d28f78f41e14.setIcon(div_icon_d8d9ed351894ce5feb34d55804fc599f);
+                marker_370036b3fa3cad64acec6ea331cc63c3.setIcon(div_icon_4765d8d1e7f8618ebcd26e4938595c77);
             
     
-            var marker_85629e0bec46a0bbadc1464981e6b203 = L.marker(
+            var marker_98f086cd418a2f49728f613eeb3da3dc = L.marker(
                 [49.87429, 2.2727],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_38ba3231cf4feef8c4743dcc7ee6b0b7 = L.divIcon({
+            var div_icon_9e2b1a190d8deac8bcf04936ff827704 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-9\" data-actor-id=\"23\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" data-lat=\"49.87429\" data-lng=\"2.2727\" onclick=\"openSidebarSingle(23)\" title=\"Capoupa\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCapoupa\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_85629e0bec46a0bbadc1464981e6b203.setIcon(div_icon_38ba3231cf4feef8c4743dcc7ee6b0b7);
+                marker_98f086cd418a2f49728f613eeb3da3dc.setIcon(div_icon_9e2b1a190d8deac8bcf04936ff827704);
             
     
-            var marker_58fb2cdb4714b75b80259bee2ccec5e7 = L.marker(
+            var marker_00445c86dd4a864d35206d247b34c972 = L.marker(
                 [49.87454, 2.27267],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_0b60647b548739e7fe06c1889a761b49 = L.divIcon({
+            var div_icon_f6c7bbbc4347b7d040113ff2e4801a5e = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-9\" data-actor-id=\"27\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9|||Tech\" data-lat=\"49.87454\" data-lng=\"2.27267\" onclick=\"openSidebarSingle(27)\" title=\"SIGO\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eSIGO\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_58fb2cdb4714b75b80259bee2ccec5e7.setIcon(div_icon_0b60647b548739e7fe06c1889a761b49);
+                marker_00445c86dd4a864d35206d247b34c972.setIcon(div_icon_f6c7bbbc4347b7d040113ff2e4801a5e);
             
     
-            var marker_47224b232ce1fbf31cb81cf754760a23 = L.marker(
+            var marker_d50bb427a7e90844b1d1cd65f2e7304b = L.marker(
                 [49.41795, 2.82632],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_b820d0a59b56058890d919eb25a4e289 = L.divIcon({
+            var div_icon_bbdc282b09955e66cb966dcdb59d2943 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"15\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Industries Culturelles et Cr\u00e9atives|||Tech\" onclick=\"openSidebarSingle(15)\" title=\"WE REV\u0027ART\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eWE REV\u0027ART\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_47224b232ce1fbf31cb81cf754760a23.setIcon(div_icon_b820d0a59b56058890d919eb25a4e289);
+                marker_d50bb427a7e90844b1d1cd65f2e7304b.setIcon(div_icon_bbdc282b09955e66cb966dcdb59d2943);
             
     
-            var marker_29bdb115bbdd22739f67cf4e0a4f4795 = L.marker(
+            var marker_4a237f0b62c75d56e55cd0ceb5061e5f = L.marker(
                 [49.884, 2.30208],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_984820edc43c539e82f337fb82482254 = L.divIcon({
+            var div_icon_726ac19c9e86aeb919ace11e8728c10d = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"16\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Tech\" onclick=\"openSidebarSingle(16)\" title=\"H\u00e9kia\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eH\u00e9kia\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_29bdb115bbdd22739f67cf4e0a4f4795.setIcon(div_icon_984820edc43c539e82f337fb82482254);
+                marker_4a237f0b62c75d56e55cd0ceb5061e5f.setIcon(div_icon_726ac19c9e86aeb919ace11e8728c10d);
             
     
-            var marker_5f9c48bc1ab0d0822043f0e7eed338d0 = L.marker(
+            var marker_84f908fc49fbd6ff61e47f22857fd2b9 = L.marker(
                 [49.89968, 2.25604],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_8ef676e36098f1cdb4fd7b6775975a00 = L.divIcon({
+            var div_icon_1c87137794ed42042162f79fcfcf9d3e = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"17\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(17)\" title=\"GRADeS In\u00e9a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGRADeS In\u00e9a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_5f9c48bc1ab0d0822043f0e7eed338d0.setIcon(div_icon_8ef676e36098f1cdb4fd7b6775975a00);
+                marker_84f908fc49fbd6ff61e47f22857fd2b9.setIcon(div_icon_1c87137794ed42042162f79fcfcf9d3e);
             
     
-            var marker_66ae31c148850d5b922f1b38d769820f = L.marker(
+            var marker_803233160b3026f082dab91face2be1e = L.marker(
                 [49.87828, 2.26861],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_00886b44ac64f9576c417f3030266849 = L.divIcon({
+            var div_icon_e58fbeb1156e78d30127fc0403570e00 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"18\" data-taille=\"PME et entreprises\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(18)\" title=\"Numih France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNumih France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_66ae31c148850d5b922f1b38d769820f.setIcon(div_icon_00886b44ac64f9576c417f3030266849);
+                marker_803233160b3026f082dab91face2be1e.setIcon(div_icon_e58fbeb1156e78d30127fc0403570e00);
             
     
-            var marker_269f3607ca7f3ac1d849e19eed1055a3 = L.marker(
+            var marker_2b0105e1ac0dae522be918c486802077 = L.marker(
                 [49.87457, 2.35187],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_7b4d0657d6e41c3efc610ff541416e56 = L.divIcon({
+            var div_icon_3236ed05bb94ae678845cdac514e0632 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"19\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif|||TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Tech|||Sciences de l\u0027ing\u00e9nieur\" onclick=\"openSidebarSingle(19)\" title=\"SPORTOPIA\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSPORTOPIA\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_269f3607ca7f3ac1d849e19eed1055a3.setIcon(div_icon_7b4d0657d6e41c3efc610ff541416e56);
+                marker_2b0105e1ac0dae522be918c486802077.setIcon(div_icon_3236ed05bb94ae678845cdac514e0632);
             
     
-            var marker_44d4c4c312ce6fa14da4937a3d5e6f2a = L.marker(
+            var marker_b7ae534eb099539b6f72b4cf4cb140c4 = L.marker(
                 [49.89419, 2.30852],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_6e0ccd3becef9b0643e9d5a75724427d = L.divIcon({
+            var div_icon_01b4375166251d4bcc9f5b8ab35c1e34 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"20\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(20)\" title=\"Caisse d\u0027Epargne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCaisse d\u0027Epargne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_44d4c4c312ce6fa14da4937a3d5e6f2a.setIcon(div_icon_6e0ccd3becef9b0643e9d5a75724427d);
+                marker_b7ae534eb099539b6f72b4cf4cb140c4.setIcon(div_icon_01b4375166251d4bcc9f5b8ab35c1e34);
             
     
-            var marker_66d089eb1b7ac6903a8f83192b5dcf3e = L.marker(
+            var marker_baadd3bdf8dd02bdc00514bed2635dea = L.marker(
                 [49.89531, 2.30461],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_f133159f9dccc444818aa653d72ff35e = L.divIcon({
+            var div_icon_00b5f0ef6220740648af817b5328c724 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"21\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Energie|||Tech|||Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(21)\" title=\"innov\u0027a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003einnov\u0027a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_66d089eb1b7ac6903a8f83192b5dcf3e.setIcon(div_icon_f133159f9dccc444818aa653d72ff35e);
+                marker_baadd3bdf8dd02bdc00514bed2635dea.setIcon(div_icon_00b5f0ef6220740648af817b5328c724);
             
     
-            var marker_4d077d6957871b43395e74bd991f4459 = L.marker(
+            var marker_dac81cd648e094d407f1d0f6b0c4ed4e = L.marker(
                 [50.00053, 2.64591],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_6113bde8c289a3203ba4813c7b05ce65 = L.divIcon({
+            var div_icon_5246eb11dfdd277c9a6612630d742ca8 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"22\" data-taille=\"Start-up ou TPE innovantes\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(22)\" title=\"SIDONY\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSIDONY\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_4d077d6957871b43395e74bd991f4459.setIcon(div_icon_6113bde8c289a3203ba4813c7b05ce65);
+                marker_dac81cd648e094d407f1d0f6b0c4ed4e.setIcon(div_icon_5246eb11dfdd277c9a6612630d742ca8);
             
     
-            var marker_e14dc267d338137571e0b0f1ffbe785d = L.marker(
+            var marker_f847ec0245af7157fb0575ff0708a0f9 = L.marker(
                 [49.87912, 2.25917],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_5b89ce71ce281c63f20ba3a7e4388489 = L.divIcon({
+            var div_icon_0cb10285b80abef8b2507de4845b90d0 = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"25\" data-taille=\"PME et entreprises\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(25)\" title=\"NovaSpine\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNovaSpine\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e14dc267d338137571e0b0f1ffbe785d.setIcon(div_icon_5b89ce71ce281c63f20ba3a7e4388489);
+                marker_f847ec0245af7157fb0575ff0708a0f9.setIcon(div_icon_0cb10285b80abef8b2507de4845b90d0);
             
     
-            var marker_db90098815d6b7fe4248e92616ca80ef = L.marker(
+            var marker_cc47ef7339e2ca2b3cc5430e3abe7e18 = L.marker(
                 [49.89504, 2.29186],
                 {
 }
-            ).addTo(map_23753245ede7edcd562f60dd151bd998);
+            ).addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-            var div_icon_459fe372245a48e4f8bcc8dbeb62dd77 = L.divIcon({
+            var div_icon_5b6735b6c19abded29b05e9809239f8f = L.divIcon({
   "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"26\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(26)\" title=\"Mutuale\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMutuale\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_db90098815d6b7fe4248e92616ca80ef.setIcon(div_icon_459fe372245a48e4f8bcc8dbeb62dd77);
+                marker_cc47ef7339e2ca2b3cc5430e3abe7e18.setIcon(div_icon_5b6735b6c19abded29b05e9809239f8f);
             
     
-            tile_layer_d4e13d516798bf889cf3d96249b4c982.addTo(map_23753245ede7edcd562f60dd151bd998);
+            tile_layer_11d11e0a6a956ab3f7e1dba58e03085a.addTo(map_e41edd60e20f83723991a86a13078a4f);
         
     
-                marker_5ba50d7e1b995ff5ec6c73063df06cbe.setIcon(div_icon_56a03239261d7233f34a307e05c84d32);
+                marker_25b6996e1a78c92a8a05f58e36e2a781.setIcon(div_icon_25f02be932957ed666e7bc51db86603f);
             
     
-                marker_34afa52c99f9d13108d3d02fbb0e0ef9.setIcon(div_icon_c10a3d2d87d013b4a695800c2791140b);
+                marker_d1fbdda0e4939bea5542d442f5dcbbc7.setIcon(div_icon_494e395ded2fbf4d2fe98f4f69e5ca60);
             
     
-                marker_822ad6e2705a24f11ae7af89ec7c00f3.setIcon(div_icon_115f0ff351be4a63a8f7808411a26be7);
+                marker_8765da6ab984125f10c72d7f59658cec.setIcon(div_icon_bc7e14696082b31d0afbefd0f2fbfff3);
             
     
-                marker_de49a84b66e826499bdd38cb96963958.setIcon(div_icon_ae68ac552661258717e9ff1f4591843d);
+                marker_61625ab2ada89482e2e751ff4d088d85.setIcon(div_icon_430a981f098e28e805f28458b2a908cb);
             
     
-                marker_c7c024670dbb8297112ac725a0811280.setIcon(div_icon_33cf29d0768b1bd75026a1b1eb80b4a6);
+                marker_5e2fe22dc321864b0b65c353c8abcf11.setIcon(div_icon_ff962d30edfcf053e51ef06cb7da0781);
             
     
-                marker_49491ccf4aeece6ccde47fcd278ec4d5.setIcon(div_icon_a3ba39791f126b8038ed6b9690576157);
+                marker_ac84fa8c4287e14bb17085376d660f5a.setIcon(div_icon_890203b1366d5574821f264cad376118);
             
     
-                marker_a7bf72f5253a46b6b99917a16ad0cbdf.setIcon(div_icon_0e91f840856586c2fcb6b1eef854e356);
+                marker_2b717dcd0d2d98c865664ba6df4f1ab1.setIcon(div_icon_e02e0418401b2497690053d9eb397e59);
             
     
-                marker_723e113a2234c1bbaa68d0b77fe09c8b.setIcon(div_icon_07565f0164bf90293caeaa5cb789b461);
+                marker_83caff9401fb61ce0a6ced1b45e4bd40.setIcon(div_icon_d00bbcf18f7cdb0040f8257426cda7bb);
             
     
-                marker_cdb42da070d423a9cf390bb918b7496b.setIcon(div_icon_1db5c14ece7d2389aa4b401a3c183a0e);
+                marker_da613eec286d69564aec965beeb70620.setIcon(div_icon_9c2f0dcb89e50536ae963b698649fc8f);
             
     
-                marker_07390b87a8e65b1c466d0b43ed96f1cd.setIcon(div_icon_161bd11e0a13553b012a45e77d385943);
+                marker_5cf95e7e5091eb86f4e771be7d1ceb8d.setIcon(div_icon_dfd0fa1f01493758ad08c906184aba5a);
             
     
-                marker_093a1a381fc4ed463a510409d4d3a2e8.setIcon(div_icon_e7f243c218ae4b01a016d31d438c75f1);
+                marker_691d3f2e394a87c257a3a358f7c0cb39.setIcon(div_icon_31d11bf29627ec506e2b2ac1e671daa4);
             
     
-                marker_2973fbddc91dfefbb2a10f9e878e5f5f.setIcon(div_icon_8a0adf1ce50e7c62d4d8f0c3b6ee0906);
+                marker_f48391cc89b97302cb4f84f6506ebfb3.setIcon(div_icon_ffb756b5244a84ba34c6c5f2c5d72d8a);
             
     
-                marker_6a45676469a3f392b72102b8f98c9eb6.setIcon(div_icon_eebccfd4ecfa5067ed5a164ff24f01d4);
+                marker_245f9177cdbb6c425121cf0d151cdd73.setIcon(div_icon_d51ff09acd9267390bd0a67d62ecc605);
             
     
-                marker_50784007bf41027b521f64b10aa2f790.setIcon(div_icon_785029ad0c43d715835e3206d44a9055);
+                marker_91f1c9cce81e92a23df3c94e8c0c5820.setIcon(div_icon_b17e8f995c22a36e0eb4b75a42706c21);
             
     
-                marker_931c9c1ec22a99167ddec37a47a2e09c.setIcon(div_icon_d532f7c78970966288c4e392125aedff);
+                marker_a8409ca8f023580434c3d9f0ad9617b0.setIcon(div_icon_07ce10f8aa456a4950703b65d10fbf79);
             
     
-                marker_9f8aa2bd429d3ec1e78785ac23a8ce32.setIcon(div_icon_300bbcabb295a84dbda2d0fa85319949);
+                marker_201f8a7337cd592507bce55ae52cd4ba.setIcon(div_icon_12d7d9023aca8a6f7ac4e591887b8f09);
             
     
-                marker_af730636a503d4d65197d28f78f41e14.setIcon(div_icon_d8d9ed351894ce5feb34d55804fc599f);
+                marker_370036b3fa3cad64acec6ea331cc63c3.setIcon(div_icon_4765d8d1e7f8618ebcd26e4938595c77);
             
     
-                marker_85629e0bec46a0bbadc1464981e6b203.setIcon(div_icon_38ba3231cf4feef8c4743dcc7ee6b0b7);
+                marker_98f086cd418a2f49728f613eeb3da3dc.setIcon(div_icon_9e2b1a190d8deac8bcf04936ff827704);
             
     
-                marker_58fb2cdb4714b75b80259bee2ccec5e7.setIcon(div_icon_0b60647b548739e7fe06c1889a761b49);
+                marker_00445c86dd4a864d35206d247b34c972.setIcon(div_icon_f6c7bbbc4347b7d040113ff2e4801a5e);
             
     
-                marker_47224b232ce1fbf31cb81cf754760a23.setIcon(div_icon_b820d0a59b56058890d919eb25a4e289);
+                marker_d50bb427a7e90844b1d1cd65f2e7304b.setIcon(div_icon_bbdc282b09955e66cb966dcdb59d2943);
             
     
-                marker_29bdb115bbdd22739f67cf4e0a4f4795.setIcon(div_icon_984820edc43c539e82f337fb82482254);
+                marker_4a237f0b62c75d56e55cd0ceb5061e5f.setIcon(div_icon_726ac19c9e86aeb919ace11e8728c10d);
             
     
-                marker_5f9c48bc1ab0d0822043f0e7eed338d0.setIcon(div_icon_8ef676e36098f1cdb4fd7b6775975a00);
+                marker_84f908fc49fbd6ff61e47f22857fd2b9.setIcon(div_icon_1c87137794ed42042162f79fcfcf9d3e);
             
     
-                marker_66ae31c148850d5b922f1b38d769820f.setIcon(div_icon_00886b44ac64f9576c417f3030266849);
+                marker_803233160b3026f082dab91face2be1e.setIcon(div_icon_e58fbeb1156e78d30127fc0403570e00);
             
     
-                marker_269f3607ca7f3ac1d849e19eed1055a3.setIcon(div_icon_7b4d0657d6e41c3efc610ff541416e56);
+                marker_2b0105e1ac0dae522be918c486802077.setIcon(div_icon_3236ed05bb94ae678845cdac514e0632);
             
     
-                marker_44d4c4c312ce6fa14da4937a3d5e6f2a.setIcon(div_icon_6e0ccd3becef9b0643e9d5a75724427d);
+                marker_b7ae534eb099539b6f72b4cf4cb140c4.setIcon(div_icon_01b4375166251d4bcc9f5b8ab35c1e34);
             
     
-                marker_66d089eb1b7ac6903a8f83192b5dcf3e.setIcon(div_icon_f133159f9dccc444818aa653d72ff35e);
+                marker_baadd3bdf8dd02bdc00514bed2635dea.setIcon(div_icon_00b5f0ef6220740648af817b5328c724);
             
     
-                marker_4d077d6957871b43395e74bd991f4459.setIcon(div_icon_6113bde8c289a3203ba4813c7b05ce65);
+                marker_dac81cd648e094d407f1d0f6b0c4ed4e.setIcon(div_icon_5246eb11dfdd277c9a6612630d742ca8);
             
     
-                marker_e14dc267d338137571e0b0f1ffbe785d.setIcon(div_icon_5b89ce71ce281c63f20ba3a7e4388489);
+                marker_f847ec0245af7157fb0575ff0708a0f9.setIcon(div_icon_0cb10285b80abef8b2507de4845b90d0);
             
     
-                marker_db90098815d6b7fe4248e92616ca80ef.setIcon(div_icon_459fe372245a48e4f8bcc8dbeb62dd77);
+                marker_cc47ef7339e2ca2b3cc5430e3abe7e18.setIcon(div_icon_5b6735b6c19abded29b05e9809239f8f);
             
 </script>
 </html>
