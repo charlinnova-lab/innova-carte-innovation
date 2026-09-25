@@ -2,7 +2,7 @@
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification : 25 septembre - Fix Responsive, Légende, Filtres, Textes & Logo Size
+#   Last Modification : 25 septembre - Fix Responsive Mobile, Sauts de ligne Airtable & Logo Size
 
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
@@ -54,7 +54,7 @@ def get_couleur(taille_valeur):
     if not taille_valeur:
         return COULEURS["Autre"]
     val_str = str(taille_valeur).strip().replace("\n", " ").replace("\r", "")
-    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Etablissement de santé")
+    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Établissement de santé")
     if val_str in COULEURS:
         return COULEURS[val_str]
     for nom_taille, couleur in COULEURS.items():
@@ -353,6 +353,20 @@ ui_and_sidebar_html = """
         width: 100% !important;
         right: -100% !important;
     }
+    .fiche-grid {
+        grid-template-columns: 1fr !important;
+        min-height: auto !important;
+    }
+    .fiche-grid > div:first-child {
+        height: 200px !important;
+        min-height: 200px !important;
+    }
+    .fiche-description {
+        column-count: 1 !important;
+        height: auto !important;
+        max-height: 260px;
+        overflow-y: auto;
+    }
     #filiere-bar {
         left: 15px !important;
         top: 10px !important;
@@ -369,9 +383,6 @@ ui_and_sidebar_html = """
     #panel-search, #panel-filter {
         left: 15px !important;
         width: calc(100vw - 30px) !important;
-    }
-    .fiche-grid {
-        grid-template-columns: 1fr !important;
     }
 }
 </style>
@@ -461,7 +472,7 @@ font-family:Arial,sans-serif; max-width:80vw; backdrop-filter:blur(4px);
 <div id="sidebar" style="
 position:fixed; top:0; right:-720px; width:720px; height:100%; background:#F4F5F7;
 z-index:99999; box-shadow:-5px 0 15px rgba(0,0,0,0.25); transition:right 0.4s ease;
-overflow-y:auto; font-family:Arial,sans-serif;
+overflow-y:auto; -webkit-overflow-scrolling:touch; font-family:Arial,sans-serif;
 ">
 <button onclick="closeSidebar()" style="
 position:absolute; top:10px; right:15px; background:white; border:1px solid #CCC;
@@ -633,7 +644,7 @@ function fitGroupToVisible(hubClass, hoteLat, hoteLng) {
     });
 
     var sidebarEl = document.getElementById('sidebar');
-    var sidebarWidth = sidebarEl ? sidebarEl.offsetWidth : 0;
+    var sidebarWidth = (sidebarEl && window.innerWidth > 768) ? sidebarEl.offsetWidth : 0;
 
     mapObject.flyToBounds(L.latLngBounds(pts), {
         paddingTopLeft: [70, 140],
@@ -740,7 +751,7 @@ function openSidebarSingle(id) {
     var elem = document.getElementById('fiche-acteur-' + id);
     if (elem) {
         var wrapper = document.createElement('div');
-        wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1);";
+        wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1); overflow:hidden;";
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
         
@@ -752,7 +763,9 @@ function openSidebarSingle(id) {
         wrapper.appendChild(contentNode);
         container.appendChild(wrapper);
     }
-    document.getElementById('sidebar').style.right = '0px';
+    var sidebar = document.getElementById('sidebar');
+    sidebar.scrollTop = 0;
+    sidebar.style.right = '0px';
 }
 
 function closeSidebar() {
@@ -917,22 +930,28 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
-                <div class="fiche-grid" style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
-                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;">{bloc_photo}</div>
+                <div class="fiche-grid" style="display:grid; grid-template-columns:35% 65%; min-height:570px;">
+                    <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column; min-height:180px;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
-                        <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
-                        <!-- CONTENEUR LOGO AGRANDI X 1.5 (165px x 75px) -->
-                        <div style="position:absolute; top:20px; right:20px; width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">{bloc_logo}</div>
-                        <!-- TITRE AVEC PADDING DROITE POUR ÉVITER DE TOUCHER LE LOGO -->
-                        <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50; padding-right:175px;" title="{nom_detail}">{nom_court}</h1>
-                        <div style="color:{couleur}; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
+                            <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
+                            <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
+                        </div>
+                        
+                        <h1 style="margin-top:10px; margin-bottom:6px; font-size:24px; color:#2C3E50; word-break:break-word;" title="{nom_detail}">{nom_court}</h1>
+                        
+                        <div style="color:{couleur}; font-size:14px; font-weight:600; margin-bottom:12px; line-height:1.4;">
                             {icone_sous_thematiques} {sous_thematiques}<br>
                             | <span style="font-weight:normal; font-style:italic;">{taille}</span>
                         </div>
-                        <div style="font-size:15px; font-weight:700; line-height:1.3; margin-bottom:12px;">{chapeau}</div>
+                        
+                        <div style="font-size:14px; font-weight:700; line-height:1.3; margin-bottom:12px;">{chapeau}</div>
+                        
                         <div class="fiche-description" style="column-count:2; column-gap:18px; font-size:12px; line-height:1.45; text-align:justify; height:200px; overflow-y:auto; margin-bottom:14px;">{description}</div>
-                        {f'<div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:15px; font-weight:bold; font-style:italic; margin-bottom:14px;">{chiffre_cle}</div>' if chiffre_cle else ''}
-                        <div style="display:grid; grid-template-columns:50% 50%; gap:12px;">
+                        
+                        {f'<div style="border-top:1px solid #DDD; border-bottom:1px solid #DDD; padding:8px; text-align:center; font-size:14px; font-weight:bold; font-style:italic; margin-bottom:14px;">{chiffre_cle}</div>' if chiffre_cle else ''}
+                        
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px;">
                             <div>
                                 {bouton_site_web_html}
                                 <div style="font-size:12px; font-weight:bold;">Contact</div>
