@@ -2,7 +2,7 @@
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification : 25 septembre - Fix Responsive Mobile, Sauts de ligne Airtable & Logo Size
+#   Last Modification : 25 septembre - Fix Full Mobile Touch & Responsive Sidebar
 
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
@@ -153,7 +153,6 @@ def get_text(record, *keys, default=""):
             elif isinstance(val, dict):
                 val = val.get("name", str(val))
             
-            # Conservation des sauts de ligne de la saisie Airtable (\n)
             val_str = str(val).strip().replace("\r\n", "\n").replace("\r", "\n")
             if val_str:
                 val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Établissement de santé")
@@ -348,23 +347,30 @@ ui_and_sidebar_html = """
 .tooltip-text li { margin-bottom:3px; }
 .tooltip-text a { color:#8FD3FF; text-decoration:underline; }
 
+#sidebar.open {
+    right: 0 !important;
+}
+
 @media (max-width: 768px) {
     #sidebar {
         width: 100% !important;
         right: -100% !important;
+        top: 0 !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
     }
     .fiche-grid {
         grid-template-columns: 1fr !important;
         min-height: auto !important;
     }
     .fiche-grid > div:first-child {
-        height: 200px !important;
-        min-height: 200px !important;
+        height: 180px !important;
+        min-height: 180px !important;
     }
     .fiche-description {
         column-count: 1 !important;
         height: auto !important;
-        max-height: 260px;
+        max-height: 220px;
         overflow-y: auto;
     }
     #filiere-bar {
@@ -500,6 +506,12 @@ document.addEventListener("DOMContentLoaded", function() {
             mapObject = window[key];
             break;
         }
+    }
+    
+    var sidebar = document.getElementById('sidebar');
+    if (sidebar && typeof L !== 'undefined') {
+        L.DomEvent.disableScrollPropagation(sidebar);
+        L.DomEvent.disableClickPropagation(sidebar);
     }
 });
 
@@ -765,11 +777,14 @@ function openSidebarSingle(id) {
     }
     var sidebar = document.getElementById('sidebar');
     sidebar.scrollTop = 0;
+    sidebar.classList.add('open');
     sidebar.style.right = '0px';
 }
 
 function closeSidebar() {
-    document.getElementById('sidebar').style.right = '-720px';
+    var sidebar = document.getElementById('sidebar');
+    sidebar.classList.remove('open');
+    sidebar.style.right = '-100%';
 }
 </script>
 """
@@ -921,7 +936,6 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             mailto_public = f"mailto:{CONTACT_PUBLIC_EMAIL}?subject={sujet_encode}&body={corps_encode}"
             bloc_contact_html = f'<a href="{mailto_public}" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a>'
 
-        # Conversion des sauts de ligne Airtable en <br> pour conserver le formatage de l'adresse
         bloc_adresse_html = adresse.replace('\n', '<br>') if adresse else '<span style="color:#999; font-style:italic;">Non renseignée</span>'
 
         bouton_site_web_html = f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ""
@@ -987,7 +1001,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     if len(groupe) == 1 or nb_dependants <= 0:
         label_pos_h, arrow_style_h = get_style_ancrage(hote_actor, couleur_hote)
         marker_html = f"""
-        <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="openSidebarSingle({hote_idx})" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
+        <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="openSidebarSingle({hote_idx})" ontouchstart="openSidebarSingle({hote_idx}); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:14px; height:14px; background:{couleur_hote}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;"></div>
             <div style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
                 <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_court}</div>
@@ -1000,7 +1014,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     else:
         label_pos_hub, arrow_style_hub = get_style_ancrage(hote_actor, couleur_hote)
         marker_hub_html = f"""
-        <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
+        <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
             <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
                 <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
@@ -1029,7 +1043,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
             label_pos_s, arrow_style_s = get_style_ancrage(actor, couleur_actor)
             sub_marker_html = f"""
-            <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
+            <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" ontouchstart="openSidebarSingle({idx}); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
                 <div style="position:absolute; top:0; left:0; width:12px; height:12px; background:{couleur_actor}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;"></div>
                 <div style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
                     <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;">{nom_actor_court}</div>
