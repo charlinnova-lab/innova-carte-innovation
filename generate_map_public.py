@@ -2,18 +2,18 @@
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification : 09 septembre - Fix Overflow & Redirections
+#   Last Modification : 25 septembre - Fix Responsive, Légende, Filtres, Textes & Logo Size
 
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
-#   1  stocke les images pour permettre une visualisation totu au long de la journée
+#   1. stocke les images pour permettre une visualisation tout au long de la journée
 #   2. associe chaque catégorie à sa couleur
-#   3. récupère les données depuis la base de données Airtable (formulaire de catographie)
+#   3. récupère les données depuis la base de données Airtable (formulaire de cartographie)
 #   4. génère la carte, les filtres, la légende
-#   5. prépare l'affichage et l'ancrage gPS
+#   5. prépare l'affichage et l'ancrage GPS
 #   6. génère la carte
 
-#   IMPORTANT :  Le token Airtable n'est PAS présent ici.   Il est stocké comme secret dans Cloudflare.
+#   IMPORTANT : Le token Airtable n'est PAS présent ici. Il est stocké comme secret dans Cloudflare.
 #========================================================= 
 
 import os
@@ -37,13 +37,13 @@ CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
 os.makedirs("assets/images", exist_ok=True)
 
 COULEURS = {
-    "Etablissement médical":                        "#2D3277", #bleu marine
+    "Etablissement de santé":                       "#2D3277", #bleu marine
     "Etablissement de formation":                    "#845EC2", #violet
     "Laboratoire ou activité de recherche":          "#FBC9D4", #rose pâle
     "Plateforme technologique ou centre technique": "#FB6F92", #rose
     "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
-    "Start-up":                    "#9BC045", #vert
-    "TPE ou PME":                           "#00EBF5", #bleu ciel
+    "Start-up":                                      "#9BC045", #vert
+    "TPE ou PME":                                    "#00EBF5", #bleu ciel
     "Grande entreprise":                            "#2583F2", #bleu moyen
     "Association":                                  "#FFC27F", #orange pâle
     "Projet collaboratif":                          "#E8873A", #orange
@@ -54,6 +54,7 @@ def get_couleur(taille_valeur):
     if not taille_valeur:
         return COULEURS["Autre"]
     val_str = str(taille_valeur).strip().replace("\n", " ").replace("\r", "")
+    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Etablissement de santé")
     if val_str in COULEURS:
         return COULEURS[val_str]
     for nom_taille, couleur in COULEURS.items():
@@ -151,8 +152,11 @@ def get_text(record, *keys, default=""):
                 val = ", ".join(extracted)
             elif isinstance(val, dict):
                 val = val.get("name", str(val))
-            val_str = str(val).strip().replace("\n", " ").replace("\r", "")
+            
+            # Conservation des sauts de ligne de la saisie Airtable (\n)
+            val_str = str(val).strip().replace("\r\n", "\n").replace("\r", "\n")
             if val_str:
+                val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Établissement de santé")
                 return val_str
     return default
 
@@ -286,20 +290,26 @@ m = folium.Map(
     subdomains="abcd"
 )
 
-html_checkbox_tailles = "".join([
+html_checkbox_tailles = (
+    '<label style="display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:8px; cursor:pointer; font-weight:bold; border-bottom:1px dashed #CCC; padding-bottom:4px;">'
+    '<input type="checkbox" id="master-taille" checked onchange="toggleAllFilters(\'filter-taille\', this)"> Tout cocher / décocher</label>'
+) + "".join([
     f'<label style="display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:5px; cursor:pointer;">'
     f'<input type="checkbox" class="filter-checkbox filter-taille" value="{t}" checked onchange="applyFilters()"> {t}</label>'
     for t in liste_tailles_presentes
 ])
 
 html_legende_items = "".join([
-    f'<div style="display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:11px; color:#333;">'
+    f'<div style="display:flex; align-items:center; gap:6px; font-size:11px; color:#333; white-space:nowrap;">'
     f'<div style="width:12px; height:12px; background:{COULEURS[t]}; border-radius:3px; flex-shrink:0; border:1px solid rgba(0,0,0,0.1);"></div>'
     f'<span>{t}</span></div>'
     for t in liste_tailles_presentes
 ])
 
-html_checkbox_trls = "".join([
+html_checkbox_trls = (
+    '<label style="display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:8px; cursor:pointer; font-weight:bold; border-bottom:1px dashed #CCC; padding-bottom:4px;">'
+    '<input type="checkbox" id="master-trl" checked onchange="toggleAllFilters(\'filter-trl\', this)"> Tout cocher / décocher</label>'
+) + "".join([
     f'<label style="display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:5px; cursor:pointer;">'
     f'<input type="checkbox" class="filter-checkbox filter-trl" value="{trl}" checked onchange="applyFilters()"> {trl}</label>'
     for trl in liste_trls
@@ -315,13 +325,14 @@ html_boutons_filiere = (
 ])
 
 ui_and_sidebar_html = """
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <style>
 .fiche-description p { margin:0 0 6px 0; }
 .fiche-description ul, .fiche-description ol { margin:2px 0 8px 0; padding-left:16px; break-inside:avoid-column; }
 .fiche-description li { margin-bottom:2px; }
 .fiche-description strong { color:#2C3E50; }
 
-/* FIX OVERFLOW & SCROLL HORIZONTAL POPUP INFO */
 .tooltip-text {
     white-space: normal !important;
     word-break: break-word !important;
@@ -336,9 +347,35 @@ ui_and_sidebar_html = """
 .tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
 .tooltip-text li { margin-bottom:3px; }
 .tooltip-text a { color:#8FD3FF; text-decoration:underline; }
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100% !important;
+        right: -100% !important;
+    }
+    #filiere-bar {
+        left: 15px !important;
+        top: 10px !important;
+        max-width: calc(100vw - 30px) !important;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    #legend-cartouche {
+        left: 15px !important;
+        right: 15px !important;
+        bottom: 10px !important;
+        max-width: calc(100vw - 30px) !important;
+    }
+    #panel-search, #panel-filter {
+        left: 15px !important;
+        width: calc(100vw - 30px) !important;
+    }
+    .fiche-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
 </style>
 
-<!-- ICONES DECLENCHEURS (recherche / filtres) -->
 <div id="icon-search-btn" onclick="togglePanel('panel-search', 'icon-search-btn')" title="Recherche" style="
 position:fixed; top:calc(50% - 52px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
 box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
@@ -351,18 +388,16 @@ box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justif
 font-size:19px; cursor:pointer; z-index:10001;
 ">🎛️</div>
 
-<!-- BARRE FILIERE - toujours visible -->
 <div id="filiere-bar" style="
 position:fixed; top:15px; left:68px; max-width: calc(100vw - 100px);
 background:white; padding:10px 15px; border-radius:8px; z-index:9999;
 box-shadow:0 3px 10px rgba(0,0,0,0.2); font-family:Arial,sans-serif;
-display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+display:flex; flex-wrap:nowrap; gap:6px; align-items:center; overflow-x:auto;
 ">
-    <span style="font-weight:bold; font-size:13px; color:#2D3277; margin-right:5px;">Filière :</span>
+    <span style="font-weight:bold; font-size:13px; color:#2D3277; margin-right:5px; flex-shrink:0;">Filière :</span>
     __HTML_BOUTONS_FILIERE__
 </div>
 
-<!-- PANNEAU RECHERCHE -->
 <div id="panel-search" style="
 display:none; position:fixed; top:calc(50% - 52px); left:68px; width:260px;
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -376,7 +411,6 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif;
     ">
 </div>
 
-<!-- PANNEAU FILTRES -->
 <div id="panel-filter" style="
 display:none; position:fixed; top:calc(50% + 8px); left:68px; width:280px; max-height: calc(50vh - 30px);
 background:white; padding:15px; border-radius:8px; z-index:10000;
@@ -403,7 +437,6 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y
     </div>
 </div>
 
-<!-- LOGO INNOV'A -->
 <div id="logo-innova" style="
 position:fixed; bottom:15px; left:15px; z-index:9999; background:#2D3277;
 padding:10px 16px; border-radius:8px; box-shadow:0 3px 12px rgba(0,0,0,0.25);
@@ -414,13 +447,15 @@ display:flex; align-items:center;
 
 <div id="legend-cartouche" style="
 position:fixed; bottom:20px; right:20px; background:rgba(255,255,255,0.92);
-padding:12px 15px; border-radius:8px; z-index:9999; box-shadow:0 3px 12px rgba(0,0,0,0.2);
-font-family:Arial,sans-serif; max-width:280px; backdrop-filter:blur(4px);
+padding:10px 15px; border-radius:8px; z-index:9999; box-shadow:0 3px 12px rgba(0,0,0,0.2);
+font-family:Arial,sans-serif; max-width:80vw; backdrop-filter:blur(4px);
 ">
-    <div style="font-weight:bold; font-size:12px; color:#2D3277; margin-bottom:8px; border-bottom:1px solid #DDD; padding-bottom:4px;">
+    <div style="font-weight:bold; font-size:11px; color:#2D3277; margin-bottom:6px; border-bottom:1px solid #DDD; padding-bottom:3px;">
          Légende des structures
     </div>
-    __HTML_LEGENDE_ITEMS__
+    <div style="display:flex; flex-direction:row; flex-wrap:wrap; gap:12px; align-items:center;">
+        __HTML_LEGENDE_ITEMS__
+    </div>
 </div>
 
 <div id="sidebar" style="
@@ -476,6 +511,14 @@ function togglePanel(panelId, iconId) {
         p.style.display = 'none';
     });
     panel.style.display = isOpen ? 'none' : 'block';
+}
+
+function toggleAllFilters(className, masterCheckbox) {
+    var checkboxes = document.querySelectorAll('.' + className);
+    checkboxes.forEach(function(cb) {
+        cb.checked = masterCheckbox.checked;
+    });
+    applyFilters();
 }
 
 document.addEventListener('click', function(e) {
@@ -816,7 +859,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         photo_url = download_airtable_image(rec_id, actor.get("Main illustration"), prefix="main")
 
         bloc_photo = f'<img src="{photo_url}" style="width:100%; height:100%; object-fit:cover; display:block;" />' if photo_url else '<div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div>'
-        bloc_logo = f'<img src="{logo_url}" style="max-width:110px; max-height:50px; object-fit:contain;" />' if logo_url else 'LOGO'
+        
+        # LOGO AGRANDI X 1.5 (165px x 75px)
+        bloc_logo = f'<img src="{logo_url}" style="max-width:165px; max-height:75px; object-fit:contain;" />' if logo_url else 'LOGO'
 
         video_raw = actor.get("Video") or actor.get("Vidéo") or actor.get("Lien_video")
         second_illu_raw = actor.get("Second_illustration") or actor.get("SecondIllustration") or actor.get("Illustration_secondaire") or actor.get("Second illustration")
@@ -862,21 +907,24 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             corps_encode = quote(f"Bonjour,\n\nJe souhaite entrer en contact avec : {nom_court}.\n\n")
             mailto_public = f"mailto:{CONTACT_PUBLIC_EMAIL}?subject={sujet_encode}&body={corps_encode}"
             bloc_contact_html = f'<a href="{mailto_public}" style="color:#2D3277; font-weight:bold; text-decoration:none;">Nous contacter</a>'
-        bloc_adresse_html = adresse or '<span style="color:#999; font-style:italic;">Non renseignée</span>'
 
-        # FIX BOUTON SITE WEB : alignement strict sur le format fonctionnel d'interview
+        # Conversion des sauts de ligne Airtable en <br> pour conserver le formatage de l'adresse
+        bloc_adresse_html = adresse.replace('\n', '<br>') if adresse else '<span style="color:#999; font-style:italic;">Non renseignée</span>'
+
         bouton_site_web_html = f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ""
-        bouton_interview_html = f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">🎤 INTERVIEW</button></a>' if url_interview else ""
+        bouton_interview_html = f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">📝 PORTRAIT</button></a>' if url_interview else ""
 
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
-                <div style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
+                <div class="fiche-grid" style="display:grid; grid-template-columns:35% 65%; min-height:570px; align-stretch;">
                     <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
-                        <div style="position:absolute; top:20px; right:20px; width:110px; height:50px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">{bloc_logo}</div>
-                        <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50;" title="{nom_detail}">{nom_court}</h1>
+                        <!-- CONTENEUR LOGO AGRANDI X 1.5 (165px x 75px) -->
+                        <div style="position:absolute; top:20px; right:20px; width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center;">{bloc_logo}</div>
+                        <!-- TITRE AVEC PADDING DROITE POUR ÉVITER DE TOUCHER LE LOGO -->
+                        <h1 style="margin-top:20px; margin-bottom:6px; font-size:30px; color:#2C3E50; padding-right:175px;" title="{nom_detail}">{nom_court}</h1>
                         <div style="color:{couleur}; font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.4;">
                             {icone_sous_thematiques} {sous_thematiques}<br>
                             | <span style="font-weight:normal; font-style:italic;">{taille}</span>
