@@ -906,7 +906,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
         bouton_equipement_html = f"""
         <div style="position:relative; display:block; margin-bottom:10px;" class="tooltip-container">
-            <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Équipements mobilisables</button>
+            <button onclick="togglePopupInfo(event, this)" style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:10px; font-weight:bold; cursor:pointer;">⚙️ Ressources ou équipements mobilisables</button>
             <div style="display:none; position:absolute; bottom:110%; right:0; background:#2C3E50; color:#fff; padding:12px; border-radius:6px; font-size:11px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:1.4;" class="tooltip-text">
                 <strong style="display:block; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px;">Équipements mobilisables :</strong>
                 {equipements}
