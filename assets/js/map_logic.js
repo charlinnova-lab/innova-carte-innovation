@@ -1,23 +1,70 @@
 // =========================================================
 // CARTOGRAPHIE FILIERE - LOGIQUE JAVASCRIPT
 // (c) Charlotte Piau - innov'a
-// Last Modification : Les filtres multiples
-// ==================================
+// Last Modification : 15/10 - Filtres unifiés (marqueurs simples, hubs,
+//                     sous-fiches, recherche) + diagnostic console
 // =========================================================
-// CARTOGRAPHIE FILIERE - LOGIQUE JAVASCRIPT
-// ==================================
 
 var mapObject = null;
 var selectedFiliere = 'all';
+var _ficheTextCache = {};
 
 document.addEventListener("DOMContentLoaded", function() {
     for (var key in window) {
-        if (window[key] instanceof L.Map) {
-            mapObject = window[key];
-            break;
-        }
+        try {
+            if (window[key] instanceof L.Map) {
+                mapObject = window[key];
+                break;
+            }
+        } catch (e) { /* propriété inaccessible : on ignore */ }
     }
+    diagnosticFiltres();
 });
+
+// ==================================
+// OUTILS DE NORMALISATION
+// ==================================
+
+// Compare sans tenir compte de la casse, des accents, des apostrophes
+// typographiques, des sauts de ligne et des espaces multiples.
+function norm(val) {
+    if (val === null || val === undefined) return '';
+    return String(val)
+        .replace(/[\u2018\u2019]/g, "'")
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+}
+
+function cleanTaille(val) {
+    return norm(val);
+}
+
+function splitAttr(el, attrName) {
+    return (el.getAttribute(attrName) || '')
+        .split('|||')
+        .map(norm)
+        .filter(function(s) { return s !== ''; });
+}
+
+function getFicheText(actorId) {
+    if (_ficheTextCache[actorId] === undefined) {
+        var fiche = document.getElementById('fiche-acteur-' + actorId);
+        _ficheTextCache[actorId] = fiche ? norm(fiche.textContent) : '';
+    }
+    return _ficheTextCache[actorId];
+}
+
+function getHubClass(el) {
+    return Array.from(el.classList).find(function(c) {
+        return c.indexOf('hub-marker-') === 0;
+    });
+}
+
+// ==================================
+// PANNEAUX
+// ==================================
 
 function togglePanel(panelId, btnId) {
     var panel = document.getElementById(panelId);
@@ -25,7 +72,7 @@ function togglePanel(panelId, btnId) {
     if (!panel) return;
 
     var isVisible = panel.style.display === 'block';
-    
+
     ['panel-search', 'panel-filter'].forEach(function(pId) {
         var p = document.getElementById(pId);
         if (p) p.style.display = 'none';
@@ -56,21 +103,29 @@ function toggleAccordion(contentId) {
 }
 
 function toggleAllFilters(className, masterCheckbox) {
-    var checkboxes = document.querySelectorAll('.' + className);
-    checkboxes.forEach(function(cb) {
+    document.querySelectorAll('.' + className).forEach(function(cb) {
         cb.checked = masterCheckbox.checked;
     });
     applyFilters();
 }
 
-function cleanTaille(val) {
-    if (!val) return '';
-    return val.trim().replace(/\n/g, ' ').replace(/\r/g, '');
+// Garde la case « Tout cocher / décocher » cohérente avec les cases individuelles
+function syncMaster(className, masterId) {
+    var boxes = document.querySelectorAll('.' + className);
+    var master = document.getElementById(masterId);
+    if (!master || boxes.length === 0) return;
+    var nbChecked = document.querySelectorAll('.' + className + ':checked').length;
+    master.checked = (nbChecked === boxes.length);
+    master.indeterminate = (nbChecked > 0 && nbChecked < boxes.length);
 }
+
+// ==================================
+// FILTRES : UN SEUL CERVEAU POUR TOUT
+// ==================================
 
 function filterFiliere(filiereVal, btnElement) {
     selectedFiliere = filiereVal;
-    
+
     document.querySelectorAll('.filter-btn').forEach(function(btn) {
         btn.style.background = '#EAEAEA';
         btn.style.color = '#333';
@@ -85,167 +140,159 @@ function filterFiliere(filiereVal, btnElement) {
     applyFilters();
 }
 
+// Lit l'état courant de tous les filtres
+function getCriteria() {
+    var searchInput = document.getElementById('global-search-input');
+    return {
+        hasTailleFilter: document.querySelectorAll('.filter-taille').length > 0,
+        tailles: Array.from(document.querySelectorAll('.filter-taille:checked'))
+            .map(function(cb) { return norm(cb.value); }),
+        hasTrlFilter: document.querySelectorAll('.filter-trl').length > 0,
+        trls: Array.from(document.querySelectorAll('.filter-trl:checked'))
+            .map(function(cb) { return norm(cb.value); }),
+        filiere: selectedFiliere,
+        query: searchInput ? norm(searchInput.value) : ''
+    };
+}
+
+// Une fiche (marqueur simple, hôte ou sous-fiche) passe-t-elle tous les filtres ?
+function matchesCriteria(el, c) {
+    // 1. Type de structure (chaque fiche a sa propre typologie)
+    if (c.hasTailleFilter) {
+        var taille = norm(el.getAttribute('data-taille')) || 'autre';
+        if (c.tailles.indexOf(taille) === -1) return false;
+    }
+
+    // 2. TRL : une fiche sans TRL n'est pas exclue, sauf si tout est décoché
+    if (c.hasTrlFilter) {
+        if (c.trls.length === 0) return false;
+        var elTrls = splitAttr(el, 'data-trl');
+        if (elTrls.length > 0) {
+            var trlOk = elTrls.some(function(t) { return c.trls.indexOf(t) !== -1; });
+            if (!trlOk) return false;
+        }
+    }
+
+    // 3. Filière
+    if (c.filiere !== 'all') {
+        if (splitAttr(el, 'data-filiere').indexOf(norm(c.filiere)) === -1) return false;
+    }
+
+    // 4. Recherche plein texte dans la fiche
+    if (c.query) {
+        if (getFicheText(el.getAttribute('data-actor-id')).indexOf(c.query) === -1) return false;
+    }
+
+    return true;
+}
+
 function applyFilters() {
-    var selectedTailles = Array.from(document.querySelectorAll('.filter-taille:checked'))
-        .map(function(cb) { return cleanTaille(cb.value); });
-    var selectedTrls = Array.from(document.querySelectorAll('.filter-trl:checked'))
-        .map(function(cb) { return cb.value.trim().toLowerCase(); });
-    
-    var searchInputVal = document.getElementById('global-search-input');
-    var searchQuery = searchInputVal ? searchInputVal.value.trim().toLowerCase() : "";
+    var c = getCriteria();
 
-    function matchesSearch(actorId) {
-        if (!searchQuery) return true;
-        var ficheElem = document.getElementById('fiche-acteur-' + actorId);
-        if (!ficheElem) return false;
-        return ficheElem.innerText.toLowerCase().indexOf(searchQuery) !== -1;
-    }
+    syncMaster('filter-taille', 'master-taille');
+    syncMaster('filter-trl', 'master-trl');
 
-    function matchesFiliereByElement(el) {
-        if (selectedFiliere === 'all') return true;
-        var vals = (el.getAttribute('data-filiere') || '').split('|||').map(function(s) { return s.trim(); });
-        return vals.indexOf(selectedFiliere) !== -1;
-    }
+    // 1. Marqueurs simples et hôtes de hub
+    document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
+        var hubClass = getHubClass(host);
+        var nbSubMatch = 0;
 
-    function matchesTrl(elTrlAttr) {
-        if (selectedTrls.length === 0) return false;
-        var elTrlsList = (elTrlAttr || '').toLowerCase().split('|||').map(function(s) { return s.trim(); });
-        if (elTrlsList.length === 0 || elTrlsList.includes('')) return true;
-        
-        return elTrlsList.some(function(trlItem) {
-            return selectedTrls.some(function(selTrl) {
-                return trlItem.indexOf(selTrl) !== -1 || selTrl.indexOf(trlItem) !== -1;
-            });
-        });
-    }
-
-    function elementMatchesCriteria(el) {
-        var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var actorId = el.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrlVal = matchesTrl(el.getAttribute('data-trl'));
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliereByElement(el);
-
-        return matchTaille && matchTrlVal && matchSearch && matchFiliere;
-    }
-
-    // 1. Filtrage des marqueurs simples et hôtes
-    document.querySelectorAll('.marker-wrapper-host').forEach(function(el) {
-        var selfMatch = elementMatchesCriteria(el);
-        var groupClass = Array.from(el.classList).find(function(c) { return c.startsWith('hub-marker-'); });
-        
-        var subMatch = false;
-        if (groupClass) {
-            var subElements = document.querySelectorAll('.sub-' + groupClass);
-            subElements.forEach(function(sub) {
-                if (elementMatchesCriteria(sub)) {
-                    subMatch = true;
-                }
+        if (hubClass) {
+            document.querySelectorAll('.sub-' + hubClass).forEach(function(sub) {
+                if (matchesCriteria(sub, c)) nbSubMatch++;
             });
         }
 
-        var shouldShow = selfMatch || subMatch;
-        
-        if (el.getAttribute('data-hub-opened') === 'true') {
-            el.style.display = 'none';
+        // Le compteur « +N » reflète les sous-fiches qui passent les filtres
+        var badge = host.querySelector('.hub-count');
+        if (badge) {
+            badge.textContent = '+' + nbSubMatch;
+            if (badge.parentNode) {
+                badge.parentNode.style.display = nbSubMatch > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Le hub reste visible si lui-même OU l'une de ses sous-fiches correspond
+        var shouldShow = matchesCriteria(host, c) || nbSubMatch > 0;
+
+        if (host.getAttribute('data-hub-opened') === 'true') {
+            host.style.display = 'none';
         } else {
-            el.style.display = shouldShow ? 'flex' : 'none';
+            host.style.display = shouldShow ? 'flex' : 'none';
         }
     });
 
-    // 2. Filtrage des sous-marqueurs (les labos dans les hubs ouverts)
-    document.querySelectorAll('.marker-wrapper-sub').forEach(function(el) {
-        if (el.getAttribute('data-active-hub') !== 'true') return;
-        el.style.display = elementMatchesCriteria(el) ? 'flex' : 'none';
+    // 2. Sous-fiches des hubs ouverts
+    document.querySelectorAll('.marker-wrapper-sub').forEach(function(sub) {
+        if (sub.getAttribute('data-active-hub') !== 'true') return;
+        sub.style.display = matchesCriteria(sub, c) ? 'flex' : 'none';
     });
 }
+
+// Aide au débogage : signale dans la console (F12) les valeurs de "Taille"
+// qui ne correspondent à aucune case du filtre.
+function diagnosticFiltres() {
+    var connus = Array.from(document.querySelectorAll('.filter-taille'))
+        .map(function(cb) { return norm(cb.value); });
+    var inconnus = {};
+
+    document.querySelectorAll('[data-taille]').forEach(function(el) {
+        var t = norm(el.getAttribute('data-taille')) || 'autre';
+        if (connus.indexOf(t) === -1) inconnus[t] = (inconnus[t] || 0) + 1;
+    });
+
+    if (Object.keys(inconnus).length > 0) {
+        console.warn('[Filtres] Types de structure sans case correspondante (ces fiches disparaissent dès qu\'un filtre est appliqué) :', inconnus);
+    }
+    if (document.querySelectorAll('.filter-trl').length === 0) {
+        console.warn('[Filtres] Aucune case TRL générée : le filtre TRL est ignoré.');
+    }
+}
+
+// ==================================
+// HUBS (GRAPPES)
+// ==================================
 
 function handleHubClick(lat, lng, hubClass, hoteId) {
     if (!mapObject) return;
 
+    // 1. Referme tout hub déjà ouvert
     document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
-        if (host.getAttribute('data-hub-opened') === 'true') {
-            host.removeAttribute('data-hub-opened');
-            host.style.display = 'flex';
-        }
+        host.removeAttribute('data-hub-opened');
     });
     document.querySelectorAll('.marker-wrapper-sub').forEach(function(sub) {
         sub.style.display = 'none';
         sub.removeAttribute('data-active-hub');
     });
 
-    fitGroupToVisible(hubClass, lat, lng);
-
+    // 2. Ouvre le hub cliqué
     var mainMarker = document.querySelector('.' + hubClass);
-    if (mainMarker) {
-        mainMarker.style.display = 'none';
-        mainMarker.setAttribute('data-hub-opened', 'true');
-    }
+    if (mainMarker) mainMarker.setAttribute('data-hub-opened', 'true');
+    document.querySelectorAll('.sub-' + hubClass).forEach(function(sub) {
+        sub.setAttribute('data-active-hub', 'true');
+    });
+
+    // 3. Les filtres décident de ce qui est affiché (hôtes comme sous-fiches)
+    applyFilters();
+    fitGroupToVisible(hubClass, lat, lng);
 
     if (hoteId !== undefined && hoteId !== null) {
         openSidebarSingle(hoteId);
     }
 
-    var selectedTailles = Array.from(document.querySelectorAll('.filter-taille:checked'))
-        .map(function(cb) { return cleanTaille(cb.value); });
-    var selectedTrls = Array.from(document.querySelectorAll('.filter-trl:checked'))
-        .map(function(cb) { return cb.value.trim().toLowerCase(); });
-    
-    var searchInputVal = document.getElementById('global-search-input');
-    var searchQuery = searchInputVal ? searchInputVal.value.trim().toLowerCase() : "";
-
-    function matchesSearch(actorId) {
-        if (!searchQuery) return true;
-        var ficheElem = document.getElementById('fiche-acteur-' + actorId);
-        if (!ficheElem) return false;
-        return ficheElem.innerText.toLowerCase().indexOf(searchQuery) !== -1;
-    }
-
-    function matchesFiliere(el) {
-        if (selectedFiliere === 'all') return true;
-        var vals = (el.getAttribute('data-filiere') || '').split('|||').map(function(s) { return s.trim(); });
-        return vals.indexOf(selectedFiliere) !== -1;
-    }
-
-    function matchesTrlSub(elTrlAttr) {
-        if (selectedTrls.length === 0) return false;
-        var elTrlsList = (elTrlAttr || '').toLowerCase().split('|||').map(function(s) { return s.trim(); });
-        if (elTrlsList.length === 0 || elTrlsList.includes('')) return true;
-        
-        return elTrlsList.some(function(trlItem) {
-            return selectedTrls.some(function(selTrl) {
-                return trlItem.indexOf(selTrl) !== -1 || selTrl.indexOf(trlItem) !== -1;
-            });
-        });
-    }
-
-    document.querySelectorAll('.sub-' + hubClass).forEach(function(el) {
-        el.setAttribute('data-active-hub', 'true');
-
-        var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var actorId = el.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrlVal = matchesTrlSub(el.getAttribute('data-trl'));
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliere(el);
-
-        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
-    });
-
     var btnDezoom = document.getElementById('btn-dezoom');
     if (btnDezoom) btnDezoom.style.display = 'block';
 }
 
+// Cadre la carte sur l'hôte et sur les sous-fiches qui passent les filtres
 function fitGroupToVisible(hubClass, hostLat, hostLng) {
     if (!mapObject) return;
-    
-    var subMarkers = document.querySelectorAll('.sub-' + hubClass);
+
+    var c = getCriteria();
     var bounds = L.latLngBounds([[hostLat, hostLng]]);
-    
-    subMarkers.forEach(function(sub) {
+
+    document.querySelectorAll('.sub-' + hubClass).forEach(function(sub) {
+        if (!matchesCriteria(sub, c)) return;
         var lat = parseFloat(sub.getAttribute('data-lat'));
         var lng = parseFloat(sub.getAttribute('data-lng'));
         if (!isNaN(lat) && !isNaN(lng)) {
@@ -265,20 +312,26 @@ function resetZoomHub() {
 
     document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
         host.removeAttribute('data-hub-opened');
-        host.style.display = 'flex';
     });
-
     document.querySelectorAll('.marker-wrapper-sub').forEach(function(sub) {
         sub.style.display = 'none';
         sub.removeAttribute('data-active-hub');
     });
 
+    // Réaffiche les hôtes en respectant les filtres en cours
+    applyFilters();
+
     var btnDezoom = document.getElementById('btn-dezoom');
     if (btnDezoom) btnDezoom.style.display = 'none';
 
-    mapObject.setView([49.89, 2.30], initialZoom, { animate: true });
+    var zoom = (typeof initialZoom !== 'undefined') ? initialZoom : 13;
+    mapObject.setView([49.89, 2.30], zoom, { animate: true });
     closeSidebar();
 }
+
+// ==================================
+// FICHE LATÉRALE ET INFOBULLES
+// ==================================
 
 function openSidebarSingle(actorId) {
     var fiche = document.getElementById('fiche-acteur-' + actorId);
@@ -302,7 +355,7 @@ function togglePopupInfo(event, btnElement) {
     event.stopPropagation();
     var container = btnElement.closest('.tooltip-container');
     if (!container) return;
-    
+
     var tooltip = container.querySelector('.tooltip-text');
     if (!tooltip) return;
 
