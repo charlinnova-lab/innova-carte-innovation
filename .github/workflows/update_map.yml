@@ -40,12 +40,12 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python generate_map_public.py
 
-      - name: Sauvegarder les images et données sur le dépôt (Git Push)
+            - name: Sauvegarder les images et données sur le dépôt (Git Push)
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A assets/images/ '*.html'
-          if ! git diff --staged --quiet; then
-            git commit -m "Auto-update map & downloaded images"
-            git pull --rebase -X theirs origin main
-            git push origin HEAD:main
+          git diff --staged --quiet && echo "Aucun changement" && exit 0
+          git commit -m "Auto-update map & downloaded images"
+          git pull --rebase -X theirs origin main
+          git push origin HEAD:main
