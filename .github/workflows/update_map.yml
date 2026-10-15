@@ -40,7 +40,7 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python generate_map_public.py
 
-            - name: Sauvegarder les images et données sur le dépôt (Git Push)
+      - name: Sauvegarder les images et données sur le dépôt (Git Push)
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -49,3 +49,15 @@ jobs:
           git commit -m "Auto-update map & downloaded images"
           git pull --rebase -X theirs origin main
           git push origin HEAD:main
+
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Téléverser l'artefact HTML
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
