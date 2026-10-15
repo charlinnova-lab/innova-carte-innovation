@@ -195,14 +195,14 @@ def formater_nom_etiquette(actor, nom_court):
     
     # 1. Si c'est un ensemble de projets (Hub), on utilise Name_group (ou nom_court) avec l'icône
     if type_fiche == "Ensemble de projets":
-        nom_groupe_field = get_text(actor, "Name_group", "Name group", "Nom_groupe")
-        nom_a_utiliser = nom_groupe_field if nom_groupe_field else nom_court
-        return f"🏢 {nom_a_utiliser}"
-
+    nom_groupe_field = get_text(actor, "Name_group")
+    nom_a_utiliser = nom_groupe_field if nom_groupe_field else nom_court
+    return f'<span style="white-space: pre-line;">🏢 {nom_a_utiliser}</span>'
+    
     # 2. Pour les autres fiches (uniques, etc.), on vérifie la case Ligne_retour
     ligne_retour_val = None
     for k, v in actor.items():
-        if k.lower() in ["ligne_retour", "saut_ligne", "retour_ligne"]:
+        if k.lower() in ["ligne_retour"]:
             ligne_retour_val = v
             break
 
@@ -227,6 +227,7 @@ def formater_nom_etiquette(actor, nom_court):
             return f"{parts[0]}-<br>{parts[1]}"
     
     return nom_court
+    
 def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
         val_str = ""
