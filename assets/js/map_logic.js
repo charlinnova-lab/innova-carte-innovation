@@ -5,9 +5,7 @@
 var mapObject = null;
 var selectedFiliere = 'all';
 
-// Initialisation de la carte et des écouteurs globaux
 document.addEventListener("DOMContentLoaded", function() {
-    // Recherche de l'instance Leaflet globale si elle existe
     for (var key in window) {
         if (window[key] instanceof L.Map) {
             mapObject = window[key];
@@ -23,7 +21,6 @@ function togglePanel(panelId, btnId) {
 
     var isVisible = panel.style.display === 'block';
     
-    // Fermer les autres panneaux
     ['panel-search', 'panel-filter'].forEach(function(pId) {
         var p = document.getElementById(pId);
         if (p) p.style.display = 'none';
@@ -69,7 +66,6 @@ function cleanTaille(val) {
 function filterFiliere(filiereVal, btnElement) {
     selectedFiliere = filiereVal;
     
-    // Gestion visuelle des boutons de filière
     document.querySelectorAll('.filter-btn').forEach(function(btn) {
         btn.style.background = '#EAEAEA';
         btn.style.color = '#333';
@@ -106,23 +102,31 @@ function applyFilters() {
         return vals.indexOf(selectedFiliere) !== -1;
     }
 
-    // Filtrage des marqueurs simples et hôtes
+    // Correspondance TRL souple (gère les phrases complètes d'Airtable)
+    function matchesTrl(elTrlAttr) {
+        if (selectedTrls.length === 0) return false;
+        var elTrlsList = (elTrlAttr || '').toLowerCase().split('|||').map(function(s) { return s.trim(); });
+        if (elTrlsList.length === 0 || elTrlsList.includes('')) return true;
+        
+        return elTrlsList.some(function(trlItem) {
+            return selectedTrls.some(function(selTrl) {
+                return trlItem.indexOf(selTrl) !== -1 || selTrl.indexOf(trlItem) !== -1;
+            });
+        });
+    }
+
+    // 1. Filtrage des marqueurs simples et hôtes
     document.querySelectorAll('.marker-wrapper-host').forEach(function(el) {
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var elTrlsList = (el.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
         var actorId = el.getAttribute('data-actor-id');
 
         var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
+        var matchTrlVal = matchesTrl(el.getAttribute('data-trl'));
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliereByElement(el);
 
-        var shouldShow = matchTaille && matchTrl && matchSearch && matchFiliere;
+        var shouldShow = matchTaille && matchTrlVal && matchSearch && matchFiliere;
         
-        // Si le hub est actuellement ouvert, on cache l'hôte mais on laisse les sous-marqueurs gérer leur affichage
         if (el.getAttribute('data-hub-opened') === 'true') {
             el.style.display = 'none';
         } else {
@@ -130,30 +134,26 @@ function applyFilters() {
         }
     });
 
-    // Filtrage des sous-marqueurs (si un hub est ouvert)
+    // 2. Filtrage des sous-marqueurs (les labos dans les hubs)
     document.querySelectorAll('.marker-wrapper-sub').forEach(function(el) {
         if (el.getAttribute('data-active-hub') !== 'true') return;
 
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var elTrlsList = (el.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
         var actorId = el.getAttribute('data-actor-id');
 
         var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
+        var matchTrlVal = matchesTrl(el.getAttribute('data-trl'));
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliereByElement(el);
 
-        el.style.display = (matchTaille && matchTrl && matchSearch && matchFiliere) ? 'flex' : 'none';
+        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
     });
 }
 
 function handleHubClick(lat, lng, hubClass, hoteId) {
     if (!mapObject) return;
 
-    // 1. Fermeture propre de tous les autres hubs ouverts pour éviter les superpositions d'étiquettes
+    // Fermeture propre des autres hubs ouverts
     document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
         if (host.getAttribute('data-hub-opened') === 'true') {
             host.removeAttribute('data-hub-opened');
@@ -165,7 +165,6 @@ function handleHubClick(lat, lng, hubClass, hoteId) {
         sub.removeAttribute('data-active-hub');
     });
 
-    // 2. Zoom et centrage sur le hub sélectionné
     fitGroupToVisible(hubClass, lat, lng);
 
     var mainMarker = document.querySelector('.' + hubClass);
@@ -199,23 +198,30 @@ function handleHubClick(lat, lng, hubClass, hoteId) {
         return vals.indexOf(selectedFiliere) !== -1;
     }
 
-    // Affichage des sous-marqueurs du hub actif selon les filtres
+    function matchesTrlSub(elTrlAttr) {
+        if (selectedTrls.length === 0) return false;
+        var elTrlsList = (elTrlAttr || '').toLowerCase().split('|||').map(function(s) { return s.trim(); });
+        if (elTrlsList.length === 0 || elTrlsList.includes('')) return true;
+        
+        return elTrlsList.some(function(trlItem) {
+            return selectedTrls.some(function(selTrl) {
+                return trlItem.indexOf(selTrl) !== -1 || selTrl.indexOf(trlItem) !== -1;
+            });
+        });
+    }
+
     document.querySelectorAll('.sub-' + hubClass).forEach(function(el) {
         el.setAttribute('data-active-hub', 'true');
 
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var elTrlsList = (el.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
         var actorId = el.getAttribute('data-actor-id');
 
         var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
+        var matchTrlVal = matchesTrlSub(el.getAttribute('data-trl'));
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliere(el);
 
-        el.style.display = (matchTaille && matchTrl && matchSearch && matchFiliere) ? 'flex' : 'none';
+        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
     });
 
     var btnDezoom = document.getElementById('btn-dezoom');
@@ -246,7 +252,6 @@ function fitGroupToVisible(hubClass, hostLat, hostLng) {
 function resetZoomHub() {
     if (!mapObject) return;
 
-    // Réinitialisation de tous les hubs ouverts
     document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
         host.removeAttribute('data-hub-opened');
         host.style.display = 'flex';
@@ -290,7 +295,6 @@ function togglePopupInfo(event, btnElement) {
     var tooltip = container.querySelector('.tooltip-text');
     if (!tooltip) return;
 
-    // Fermer les autres infobulles ouvertes
     document.querySelectorAll('.tooltip-text').forEach(function(tip) {
         if (tip !== tooltip) tip.style.display = 'none';
     });
@@ -298,7 +302,6 @@ function togglePopupInfo(event, btnElement) {
     tooltip.style.display = (tooltip.style.display === 'block') ? 'none' : 'block';
 }
 
-// Fermeture des infobulles au clic en dehors
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.tooltip-container')) {
         document.querySelectorAll('.tooltip-text').forEach(function(tip) {
