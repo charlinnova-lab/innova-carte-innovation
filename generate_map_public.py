@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Fix icône, Name_group multi-lignes pour les hubs
+#            15/10 - Ajout boutons zoom +/-, fix TRL et Name_group hubs
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -163,7 +163,23 @@ def _nettoyer_marqueurs_gras_casses(text):
     return text
 
 def get_liste_trls_record(record):
-    return get_liste_valeurs(record, "TRL_scale", "TRL")
+    """Récupère et découpe proprement les TRL même si Airtable les renvoie groupés en bloc"""
+    brut = get_liste_valeurs(record, "TRL_scale", "TRL")
+    trls_nettoyes = []
+    
+    for item in brut:
+        if "TRL" in item and item.count("TRL") > 1:
+            morceaux = re.split(r'(?=\bTRL\s+\d+)', item)
+            for m in morceaux:
+                m_clean = m.strip()
+                if m_clean:
+                    trls_nettoyes.append(m_clean)
+        else:
+            item_clean = item.strip()
+            if item_clean:
+                trls_nettoyes.append(item_clean)
+                
+    return trls_nettoyes
 
 def get_liste_valeurs(record, *keys):
     for key in keys:
@@ -369,16 +385,28 @@ ui_and_sidebar_html = f"""
 </style>
 
 <div id="icon-search-btn" onclick="togglePanel('panel-search', 'icon-search-btn')" title="Recherche" style="
-position:fixed; top:calc(50% - 52px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
+position:fixed; top:calc(50% - 82px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
 box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
 font-size:19px; cursor:pointer; z-index:10001;
 ">🔍</div>
 
 <div id="icon-filter-btn" onclick="togglePanel('panel-filter', 'icon-filter-btn')" title="Filtres" style="
-position:fixed; top:calc(50% + 8px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
+position:fixed; top:calc(50% - 22px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
 box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
 font-size:19px; cursor:pointer; z-index:10001;
 ">🎛️</div>
+
+<div id="icon-zoom-in" onclick="if(mapObject) mapObject.zoomIn()" title="Zoom avant" style="
+position:fixed; top:calc(50% + 38px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
+box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
+font-size:20px; font-weight:bold; cursor:pointer; z-index:10001; color:#2D3277;
+">+</div>
+
+<div id="icon-zoom-out" onclick="if(mapObject) mapObject.zoomOut()" title="Zoom arrière" style="
+position:fixed; top:calc(50% + 98px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
+box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
+font-size:20px; font-weight:bold; cursor:pointer; z-index:10001; color:#2D3277;
+">-</div>
 
 <div id="filiere-bar" style="
 position:fixed; top:15px; left:68px; max-width: calc(100vw - 100px);
@@ -391,7 +419,7 @@ display:flex; flex-wrap:nowrap; gap:6px; align-items:center; overflow-x:auto;
 </div>
 
 <div id="panel-search" style="
-display:none; position:fixed; top:calc(50% - 52px); left:68px; width:260px;
+display:none; position:fixed; top:calc(50% - 82px); left:68px; width:260px;
 background:white; padding:15px; border-radius:8px; z-index:10000;
 box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif;
 ">
@@ -404,7 +432,7 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif;
 </div>
 
 <div id="panel-filter" style="
-display:none; position:fixed; top:calc(50% + 8px); left:68px; width:280px; max-height: calc(50vh - 30px);
+display:none; position:fixed; top:calc(50% - 22px); left:68px; width:280px; max-height: calc(50vh - 30px);
 background:white; padding:15px; border-radius:8px; z-index:10000;
 box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y:auto;
 ">
