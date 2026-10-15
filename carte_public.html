@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_becc2c23dfb03bce7c4eee4541f73a6d {
+                #map_2a3fef3b579f40b5fe873374224cd656 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -55,6 +55,15 @@
     
     
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Google Analytics / Suivi stat (Remplacez G-XXXXXXXXXX par votre ID Google Analytics) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 
 <style>
 .fiche-description p { margin:0 0 6px 0; }
@@ -497,6 +506,16 @@ function openSidebarSingle(id) {
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
         
+        # Enregistrement de l'événement de consultation de fiche dans Google Analytics
+        if (typeof gtag === 'function') {
+            var titleElem = contentNode.querySelector('h1');
+            var actorName = titleElem ? titleElem.innerText : ('ID ' + id);
+            gtag('event', 'consultation_fiche', {
+                'event_category': 'Acteur',
+                'event_label': actorName
+            });
+        }
+
         contentNode.querySelectorAll('a').forEach(function(link) {
             link.setAttribute('target', '_blank');
             link.setAttribute('rel', 'noopener noreferrer');
@@ -3266,14 +3285,14 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
         </div>
         
     
-            <div class="folium-map" id="map_becc2c23dfb03bce7c4eee4541f73a6d" ></div>
+            <div class="folium-map" id="map_2a3fef3b579f40b5fe873374224cd656" ></div>
         
 </body>
 <script>
     
     
-            var map_becc2c23dfb03bce7c4eee4541f73a6d = L.map(
-                "map_becc2c23dfb03bce7c4eee4541f73a6d",
+            var map_2a3fef3b579f40b5fe873374224cd656 = L.map(
+                "map_2a3fef3b579f40b5fe873374224cd656",
                 {
                     center: [49.89, 2.3],
                     crs: L.CRS.EPSG3857,
@@ -3291,7 +3310,7 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
 
         
     
-            var tile_layer_03f282438373d913ac70a2865126105c = L.tileLayer(
+            var tile_layer_74a4d096e99509c0391556cdeb011625 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=cb1_2w4r_1_3b46deb5d7b181db2c1173a7",
                 {
   "minZoom": 0,
@@ -3308,789 +3327,789 @@ NovaSpine fournit ses dispositifs médicaux en France et dans pus de 30 pays.</p
             );
         
     
-            tile_layer_03f282438373d913ac70a2865126105c.addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            tile_layer_74a4d096e99509c0391556cdeb011625.addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var marker_2f960a5d6e0d364df467e79a2bef015c = L.marker(
+            var marker_254e204920deb80dea2fb43428cd6e2d = L.marker(
                 [49.89093, 2.30803],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_dc1858ac1e347caca70173f69d0e29f9 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"0\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(0)\" ontouchstart=\"openSidebarSingle(0); event.stopPropagation();\" title=\"ACKOMAS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eACKOMAS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_45b390c67d832d23e56c19d2b349237c = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"0\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(0)\" ontouchstart=\"openSidebarSingle(0); event.stopPropagation();\" title=\"ACKOMAS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eACKOMAS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_2f960a5d6e0d364df467e79a2bef015c.setIcon(div_icon_dc1858ac1e347caca70173f69d0e29f9);
+                marker_254e204920deb80dea2fb43428cd6e2d.setIcon(div_icon_45b390c67d832d23e56c19d2b349237c);
             
     
-            var marker_dcab3afc05dc9d0399cccc6020da7222 = L.marker(
+            var marker_137820fc578b8dc5669b5348b842f098 = L.marker(
                 [49.8732, 2.25533],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_10675a0413bd51d38d20974a43a6317b = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-1\" data-actor-id=\"1\" data-group-id=\"1\" data-taille=\"Etablissement de sant\u00e9\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.8732, 2.25533, \u0027hub-marker-1\u0027, 1)\" ontouchstart=\"handleHubClick(49.8732, 2.25533, \u0027hub-marker-1\u0027, 1); event.stopPropagation();\" title=\"H\u00f4te : CHU Amiens Picardie (+4 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#2D3277; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2D3277; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CHU Amiens Picardie\n                    \u003cspan style=\"background:#FFF; color:#2D3277; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+4\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #2D3277;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_212039aa65c2ed348dd21b6f955da259 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-1\" data-actor-id=\"1\" data-group-id=\"1\" data-taille=\"Etablissement de sant\u00e9\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.8732, 2.25533, \u0027hub-marker-1\u0027, 1)\" ontouchstart=\"handleHubClick(49.8732, 2.25533, \u0027hub-marker-1\u0027, 1); event.stopPropagation();\" title=\"H\u00f4te : CHU Amiens Picardie (+4 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#2D3277; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2D3277; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CHU Amiens Picardie\n                    \u003cspan style=\"background:#FFF; color:#2D3277; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+4\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #2D3277;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_dcab3afc05dc9d0399cccc6020da7222.setIcon(div_icon_10675a0413bd51d38d20974a43a6317b);
+                marker_137820fc578b8dc5669b5348b842f098.setIcon(div_icon_212039aa65c2ed348dd21b6f955da259);
             
     
-            var marker_2fd009d6a19de096f196d475a1769668 = L.marker(
+            var marker_a9fd40026ced5d1a2dab1493fbc70894 = L.marker(
                 [49.87344, 2.25591],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_9ae6ee95f4f5dc7bf8821efca37e52a3 = L.divIcon({
+            var div_icon_041dd69d2799206cdf6be7ef0e6073b1 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-1\" data-actor-id=\"10\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87344\" data-lng=\"2.25591\" onclick=\"openSidebarSingle(10)\" ontouchstart=\"openSidebarSingle(10); event.stopPropagation();\" title=\"Tumoroth\u00e8que de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eTumoroth\u00e8que de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_2fd009d6a19de096f196d475a1769668.setIcon(div_icon_9ae6ee95f4f5dc7bf8821efca37e52a3);
+                marker_a9fd40026ced5d1a2dab1493fbc70894.setIcon(div_icon_041dd69d2799206cdf6be7ef0e6073b1);
             
     
-            var marker_3bb10b74d2a138051a9ab4b6dfa0f275 = L.marker(
+            var marker_4609fb08dbeb053933ad44184ac06e90 = L.marker(
                 [49.87409, 2.25327],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_f00dba5fba5907e42f12d8ff6569710c = L.divIcon({
+            var div_icon_dccd9723c56e5d9b3005201d4b509a37 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-1\" data-actor-id=\"21\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87409\" data-lng=\"2.25327\" onclick=\"openSidebarSingle(21)\" ontouchstart=\"openSidebarSingle(21); event.stopPropagation();\" title=\"GRECO EXPER\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eGRECO EXPER\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_3bb10b74d2a138051a9ab4b6dfa0f275.setIcon(div_icon_f00dba5fba5907e42f12d8ff6569710c);
+                marker_4609fb08dbeb053933ad44184ac06e90.setIcon(div_icon_dccd9723c56e5d9b3005201d4b509a37);
             
     
-            var marker_6695bb1cc94748d234c060793027ae29 = L.marker(
+            var marker_cb13842a84bf65ea35eb49018e1c71e3 = L.marker(
                 [49.87356, 2.25255],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_3568ee5b13b0dc587b209f2dff38b116 = L.divIcon({
+            var div_icon_ac1bde55af25d2001eb8ea1212c6fe9e = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-1\" data-actor-id=\"36\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87356\" data-lng=\"2.25255\" onclick=\"openSidebarSingle(36)\" ontouchstart=\"openSidebarSingle(36); event.stopPropagation();\" title=\"CRB - Biobanque de Picardie\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCRB - Biobanque de Picardie\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_6695bb1cc94748d234c060793027ae29.setIcon(div_icon_3568ee5b13b0dc587b209f2dff38b116);
+                marker_cb13842a84bf65ea35eb49018e1c71e3.setIcon(div_icon_ac1bde55af25d2001eb8ea1212c6fe9e);
             
     
-            var marker_a5f642143bd3f69b0db5a8349b46935f = L.marker(
+            var marker_b29494c5ed0ee47435b39b80f8fbc8c1 = L.marker(
                 [49.87326, 2.25358],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_cd6e886926143fc25ea428f423f06e02 = L.divIcon({
+            var div_icon_75f5975732faf3318f08cd109d59e67d = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-1\" data-actor-id=\"45\" data-taille=\"Projet collaboratif\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87326\" data-lng=\"2.25358\" onclick=\"openSidebarSingle(45)\" ontouchstart=\"openSidebarSingle(45); event.stopPropagation();\" title=\"RHU RAUC\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#E8873A; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#E8873A; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eRHU RAUC\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #E8873A;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a5f642143bd3f69b0db5a8349b46935f.setIcon(div_icon_cd6e886926143fc25ea428f423f06e02);
+                marker_b29494c5ed0ee47435b39b80f8fbc8c1.setIcon(div_icon_75f5975732faf3318f08cd109d59e67d);
             
     
-            var marker_036670f5a1cffd0ccc3c7015e3f61e6e = L.marker(
+            var marker_86d190301928e1892391589fa2ba51e6 = L.marker(
                 [49.87103, 2.30374],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_a3c5d5a5d8e1e025e171f5ec1ee02388 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"2\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(2)\" ontouchstart=\"openSidebarSingle(2); event.stopPropagation();\" title=\"Apotekisto\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eApotekisto\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_607441dcf090cbddf31a441df3f8c403 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"2\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(2)\" ontouchstart=\"openSidebarSingle(2); event.stopPropagation();\" title=\"Apotekisto\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eApotekisto\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_036670f5a1cffd0ccc3c7015e3f61e6e.setIcon(div_icon_a3c5d5a5d8e1e025e171f5ec1ee02388);
+                marker_86d190301928e1892391589fa2ba51e6.setIcon(div_icon_607441dcf090cbddf31a441df3f8c403);
             
     
-            var marker_e9c643d2859f19c5ad01aa93b6d4ddee = L.marker(
+            var marker_492332d76c415e8576293277d2e0c66d = L.marker(
                 [49.87119, 2.25437],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_ac27584ea2a34d5bb75389471f0ad615 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"3\" data-taille=\"Etablissement de formation, Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(3)\" ontouchstart=\"openSidebarSingle(3); event.stopPropagation();\" title=\"SimUSant\u00e9\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSimUSant\u00e9\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_c4738dfe53c8fae97262b1f60d233dc2 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"3\" data-taille=\"Etablissement de formation, Laboratoire ou activit\u00e9 de recherche\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(3)\" ontouchstart=\"openSidebarSingle(3); event.stopPropagation();\" title=\"SimUSant\u00e9\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSimUSant\u00e9\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e9c643d2859f19c5ad01aa93b6d4ddee.setIcon(div_icon_ac27584ea2a34d5bb75389471f0ad615);
+                marker_492332d76c415e8576293277d2e0c66d.setIcon(div_icon_c4738dfe53c8fae97262b1f60d233dc2);
             
     
-            var marker_abcad7cf9fbd5fc935f644a7363a750a = L.marker(
+            var marker_afd93b6f6f04784b92814d5517160ed6 = L.marker(
                 [49.87653, 2.2549],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_cc14397b7d80b0a553022df4c6925497 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"4\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(4)\" ontouchstart=\"openSidebarSingle(4); event.stopPropagation();\" title=\"Surgitec Robotics\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSurgitec Robotics\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_11e6cf37691553ad5ab75225fe9db363 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"4\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(4)\" ontouchstart=\"openSidebarSingle(4); event.stopPropagation();\" title=\"Surgitec Robotics\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSurgitec Robotics\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_abcad7cf9fbd5fc935f644a7363a750a.setIcon(div_icon_cc14397b7d80b0a553022df4c6925497);
+                marker_afd93b6f6f04784b92814d5517160ed6.setIcon(div_icon_11e6cf37691553ad5ab75225fe9db363);
             
     
-            var marker_7e12dec5dd2654b730f2ffdff6f3f28e = L.marker(
+            var marker_84c7537a92bed77ab5398adca976540a = L.marker(
                 [49.8709, 2.25196],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_dcc5388388d15758b60e09d9a12995be = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-5\" data-actor-id=\"17\" data-group-id=\"5\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.8709, 2.25196, \u0027hub-marker-5\u0027, 17)\" ontouchstart=\"handleHubClick(49.8709, 2.25196, \u0027hub-marker-5\u0027, 17); event.stopPropagation();\" title=\"H\u00f4te : Centre Unirversitaire Recherche en Sant\u00e9 (+11 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FBC9D4; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FBC9D4; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CURS\n                    \u003cspan style=\"background:#FFF; color:#FBC9D4; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+11\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_f761311c4799261b02571d311203e6e3 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-5\" data-actor-id=\"17\" data-group-id=\"5\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.8709, 2.25196, \u0027hub-marker-5\u0027, 17)\" ontouchstart=\"handleHubClick(49.8709, 2.25196, \u0027hub-marker-5\u0027, 17); event.stopPropagation();\" title=\"H\u00f4te : Centre Unirversitaire Recherche en Sant\u00e9 (+11 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FBC9D4; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FBC9D4; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 CURS\n                    \u003cspan style=\"background:#FFF; color:#FBC9D4; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+11\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_7e12dec5dd2654b730f2ffdff6f3f28e.setIcon(div_icon_dcc5388388d15758b60e09d9a12995be);
+                marker_84c7537a92bed77ab5398adca976540a.setIcon(div_icon_f761311c4799261b02571d311203e6e3);
             
     
-            var marker_4e002e05e419f28bbd3700a78f32e667 = L.marker(
+            var marker_6dd7d587b2f7d93980f83fe0b2896872 = L.marker(
                 [49.87082, 2.2518],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_802963c6599b6716f138f6fe4c2572df = L.divIcon({
+            var div_icon_2346505c7cf45bf6b095fd5cb7612f7e = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"5\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87082\" data-lng=\"2.2518\" onclick=\"openSidebarSingle(5)\" ontouchstart=\"openSidebarSingle(5); event.stopPropagation();\" title=\"Imagerie par R\u00e9sonance Magn\u00e9tique Petits Animaux\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme PIRMPA\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_4e002e05e419f28bbd3700a78f32e667.setIcon(div_icon_802963c6599b6716f138f6fe4c2572df);
+                marker_6dd7d587b2f7d93980f83fe0b2896872.setIcon(div_icon_2346505c7cf45bf6b095fd5cb7612f7e);
             
     
-            var marker_1fa99be4e2d216af364f49e7165ccc4b = L.marker(
+            var marker_228d2ec00646b3798710b5fa16fae316 = L.marker(
                 [49.87052, 2.25219],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_e3b245678f7d3f1c384fc6a8f174be4d = L.divIcon({
+            var div_icon_bf05a00731ebd523fcf299a09c906f59 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"7\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87052\" data-lng=\"2.25219\" onclick=\"openSidebarSingle(7)\" ontouchstart=\"openSidebarSingle(7); event.stopPropagation();\" title=\"Plateforme PlatAnN\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme PlatAnN\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_1fa99be4e2d216af364f49e7165ccc4b.setIcon(div_icon_e3b245678f7d3f1c384fc6a8f174be4d);
+                marker_228d2ec00646b3798710b5fa16fae316.setIcon(div_icon_bf05a00731ebd523fcf299a09c906f59);
             
     
-            var marker_997065906cf8504d0e9f5933dbf3bafa = L.marker(
+            var marker_0dd13c28549a1b2dda7272fdca47751f = L.marker(
                 [49.87099, 2.25175],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_5be97461188aa0d113bb24f6683ea13b = L.divIcon({
+            var div_icon_a4d84ccba5dd3394c4228348ed344b53 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"12\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87099\" data-lng=\"2.25175\" onclick=\"openSidebarSingle(12)\" ontouchstart=\"openSidebarSingle(12); event.stopPropagation();\" title=\"H\u00e9matopo\u00ef\u00e8se et Immunologie - UR 4666 UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eHEMATIM\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_997065906cf8504d0e9f5933dbf3bafa.setIcon(div_icon_5be97461188aa0d113bb24f6683ea13b);
+                marker_0dd13c28549a1b2dda7272fdca47751f.setIcon(div_icon_a4d84ccba5dd3394c4228348ed344b53);
             
     
-            var marker_e497fdeffc4a27914f52036aa5c35ddc = L.marker(
+            var marker_92d03418f254743ab7c082105fc9ba99 = L.marker(
                 [49.87081, 2.25195],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_a57f2580ff16d48efad6ce0baadc8701 = L.divIcon({
+            var div_icon_44f60baa434b073d8e11ddf91154f1f2 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"18\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87081\" data-lng=\"2.25195\" onclick=\"openSidebarSingle(18)\" ontouchstart=\"openSidebarSingle(18); event.stopPropagation();\" title=\"ConsEquences Syst\u00e9miques et th\u00e9rapeutiques du vieillissement cArdiovasculaire et de l\u2019insuffisance R\u00e9nale - UR 7517 UPJV / CHU\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCESAR\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e497fdeffc4a27914f52036aa5c35ddc.setIcon(div_icon_a57f2580ff16d48efad6ce0baadc8701);
+                marker_92d03418f254743ab7c082105fc9ba99.setIcon(div_icon_44f60baa434b073d8e11ddf91154f1f2);
             
     
-            var marker_7bb8188b0b02f748aaa371af689cae9d = L.marker(
+            var marker_ec039fac589c5721f8c37ddce600cb8f = L.marker(
                 [49.87077, 2.25199],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_e26036ae59d70393f5f1447e383f4c13 = L.divIcon({
+            var div_icon_6afb66d975f46f29fe0563bbb27a4338 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"20\" data-taille=\"Plateforme technologique ou centre technique\" data-trl=\"TRL 4 : Validation en laboratoire|||TRL 3 : Validation du concept (PoC)|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 1 : Principes de base observ\u00e9s|||Non applicable\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87077\" data-lng=\"2.25199\" onclick=\"openSidebarSingle(20)\" ontouchstart=\"openSidebarSingle(20); event.stopPropagation();\" title=\"Plateforme ICAP\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FB6F92; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FB6F92; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePlateforme ICAP\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FB6F92;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_7bb8188b0b02f748aaa371af689cae9d.setIcon(div_icon_e26036ae59d70393f5f1447e383f4c13);
+                marker_ec039fac589c5721f8c37ddce600cb8f.setIcon(div_icon_6afb66d975f46f29fe0563bbb27a4338);
             
     
-            var marker_499b1287ce2b221e8dcabca679ae4ab7 = L.marker(
+            var marker_6d4c7534894869004b06cdf18ede00c7 = L.marker(
                 [49.874, 2.25465],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_6824ebbd0a85d4abfb8aabb9064166f8 = L.divIcon({
+            var div_icon_9e99753ac7edc9188bdcd79605b3d083 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"23\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif|||TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9\" data-lat=\"49.874\" data-lng=\"2.25465\" onclick=\"openSidebarSingle(23)\" ontouchstart=\"openSidebarSingle(23); event.stopPropagation();\" title=\"Simplification des Soins des Patients Chirurgicaux Complexes - UR 7518 UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eSSPC\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_499b1287ce2b221e8dcabca679ae4ab7.setIcon(div_icon_6824ebbd0a85d4abfb8aabb9064166f8);
+                marker_6d4c7534894869004b06cdf18ede00c7.setIcon(div_icon_9e99753ac7edc9188bdcd79605b3d083);
             
     
-            var marker_96bb99f36e52b229323620ab0db9bfb3 = L.marker(
+            var marker_6da1ae7d3da0cec81df7108e972c2801 = L.marker(
                 [49.87114, 2.25197],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_ac3c7ce2a6bfd11551a74cb8bf50f1aa = L.divIcon({
+            var div_icon_b01fc09fde8ef7185df26938391bbc3b = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"25\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87114\" data-lng=\"2.25197\" onclick=\"openSidebarSingle(25)\" ontouchstart=\"openSidebarSingle(25); event.stopPropagation();\" title=\"Laboratoire de Neurosciences Fonctionnelles et Pathologies - UR 4559 UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eLNFP\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_96bb99f36e52b229323620ab0db9bfb3.setIcon(div_icon_ac3c7ce2a6bfd11551a74cb8bf50f1aa);
+                marker_6da1ae7d3da0cec81df7108e972c2801.setIcon(div_icon_b01fc09fde8ef7185df26938391bbc3b);
             
     
-            var marker_e1143a3ea9243289cafa0bdffc08ff92 = L.marker(
+            var marker_1fd574f0467f2a918021c4e07e82a94a = L.marker(
                 [49.87647, 2.25477],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_e12f36d4174be2550f888cbaa6be33a8 = L.divIcon({
+            var div_icon_e855bf8f3bf4db83db8b7927724f3b6b = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"29\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif\" data-filiere=\"Sant\u00e9|||Sciences de l\u0027ing\u00e9nieur\" data-lat=\"49.87647\" data-lng=\"2.25477\" onclick=\"openSidebarSingle(29)\" ontouchstart=\"openSidebarSingle(29); event.stopPropagation();\" title=\"Chirurgie et Extr\u00e9mit\u00e9 C\u00e9phalique - UR 7516 UPJV / UA INSERM 21\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCHIMERE\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e1143a3ea9243289cafa0bdffc08ff92.setIcon(div_icon_e12f36d4174be2550f888cbaa6be33a8);
+                marker_1fd574f0467f2a918021c4e07e82a94a.setIcon(div_icon_e855bf8f3bf4db83db8b7927724f3b6b);
             
     
-            var marker_231ae214174364e5157308d3662d5175 = L.marker(
+            var marker_14530bdef890d2515826b2cc60ed4b90 = L.marker(
                 [49.87113, 2.25214],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_6468442ea56d78bd2e7a8c591183304f = L.divIcon({
+            var div_icon_b4b18168dda7c267195765dbc60f4999 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"30\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87113\" data-lng=\"2.25214\" onclick=\"openSidebarSingle(30)\" ontouchstart=\"openSidebarSingle(30); event.stopPropagation();\" title=\"Analyse Multimodale de la Fonction C\u00e9r\u00e9brale - UMR-S INSERM 1105\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eGRAMFC\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_231ae214174364e5157308d3662d5175.setIcon(div_icon_6468442ea56d78bd2e7a8c591183304f);
+                marker_14530bdef890d2515826b2cc60ed4b90.setIcon(div_icon_b4b18168dda7c267195765dbc60f4999);
             
     
-            var marker_09b1931c5a39e1ee382e323c9ffc5088 = L.marker(
+            var marker_4390f1e558b8f74c6d852c7a868e506e = L.marker(
                 [49.871, 2.25211],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_b7abccc613916a70b5f52b1a3f48de45 = L.divIcon({
+            var div_icon_9ba63d9e3b8831aaf3dd2f43b0a1c805 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"38\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif\" data-filiere=\"Sant\u00e9\" data-lat=\"49.871\" data-lng=\"2.25211\" onclick=\"openSidebarSingle(38)\" ontouchstart=\"openSidebarSingle(38); event.stopPropagation();\" title=\"P\u00e9rinatalit\u00e9 et Risques Toxiques - UMR-I INERIS 01 / UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePERITOX\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_09b1931c5a39e1ee382e323c9ffc5088.setIcon(div_icon_b7abccc613916a70b5f52b1a3f48de45);
+                marker_4390f1e558b8f74c6d852c7a868e506e.setIcon(div_icon_9ba63d9e3b8831aaf3dd2f43b0a1c805);
             
     
-            var marker_b23101ce826741c6103ec092948674e3 = L.marker(
+            var marker_db9fb195919ea56377c6166d7c2a2f64 = L.marker(
                 [49.87072, 2.25229],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_4dcecfda98b81adad37cc833362ec387 = L.divIcon({
+            var div_icon_44d14fe56e64608f3e3636ae52723f25 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-5\" data-actor-id=\"40\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87072\" data-lng=\"2.25229\" onclick=\"openSidebarSingle(40)\" ontouchstart=\"openSidebarSingle(40); event.stopPropagation();\" title=\"Groupe de Recherche sur l\u0027Alcool et les Pharmacod\u00e9pendances - UMR-S INSERM 1247\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eGRAP\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_b23101ce826741c6103ec092948674e3.setIcon(div_icon_4dcecfda98b81adad37cc833362ec387);
+                marker_db9fb195919ea56377c6166d7c2a2f64.setIcon(div_icon_44d14fe56e64608f3e3636ae52723f25);
             
     
-            var marker_cd86d56c2c6f9067cd94f6bf13044adb = L.marker(
+            var marker_8a34a5480d1bd7f986a4d00afc92fb2f = L.marker(
                 [49.87684, 2.26242],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_5b833d380ff0e094049e17ef2f82623e = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-6\" data-actor-id=\"6\" data-group-id=\"6\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87684, 2.26242, \u0027hub-marker-6\u0027, 6)\" ontouchstart=\"handleHubClick(49.87684, 2.26242, \u0027hub-marker-6\u0027, 6); event.stopPropagation();\" title=\"H\u00f4te : Campus Sant\u00e9 (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#845EC2; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Campus Sant\u00e9\n                    \u003cspan style=\"background:#FFF; color:#845EC2; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_e749b2613118830a22626402677aad5d = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-6\" data-actor-id=\"6\" data-group-id=\"6\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87684, 2.26242, \u0027hub-marker-6\u0027, 6)\" ontouchstart=\"handleHubClick(49.87684, 2.26242, \u0027hub-marker-6\u0027, 6); event.stopPropagation();\" title=\"H\u00f4te : Campus Sant\u00e9 (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#845EC2; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Campus Sant\u00e9\n                    \u003cspan style=\"background:#FFF; color:#845EC2; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_cd86d56c2c6f9067cd94f6bf13044adb.setIcon(div_icon_5b833d380ff0e094049e17ef2f82623e);
+                marker_8a34a5480d1bd7f986a4d00afc92fb2f.setIcon(div_icon_e749b2613118830a22626402677aad5d);
             
     
-            var marker_b32937468308461219f9528942b66698 = L.marker(
+            var marker_b8c45d46a08290ce72db22c3314efa5c = L.marker(
                 [49.87326, 2.26747],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_0f546fdc01c8e61b4baea9b022d5d8fd = L.divIcon({
+            var div_icon_e4b7ae07c15fea2caa708eec32d0295e = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-6\" data-actor-id=\"11\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" data-lat=\"49.87326\" data-lng=\"2.26747\" onclick=\"openSidebarSingle(11)\" ontouchstart=\"openSidebarSingle(11); event.stopPropagation();\" title=\"Adaptations Physiologiques \u00e0 l\u2019Exercice et R\u00e9adaptation \u00e0 l\u2019Effort - UR 3300 UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eAPERE\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_b32937468308461219f9528942b66698.setIcon(div_icon_0f546fdc01c8e61b4baea9b022d5d8fd);
+                marker_b8c45d46a08290ce72db22c3314efa5c.setIcon(div_icon_e4b7ae07c15fea2caa708eec32d0295e);
             
     
-            var marker_c03e68a6f9cc032f175dc1b232aabf57 = L.marker(
+            var marker_794f086dc489f7ca20a7e77cf8b8d7dd = L.marker(
                 [49.87627, 2.26194],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_fa833ee697e2144ff95c58782df31915 = L.divIcon({
+            var div_icon_ed4fd20a54d5e9a16c5961ec049525e7 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-6\" data-actor-id=\"28\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87627\" data-lng=\"2.26194\" onclick=\"openSidebarSingle(28)\" ontouchstart=\"openSidebarSingle(28); event.stopPropagation();\" title=\"Agents Infectieux, R\u00e9sistance et Chimioth\u00e9rapie - UR 4294 UPJV\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eAGIR\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c03e68a6f9cc032f175dc1b232aabf57.setIcon(div_icon_fa833ee697e2144ff95c58782df31915);
+                marker_794f086dc489f7ca20a7e77cf8b8d7dd.setIcon(div_icon_ed4fd20a54d5e9a16c5961ec049525e7);
             
     
-            var marker_46077e075bff0b3b177c71ec0f43735c = L.marker(
+            var marker_842a35f5e7611d695c575233efd05fdc = L.marker(
                 [49.89841, 2.29997],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_fe42901a8b0268a22a4a70d5019447b2 = L.divIcon({
+            var div_icon_6c6f263436f63b5247e28212d2697d16 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-6\" data-actor-id=\"41\" data-taille=\"Laboratoire ou activit\u00e9 de recherche\" data-trl=\"TRL 1 : Principes de base observ\u00e9s|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire\" data-filiere=\"Sant\u00e9\" data-lat=\"49.89841\" data-lng=\"2.29997\" onclick=\"openSidebarSingle(41)\" ontouchstart=\"openSidebarSingle(41); event.stopPropagation();\" title=\"Physio-pathologie Canaux Ioniques et Cancers - UMR-S INSERM 1366 / 9020\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#FBC9D4; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#FBC9D4; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003ePANCREST\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FBC9D4;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_46077e075bff0b3b177c71ec0f43735c.setIcon(div_icon_fe42901a8b0268a22a4a70d5019447b2);
+                marker_842a35f5e7611d695c575233efd05fdc.setIcon(div_icon_6c6f263436f63b5247e28212d2697d16);
             
     
-            var marker_6136e17069997a6678dd1b4f5e4ff5ca = L.marker(
+            var marker_1baf9c0b0f3c073c19996db14eab5005 = L.marker(
                 [49.89922, 2.30011],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_7b2ca70256fb0b7e87c9125bf8ef7915 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"8\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sciences de l\u0027ing\u00e9nieur|||Sant\u00e9|||Energie\" onclick=\"openSidebarSingle(8)\" ontouchstart=\"openSidebarSingle(8); event.stopPropagation();\" title=\"\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003e\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_868fa797326bf1f0938f68475a39a9be = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"8\" data-taille=\"Etablissement de formation\" data-trl=\"Non applicable\" data-filiere=\"Sciences de l\u0027ing\u00e9nieur|||Sant\u00e9|||Energie\" onclick=\"openSidebarSingle(8)\" ontouchstart=\"openSidebarSingle(8); event.stopPropagation();\" title=\"\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#845EC2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#845EC2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003e\u00c9cole d\u0027Ing\u00e9nieurs Jules Verne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #845EC2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_6136e17069997a6678dd1b4f5e4ff5ca.setIcon(div_icon_7b2ca70256fb0b7e87c9125bf8ef7915);
+                marker_1baf9c0b0f3c073c19996db14eab5005.setIcon(div_icon_868fa797326bf1f0938f68475a39a9be);
             
     
-            var marker_d82b23477c2015545ddc00f521cb03d6 = L.marker(
+            var marker_97abb2fe088904bdb6869d15c8e2875a = L.marker(
                 [49.89543, 2.3053],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_90eecc5ea009b490d3d24e8f11acdb3d = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"9\" data-taille=\"Association\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" onclick=\"openSidebarSingle(9)\" ontouchstart=\"openSidebarSingle(9); event.stopPropagation();\" title=\"G\u00e9rontop\u00f4le Hauts-de-France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FFC27F; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FFC27F; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eG\u00e9rontop\u00f4le\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FFC27F;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_79bcaa66a8d46e7c8307457d15aa4a4f = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"9\" data-taille=\"Association\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" onclick=\"openSidebarSingle(9)\" ontouchstart=\"openSidebarSingle(9); event.stopPropagation();\" title=\"G\u00e9rontop\u00f4le Hauts-de-France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FFC27F; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FFC27F; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eG\u00e9rontop\u00f4le\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #FFC27F;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_d82b23477c2015545ddc00f521cb03d6.setIcon(div_icon_90eecc5ea009b490d3d24e8f11acdb3d);
+                marker_97abb2fe088904bdb6869d15c8e2875a.setIcon(div_icon_79bcaa66a8d46e7c8307457d15aa4a4f);
             
     
-            var marker_933fc9b32322d27fd1b765c2170bc067 = L.marker(
+            var marker_971314195ca5b4c824517839e8bf507d = L.marker(
                 [49.89048, 2.30183],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_30dbed19921183f512decb7d55488ba2 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"13\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(13)\" ontouchstart=\"openSidebarSingle(13); event.stopPropagation();\" title=\"GLYX THERAPEUTICS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGLYX THERAPEUTICS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_798fb57fda471b022d4ed216454254b3 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"13\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(13)\" ontouchstart=\"openSidebarSingle(13); event.stopPropagation();\" title=\"GLYX THERAPEUTICS\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGLYX THERAPEUTICS\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_933fc9b32322d27fd1b765c2170bc067.setIcon(div_icon_30dbed19921183f512decb7d55488ba2);
+                marker_971314195ca5b4c824517839e8bf507d.setIcon(div_icon_798fb57fda471b022d4ed216454254b3);
             
     
-            var marker_d4c683890638e383d5e1d8b1d6947435 = L.marker(
+            var marker_ca2f24f5252548e53860bd9736b280e5 = L.marker(
                 [49.87445, 2.27334],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_6212ddf189f4d4c572dfe26ee4f51ac0 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-10\" data-actor-id=\"14\" data-group-id=\"10\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-10\u0027, 14)\" ontouchstart=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-10\u0027, 14); event.stopPropagation();\" title=\"H\u00f4te : Biolab, p\u00e9pin\u00e8re (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FDC500; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Biolab, p\u00e9pin\u00e8re\n                    \u003cspan style=\"background:#FFF; color:#FDC500; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_b454fd03a0fdc5a435f39482c3285f83 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host hub-marker-10\" data-actor-id=\"14\" data-group-id=\"10\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-10\u0027, 14)\" ontouchstart=\"handleHubClick(49.87445, 2.27334, \u0027hub-marker-10\u0027, 14); event.stopPropagation();\" title=\"H\u00f4te : Biolab, p\u00e9pin\u00e8re (+3 projets)\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:16px; height:16px; background:#FDC500; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;\"\u003e\n                    \ud83c\udfe2 Biolab, p\u00e9pin\u00e8re\n                    \u003cspan style=\"background:#FFF; color:#FDC500; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;\"\u003e+3\u003c/span\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_d4c683890638e383d5e1d8b1d6947435.setIcon(div_icon_6212ddf189f4d4c572dfe26ee4f51ac0);
+                marker_ca2f24f5252548e53860bd9736b280e5.setIcon(div_icon_b454fd03a0fdc5a435f39482c3285f83);
             
     
-            var marker_1ab779f11cdce9cb97b9cce6c869b6fc = L.marker(
+            var marker_bbcd6417a0c9dec563ce7a85fb934f74 = L.marker(
                 [49.87448, 2.27352],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_60312b032fc79d80508610391b09edd8 = L.divIcon({
+            var div_icon_c12280ac575c11473bf1fe92b162d64b = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-10\" data-actor-id=\"15\" data-taille=\"Start-up\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9|||TRL 2 : Concepts ou applications de la technologie formul\u00e9s\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87448\" data-lng=\"2.27352\" onclick=\"openSidebarSingle(15)\" ontouchstart=\"openSidebarSingle(15); event.stopPropagation();\" title=\"Dyscoveri\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eDyscoveri\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_1ab779f11cdce9cb97b9cce6c869b6fc.setIcon(div_icon_60312b032fc79d80508610391b09edd8);
+                marker_bbcd6417a0c9dec563ce7a85fb934f74.setIcon(div_icon_c12280ac575c11473bf1fe92b162d64b);
             
     
-            var marker_5f7e7936bfb70c02a8ecf0ad64651400 = L.marker(
+            var marker_8680e7390237947ebbb8b04d8cb5a639 = L.marker(
                 [49.87429, 2.2727],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_789f405d59f8519d4637d1f0ef09a4e5 = L.divIcon({
+            var div_icon_c3320ea176319eba0d255569f9fd3462 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-10\" data-actor-id=\"35\" data-taille=\"Start-up\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Sciences Humaines et Sociales\" data-lat=\"49.87429\" data-lng=\"2.2727\" onclick=\"openSidebarSingle(35)\" ontouchstart=\"openSidebarSingle(35); event.stopPropagation();\" title=\"Capoupa\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eCapoupa\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_5f7e7936bfb70c02a8ecf0ad64651400.setIcon(div_icon_789f405d59f8519d4637d1f0ef09a4e5);
+                marker_8680e7390237947ebbb8b04d8cb5a639.setIcon(div_icon_c3320ea176319eba0d255569f9fd3462);
             
     
-            var marker_c9fb109ab520a9459cb6ae1aca1cbc52 = L.marker(
+            var marker_75e6af94c274a53821bf8a1b28aa1631 = L.marker(
                 [49.87454, 2.27267],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_55b968d8f2bfa295bf8081a89dbd0b5a = L.divIcon({
+            var div_icon_74300d7b634a9b6f06bf9c797974f0b8 = L.divIcon({
   "html": "\n            \u003cdiv class=\"marker-wrapper marker-wrapper-sub sub-hub-marker-10\" data-actor-id=\"44\" data-taille=\"Start-up\" data-trl=\"TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" data-lat=\"49.87454\" data-lng=\"2.27267\" onclick=\"openSidebarSingle(44)\" ontouchstart=\"openSidebarSingle(44); event.stopPropagation();\" title=\"SIGO\" style=\"display:none; position:relative; cursor:pointer; z-index:10000;\"\u003e\n                \u003cdiv style=\"position:absolute; top:0; left:0; width:12px; height:12px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;\"\u003e\u003c/div\u003e\n                \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                    \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;\"\u003eSIGO\u003c/div\u003e\n                    \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c9fb109ab520a9459cb6ae1aca1cbc52.setIcon(div_icon_55b968d8f2bfa295bf8081a89dbd0b5a);
+                marker_75e6af94c274a53821bf8a1b28aa1631.setIcon(div_icon_74300d7b634a9b6f06bf9c797974f0b8);
             
     
-            var marker_a4b455cb03d1fa922c27a53d2b8ccc08 = L.marker(
+            var marker_2ed36025fe1464d1d15c111608a03ac2 = L.marker(
                 [49.93532, 2.26781],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_96d888c8a380bdbd96706bd085b131f0 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"16\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(16)\" ontouchstart=\"openSidebarSingle(16); event.stopPropagation();\" title=\"Unither Pharmaceuticals\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eUnither Pharmaceuticals\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_5e0d620b1e8daf6c05b46cd1b685ec60 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"16\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(16)\" ontouchstart=\"openSidebarSingle(16); event.stopPropagation();\" title=\"Unither Pharmaceuticals\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eUnither Pharmaceuticals\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_a4b455cb03d1fa922c27a53d2b8ccc08.setIcon(div_icon_96d888c8a380bdbd96706bd085b131f0);
+                marker_2ed36025fe1464d1d15c111608a03ac2.setIcon(div_icon_5e0d620b1e8daf6c05b46cd1b685ec60);
             
     
-            var marker_c25dc7ec9dac9e72b689859ae666dd8f = L.marker(
+            var marker_32bf0e6adc8b0e851596e1d06fed99c9 = L.marker(
                 [49.89564, 2.30461],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_934a29ab1ad845787b2aac389fd4af36 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"19\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif\" data-filiere=\"Sant\u00e9|||Energie|||Agroalimentaire|||Industries Culturelles et Cr\u00e9atives|||Sciences de l\u0027ing\u00e9nieur|||Sciences Humaines et Sociales|||Autre\" onclick=\"openSidebarSingle(19)\" ontouchstart=\"openSidebarSingle(19); event.stopPropagation();\" title=\"SATT Nord\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSATT Nord\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_e78b72a0f26527968a228f6ba0085a84 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"19\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"TRL 2 : Concepts ou applications de la technologie formul\u00e9s|||TRL 3 : Validation du concept (PoC)|||TRL 4 : Validation en laboratoire|||TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9|||TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif\" data-filiere=\"Sant\u00e9|||Energie|||Agroalimentaire|||Industries Culturelles et Cr\u00e9atives|||Sciences de l\u0027ing\u00e9nieur|||Sciences Humaines et Sociales|||Autre\" onclick=\"openSidebarSingle(19)\" ontouchstart=\"openSidebarSingle(19); event.stopPropagation();\" title=\"SATT Nord\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSATT Nord\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_c25dc7ec9dac9e72b689859ae666dd8f.setIcon(div_icon_934a29ab1ad845787b2aac389fd4af36);
+                marker_32bf0e6adc8b0e851596e1d06fed99c9.setIcon(div_icon_e78b72a0f26527968a228f6ba0085a84);
             
     
-            var marker_f34bb6bb2320409a1d7aaa178bf462d3 = L.marker(
+            var marker_6bc650027204b46f91d51d986e1a3ee6 = L.marker(
                 [49.41795, 2.82632],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_556a09b2b9892e30c85eb9fa064acdc3 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"22\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(22)\" ontouchstart=\"openSidebarSingle(22); event.stopPropagation();\" title=\"WE REV\u0027ART\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eWE REV\u0027ART\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_7ac3dd8cfd9bb36ddf4975fcbffe8e2c = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"22\" data-taille=\"Start-up\" data-trl=\"TRL 5 : Prototype valid\u00e9 en environnement contr\u00f4l\u00e9\" data-filiere=\"Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(22)\" ontouchstart=\"openSidebarSingle(22); event.stopPropagation();\" title=\"WE REV\u0027ART\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eWE REV\u0027ART\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_f34bb6bb2320409a1d7aaa178bf462d3.setIcon(div_icon_556a09b2b9892e30c85eb9fa064acdc3);
+                marker_6bc650027204b46f91d51d986e1a3ee6.setIcon(div_icon_7ac3dd8cfd9bb36ddf4975fcbffe8e2c);
             
     
-            var marker_bbe4e634ad637bc2a320189e4b3ed739 = L.marker(
+            var marker_20fe71ac6facac5b75d805c978df8ba6 = L.marker(
                 [49.89129, 2.31088],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_e5983492e11720a745ffe16235a909a6 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"24\" data-taille=\"Grande Entreprise\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(24)\" ontouchstart=\"openSidebarSingle(24); event.stopPropagation();\" title=\"TALAN\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eTALAN\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_ee44a9d783880c8aa57dc15c8c12953f = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"24\" data-taille=\"Grande Entreprise\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(24)\" ontouchstart=\"openSidebarSingle(24); event.stopPropagation();\" title=\"TALAN\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eTALAN\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_bbe4e634ad637bc2a320189e4b3ed739.setIcon(div_icon_e5983492e11720a745ffe16235a909a6);
+                marker_20fe71ac6facac5b75d805c978df8ba6.setIcon(div_icon_ee44a9d783880c8aa57dc15c8c12953f);
             
     
-            var marker_7e232f88714e4e1a98c4d8d66c1774b7 = L.marker(
+            var marker_9480b9731d226ab69d1fbb76e55766d2 = L.marker(
                 [49.89968, 2.25604],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_36eeb1c79020397400a949e52c7c9787 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"26\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(26)\" ontouchstart=\"openSidebarSingle(26); event.stopPropagation();\" title=\"GRADeS In\u00e9a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGRADeS In\u00e9a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_68634fd3ddd4a0c3fd2edbf60a317e88 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"26\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(26)\" ontouchstart=\"openSidebarSingle(26); event.stopPropagation();\" title=\"GRADeS In\u00e9a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eGRADeS In\u00e9a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_7e232f88714e4e1a98c4d8d66c1774b7.setIcon(div_icon_36eeb1c79020397400a949e52c7c9787);
+                marker_9480b9731d226ab69d1fbb76e55766d2.setIcon(div_icon_68634fd3ddd4a0c3fd2edbf60a317e88);
             
     
-            var marker_e6c3d5e8fc2ba3c69e34290a5f36b847 = L.marker(
+            var marker_5e08875c15a092533e26c1f7da35397b = L.marker(
                 [49.87828, 2.26861],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_b3323cf8b7a93ad2b9a2600e5ed717a1 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"27\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(27)\" ontouchstart=\"openSidebarSingle(27); event.stopPropagation();\" title=\"Numih France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNumih France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_f0778d0db833d007681d184daf48f494 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"27\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(27)\" ontouchstart=\"openSidebarSingle(27); event.stopPropagation();\" title=\"Numih France\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNumih France\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_e6c3d5e8fc2ba3c69e34290a5f36b847.setIcon(div_icon_b3323cf8b7a93ad2b9a2600e5ed717a1);
+                marker_5e08875c15a092533e26c1f7da35397b.setIcon(div_icon_f0778d0db833d007681d184daf48f494);
             
     
-            var marker_52e2bf46005784052168ca17c5c0a0d7 = L.marker(
+            var marker_d26a840b0832e63c6c5d5a6cea1cdc77 = L.marker(
                 [49.87457, 2.35187],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_93bbe248a12f22822b2d4b344e02e56d = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"31\" data-taille=\"Start-up\" data-trl=\"TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif|||TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Sciences de l\u0027ing\u00e9nieur\" onclick=\"openSidebarSingle(31)\" ontouchstart=\"openSidebarSingle(31); event.stopPropagation();\" title=\"SPORTOPIA\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSPORTOPIA\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_021f7712705a17da98c1b13410c6f045 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"31\" data-taille=\"Start-up\" data-trl=\"TRL 6 : Prototype en environnement simul\u00e9 ou repr\u00e9sentatif|||TRL 7 : D\u00e9monstration d\u2019un prototype du syst\u00e8me dans un environnement op\u00e9rationnel\" data-filiere=\"Sant\u00e9|||Sciences de l\u0027ing\u00e9nieur\" onclick=\"openSidebarSingle(31)\" ontouchstart=\"openSidebarSingle(31); event.stopPropagation();\" title=\"SPORTOPIA\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSPORTOPIA\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_52e2bf46005784052168ca17c5c0a0d7.setIcon(div_icon_93bbe248a12f22822b2d4b344e02e56d);
+                marker_d26a840b0832e63c6c5d5a6cea1cdc77.setIcon(div_icon_021f7712705a17da98c1b13410c6f045);
             
     
-            var marker_9f6f6ec16427f215a23746fc8369ad79 = L.marker(
+            var marker_1b4645ae59406f8c9e21983da0578e40 = L.marker(
                 [49.89419, 2.30852],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_131d9682d739c87ab553ca95d803a0fa = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"32\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(32)\" ontouchstart=\"openSidebarSingle(32); event.stopPropagation();\" title=\"Caisse d\u0027Epargne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCaisse d\u0027Epargne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_a406a87d579ae61f9da279f54e45e10d = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"32\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(32)\" ontouchstart=\"openSidebarSingle(32); event.stopPropagation();\" title=\"Caisse d\u0027Epargne\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eCaisse d\u0027Epargne\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_9f6f6ec16427f215a23746fc8369ad79.setIcon(div_icon_131d9682d739c87ab553ca95d803a0fa);
+                marker_1b4645ae59406f8c9e21983da0578e40.setIcon(div_icon_a406a87d579ae61f9da279f54e45e10d);
             
     
-            var marker_211fae71f3ae13b407acc1702391bc07 = L.marker(
+            var marker_214c005f9343318374fa402b2b3add42 = L.marker(
                 [49.89531, 2.30461],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_05e3b8f059c2e2e4af2ae9652ef891a1 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"33\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Energie|||Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(33)\" ontouchstart=\"openSidebarSingle(33); event.stopPropagation();\" title=\"innov\u0027a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003einnov\u0027a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_4356de5b3cc99953f34fae45269993e8 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"33\" data-taille=\"Structure d\u0027accompagnement \u00e0 l\u0027innovation\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9|||Energie|||Industries Culturelles et Cr\u00e9atives\" onclick=\"openSidebarSingle(33)\" ontouchstart=\"openSidebarSingle(33); event.stopPropagation();\" title=\"innov\u0027a\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#FDC500; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#FDC500; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003einnov\u0027a\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #FDC500;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_211fae71f3ae13b407acc1702391bc07.setIcon(div_icon_05e3b8f059c2e2e4af2ae9652ef891a1);
+                marker_214c005f9343318374fa402b2b3add42.setIcon(div_icon_4356de5b3cc99953f34fae45269993e8);
             
     
-            var marker_3b6d055abf1ed5d7e6443d72ca440317 = L.marker(
+            var marker_3ca9b7c89483bc971ba08e1c02df4568 = L.marker(
                 [50.00053, 2.64591],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_a721c1e7f53c8c8f96fb5739552c46f3 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"34\" data-taille=\"Start-up\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(34)\" ontouchstart=\"openSidebarSingle(34); event.stopPropagation();\" title=\"SIDONY\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSIDONY\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_c83b5c346a64e0a9700b444c31d4c2f2 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"34\" data-taille=\"Start-up\" data-trl=\"Non applicable\" data-filiere=\"Autre\" onclick=\"openSidebarSingle(34)\" ontouchstart=\"openSidebarSingle(34); event.stopPropagation();\" title=\"SIDONY\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#9BC045; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#9BC045; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eSIDONY\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #9BC045;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_3b6d055abf1ed5d7e6443d72ca440317.setIcon(div_icon_a721c1e7f53c8c8f96fb5739552c46f3);
+                marker_3ca9b7c89483bc971ba08e1c02df4568.setIcon(div_icon_c83b5c346a64e0a9700b444c31d4c2f2);
             
     
-            var marker_86118e15f317d7c712fb45074fb64744 = L.marker(
+            var marker_2d54fd31471dab8b23c9a6237eb0d93c = L.marker(
                 [49.87912, 2.25917],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_5569ac595328a43aa93c276a2c033029 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"37\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(37)\" ontouchstart=\"openSidebarSingle(37); event.stopPropagation();\" title=\"NovaSpine\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNovaSpine\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_c45ce6117c13a37812bafe227ced18e0 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"37\" data-taille=\"TPE ou PME\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(37)\" ontouchstart=\"openSidebarSingle(37); event.stopPropagation();\" title=\"NovaSpine\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#00EBF5; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#00EBF5; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eNovaSpine\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #00EBF5;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_86118e15f317d7c712fb45074fb64744.setIcon(div_icon_5569ac595328a43aa93c276a2c033029);
+                marker_2d54fd31471dab8b23c9a6237eb0d93c.setIcon(div_icon_c45ce6117c13a37812bafe227ced18e0);
             
     
-            var marker_5c8404834f1fd43cc2191c54d1255136 = L.marker(
+            var marker_79b260d22f9cbb995e2e2592faab54e4 = L.marker(
                 [49.93182, 2.27997],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_176d4a407b9bc8cfde05ba4a836e58e1 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"39\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(39)\" ontouchstart=\"openSidebarSingle(39); event.stopPropagation();\" title=\"Mast Diagnostic\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMast Diagnostic\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_0da50c92c87cc6e6d3027ffab01e9fac = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"39\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(39)\" ontouchstart=\"openSidebarSingle(39); event.stopPropagation();\" title=\"Mast Diagnostic\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; top: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMast Diagnostic\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_5c8404834f1fd43cc2191c54d1255136.setIcon(div_icon_176d4a407b9bc8cfde05ba4a836e58e1);
+                marker_79b260d22f9cbb995e2e2592faab54e4.setIcon(div_icon_0da50c92c87cc6e6d3027ffab01e9fac);
             
     
-            var marker_412e0f1de123b1a100b3c29432e4b90e = L.marker(
+            var marker_878802690fff5308e7646fe378cb6fb4 = L.marker(
                 [49.89504, 2.29186],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_ea4092a1d56a80f2fbb3b72fb3bc26ab = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"42\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(42)\" ontouchstart=\"openSidebarSingle(42); event.stopPropagation();\" title=\"Mutuale\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMutuale\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_9b22d6589dbce23e72efb84f39c90992 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"42\" data-taille=\"Autre\" data-trl=\"Non applicable\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(42)\" ontouchstart=\"openSidebarSingle(42); event.stopPropagation();\" title=\"Mutuale\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#888888; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: row; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#888888; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eMutuale\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #888888;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_412e0f1de123b1a100b3c29432e4b90e.setIcon(div_icon_ea4092a1d56a80f2fbb3b72fb3bc26ab);
+                marker_878802690fff5308e7646fe378cb6fb4.setIcon(div_icon_9b22d6589dbce23e72efb84f39c90992);
             
     
-            var marker_65c27b4d427b51568915975ed5c0b49a = L.marker(
+            var marker_920503a49efeba14d2b85686a491c1d8 = L.marker(
                 [49.87123, 2.28143],
                 {
 }
-            ).addTo(map_becc2c23dfb03bce7c4eee4541f73a6d);
+            ).addTo(map_2a3fef3b579f40b5fe873374224cd656);
         
     
-            var div_icon_5f3cf091c90b63f0be992a5186a99f41 = L.divIcon({
-  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"43\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(43)\" ontouchstart=\"openSidebarSingle(43); event.stopPropagation();\" title=\"Bow Medical\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eBow Medical\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
+            var div_icon_779b7aae2ba9f9d5acdd492284d14b41 = L.divIcon({
+  "html": "\n        \u003cdiv class=\"marker-wrapper-host\" data-actor-id=\"43\" data-taille=\"Grande Entreprise\" data-trl=\"TRL 8 : Syst\u00e8me complet qualifi\u00e9 (normes, s\u00e9curit\u00e9, qualit\u00e9...)|||TRL 9 : Syst\u00e8me commercialis\u00e9\" data-filiere=\"Sant\u00e9\" onclick=\"openSidebarSingle(43)\" ontouchstart=\"openSidebarSingle(43); event.stopPropagation();\" title=\"Bow Medical\" style=\"display:flex; position:relative; cursor:pointer;\"\u003e\n            \u003cdiv style=\"position:absolute; top:0; left:0; width:14px; height:14px; background:#2583F2; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;\"\u003e\u003c/div\u003e\n            \u003cdiv style=\"position:absolute; left: 10px; top: 50%; transform: translateY(-50%); flex-direction: row-reverse; display:flex; align-items:center; z-index:1;\"\u003e\n                \u003cdiv style=\"background:#2583F2; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);\"\u003eBow Medical\u003c/div\u003e\n                \u003cdiv style=\"width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:7px solid #2583F2;\"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n        ",
   "iconSize": [0, 0],
   "className": "empty",
 });
         
     
-                marker_65c27b4d427b51568915975ed5c0b49a.setIcon(div_icon_5f3cf091c90b63f0be992a5186a99f41);
+                marker_920503a49efeba14d2b85686a491c1d8.setIcon(div_icon_779b7aae2ba9f9d5acdd492284d14b41);
             
 </script>
 </html>
