@@ -194,10 +194,11 @@ def formater_nom_etiquette(actor, nom_court):
     type_fiche = get_text(actor, "type_fiche", "Type_fiche", "Type").strip().lower()
     
     # 1. Si c'est un ensemble de projets (Hub), on utilise Name_group (ou nom_court) avec l'icône
-    if type_fiche == "Ensemble de projets":
-    nom_groupe_field = get_text(actor, "Name_group")
-    nom_a_utiliser = nom_groupe_field if nom_groupe_field else nom_court
-    return f'<span style="white-space: pre-line;">🏢 {nom_a_utiliser}</span>'
+   if type_fiche == "Ensemble de projets":
+        nom_groupe_field = get_text(actor, "Name_group")
+        nom_a_utiliser = nom_groupe_field if nom_groupe_field else nom_court
+        nom_a_utiliser = nom_a_utiliser.replace("\n", "<br>")
+        return f"🏢 {nom_a_utiliser}"
     
     # 2. Pour les autres fiches (uniques, etc.), on vérifie la case Ligne_retour
     ligne_retour_val = None
