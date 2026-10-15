@@ -191,16 +191,24 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
-    """Gère le retour à la ligne uniquement si la colonne Ligne_retour est activée"""
-    ligne_retour_val = get_text(actor, "Ligne_retour", "Saut_ligne")
-    est_coche = str(ligne_retour_val).strip().lower() in ["oui", "true", "1", "x", "yes"]
+    """Gère le retour à la ligne uniquement si la colonne Ligne_retour est explicitement cochée à True"""
+    ligne_retour_val = actor.get("Ligne_retour") or actor.get("Saut_ligne")
     
+    # Vérification stricte si c'est True (booléen) ou une liste contenant True/vrai
+    est_coche = False
+    if isinstance(ligne_retour_val, bool):
+        est_coche = ligne_retour_val
+    elif isinstance(ligne_retour_val, list):
+        est_coche = any(v is True or str(v).lower() in ["true", "1", "oui", "yes"] for v in ligne_retour_val)
+    elif ligne_retour_val is not None:
+        est_coche = str(ligne_retour_val).strip().lower() in ["true", "1", "oui", "yes", "x"]
+
     if est_coche:
-        parts = re.split(r'[\s-]+', nom_court, 1)
-        if len(parts) > 1:
-            return f"{parts[0]}<br>{parts[1]}"
-        return nom_court
+        # Si c'est coché, on coupe au premier espace pour forcer le retour à la ligne
+        parts = nom_court.split(" ", 1)
+        return f"{parts[0]}<br>{parts[1]}" if len(parts) > 1 else nom_court
     else:
+        # Sinon, pas de retour à la ligne du tout
         return nom_court
 
 def get_media_url_and_type(record_id, video_field, second_illu):
