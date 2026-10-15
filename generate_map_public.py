@@ -218,7 +218,7 @@ def formater_nom_etiquette(actor, nom_court):
         return nom_court
     else:
         return nom_court
-
+        
 def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
         val_str = ""
