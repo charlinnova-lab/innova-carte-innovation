@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Fix nom_court, ligne retour & badge hub sur la ligne du dessous
+#            15/10 - Fix nom_court et ligne retour (retour au nowrap compact)
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -658,7 +658,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="openSidebarSingle({hote_idx})" ontouchstart="openSidebarSingle({hote_idx}); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:14px; height:14px; background:{couleur_hote}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;"></div>
             <div style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:pre-line; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
+                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:nowrap; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
                 <div style="width:0; height:0; {arrow_style_h}"></div>
             </div>
         </div>
@@ -671,10 +671,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
             <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:pre-line; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
+                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:nowrap; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
                     🏢 {nom_hote_affiche}
-                    <br>
-                    <span style="background:#FFF; color:{couleur_hote}; padding:2px 7px; border-radius:10px; font-size:11px; font-weight:900; display:inline-block; margin-top:3px;">+{nb_dependants}</span>
+                    <span style="background:#FFF; color:{couleur_hote}; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;">+{nb_dependants}</span>
                 </div>
                 <div style="width:0; height:0; {arrow_style_hub}"></div>
             </div>
@@ -703,7 +702,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" ontouchstart="openSidebarSingle({idx}); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
                 <div style="position:absolute; top:0; left:0; width:12px; height:12px; background:{couleur_actor}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;"></div>
                 <div style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
-                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; max-width:200px; white-space:pre-line; box-shadow:0 2px 6px rgba(0,0,0,0.35); border:1px solid white;">{nom_actor_affiche}</div>
+                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; max-width:200px; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.35); border:1px solid white;">{nom_actor_affiche}</div>
                     <div style="width:0; height:0; {arrow_style_s}"></div>
                 </div>
             </div>
