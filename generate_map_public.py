@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Fix nom_court, ligne_retour & badge hub sur la ligne du dessous (corrigé)
+#            15/10 - Fix icône, nom sur une seule ligne et badges hubs
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -667,12 +667,14 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
     else:
         label_pos_hub, arrow_style_hub = get_style_ancrage(hote_actor, couleur_hote)
+        nom_hote_propre = nom_hote_affiche.replace("<br>", " ").replace("\n", " ").strip()
+
         marker_hub_html = f"""
         <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
             <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
-                    🏢 {nom_hote_affiche}
+                <div style="background:{couleur_hote}; color:white; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:260px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
+                    <span style="display:inline-flex; align-items:center; gap:5px; white-space:nowrap;">🏢 {nom_hote_propre}</span>
                     <div style="margin-top:4px;">
                         <span style="background:#FFF; color:{couleur_hote}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:900; display:inline-block;">+{nb_dependants}</span>
                     </div>
