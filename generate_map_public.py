@@ -14,7 +14,6 @@
 #   5. prépare l'affichage et l'ancrage GPS
 #   6. génère la carte
 # =========================================================
-
 # =========================================================
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
@@ -196,7 +195,9 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
+    """Gère le retour à la ligne si Ligne_retour est coché (sur espace ou tiret)"""
     ligne_retour_val = actor.get("Ligne_retour") or actor.get("Saut_ligne")
+    
     est_coche = False
     if isinstance(ligne_retour_val, bool):
         est_coche = ligne_retour_val
@@ -206,8 +207,15 @@ def formater_nom_etiquette(actor, nom_court):
         est_coche = str(ligne_retour_val).strip().lower() in ["true", "1", "oui", "yes", "x"]
 
     if est_coche:
-        parts = nom_court.split(" ", 1)
-        return f"{parts[0]}<br>{parts[1]}" if len(parts) > 1 else nom_court
+        if "\n" in nom_court:
+            return nom_court.replace("\n", "<br>")
+        if " " in nom_court:
+            parts = nom_court.split(" ", 1)
+            return f"{parts[0]}<br>{parts[1]}"
+        elif "-" in nom_court:
+            parts = nom_court.split("-", 1)
+            return f"{parts[0]}-<br>{parts[1]}"
+        return nom_court
     else:
         return nom_court
 
