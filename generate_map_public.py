@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - FDix nom_court
+#            15/10 - FDix nom_court et ligne retour
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -16,12 +16,18 @@
 
 #   IMPORTANT : Le token Airtable n'est PAS présent ici. Il est stocké comme secret dans Cloudflare.
 #========================================================= 
+# =========================================================
+# CARTOGRAPHIE FILIERE
+#   innov'a (c) Charlotte Piau
+#   Création : 17 août 2026
+#   Last Modification : Option 2 - Saut de ligne personnalisé
+#========================================================= 
 
 import os
 import re
 import requests
 import folium
-import markdown  # pip install markdown --break-system-packages
+import markdown
 from urllib.parse import quote
 from collections import defaultdict
 
@@ -34,7 +40,6 @@ MODE = "public"
 CONTACT_PUBLIC_EMAIL = "contact@innov-a.com"
 CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
 
-# Dossier d'accueil des images
 os.makedirs("assets/images", exist_ok=True)
 
 COULEURS = {
@@ -55,7 +60,7 @@ def get_couleur(taille_valeur):
     if not taille_valeur:
         return COULEURS["Autre"]
     val_str = str(taille_valeur).strip().replace("\n", " ").replace("\r", "")
-    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Établissement de santé")
+    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Etablissement de santé")
     if val_str in COULEURS:
         return COULEURS[val_str]
     for nom_taille, couleur in COULEURS.items():
@@ -64,7 +69,6 @@ def get_couleur(taille_valeur):
     return COULEURS["Autre"]
 
 def format_url(url):
-    """S'assure que l'URL commence par http:// ou https:// pour éviter les erreurs de redirection locale."""
     if not url:
         return ""
     url_clean = str(url).strip()
@@ -74,16 +78,10 @@ def format_url(url):
         return f"https://{url_clean}"
     return url_clean
 
-# ==================================
-# 1. HELPER POUR TÉLÉCHARGEMENT LOCAL DES IMAGES
-# ==================================
 def download_airtable_image(record_id, field_value, prefix="img"):
     if not field_value:
         return ""
-    
-    airtable_url = ""
-    filename = ""
-    
+    airtable_url, filename = "", ""
     if isinstance(field_value, list) and len(field_value) > 0:
         if isinstance(field_value[0], dict):
             airtable_url = field_value[0].get("url", "")
@@ -106,7 +104,6 @@ def download_airtable_image(record_id, field_value, prefix="img"):
         ext = "png"
 
     local_path = f"assets/images/{record_id}_{prefix}.{ext}"
-
     try:
         res = requests.get(airtable_url, timeout=10)
         if res.status_code == 200:
@@ -115,33 +112,24 @@ def download_airtable_image(record_id, field_value, prefix="img"):
             return local_path
     except Exception as e:
         print(f"⚠️ Erreur téléch. {prefix} ({record_id}) : {e}")
-
     return ""
 
-# ==================================
-# 2. RECUPERATION ET PARSING WORKER
-# ==================================
 def fetch_acteurs():
     records, offset = [], None
     while True:
         params = {"pageSize": 100}
         if offset:
             params["offset"] = offset
-        
         res = requests.get(WORKER_URL, params=params)
         res.raise_for_status()
-        
         data = res.json()
-        
         for r in data.get("records", []):
             rec_fields = r.get("fields", {})
             rec_fields["_record_id"] = r.get("id")
             records.append(rec_fields)
-        
         offset = data.get("offset")
         if not offset:
             break
-            
     return records
 
 def get_text(record, *keys, default=""):
@@ -153,10 +141,9 @@ def get_text(record, *keys, default=""):
                 val = ", ".join(extracted)
             elif isinstance(val, dict):
                 val = val.get("name", str(val))
-            
             val_str = str(val).strip().replace("\r\n", "\n").replace("\r", "\n")
             if val_str:
-                val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Établissement de santé")
+                val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Etablissement de santé")
                 return val_str
     return default
 
@@ -210,6 +197,23 @@ def parse_nom(nom_brut):
         return match.group(1).strip(), match.group(2).strip()
     return nom_brut, nom_brut
 
+def formater_nom_ etiquette(actor, nom_court):
+    """Gère le retour à la ligne selon la colonne Ligne_retour d'Airtable"""
+    ligne_retour_val = get_text(actor, "Ligne_retour", "Saut_ligne")
+    
+    # Si la colonne est remplie, on l'utilise (ex: "CHU Amiens<br>Picardie" ou un format spécifique)
+    if ligne_retour_val:
+        if ligne_retour_val.lower() in ["oui", "true", "1", "x"]:
+            # Si c'est juste une case cochée, on coupe au premier espace du nom court
+            parts = nom_court.split(" ", 1)
+            return f"{parts[0]}<br>{parts[1]}" if len(parts) > 1 else nom_court
+        else:
+            # Sinon on prend le texte exact mis dans la colonne (permet de placer le <br> où on veut)
+            return ligne_retour_val
+    
+    # Par défaut, pas de retour à la ligne forcé (reste sur une ligne propre)
+    return nom_court
+
 def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
         val_str = ""
@@ -232,7 +236,6 @@ def get_media_url_and_type(record_id, video_field, second_illu):
         local_second_img = download_airtable_image(record_id, second_illu, prefix="second")
         if local_second_img:
             return local_second_img, "image"
-            
     return "", ""
 
 def parse_gps(gps_str):
@@ -243,9 +246,6 @@ def parse_gps(gps_str):
         return round(float(match.group(1)), 5), round(float(match.group(2)), 5)
     return None
 
-# ==================================
-# 3. COLLECTE DES VALEURS UNIQUES
-# ==================================
 acteurs = fetch_acteurs()
 print(f"✅ {len(acteurs)} acteurs récupérés depuis le Worker")
 
@@ -275,11 +275,7 @@ liste_domaines = sorted(set(
     v for a in acteurs for v in (get_liste_valeurs(a, "Filières", "Filiere", "Domaine") or ["Autre"])
 ))
 
-# ==================================
-# 4. INITIALISATION CARTE & UI
-# ==================================
 CARTO_KEY = "cb1_2w4r_1_3b46deb5d7b181db2c1173a7"
-
 INITIAL_ZOOM = 13
 m = folium.Map(
     location=[49.89, 2.30],
@@ -798,9 +794,6 @@ ui_and_sidebar_html = ui_and_sidebar_html.replace("__INITIAL_ZOOM__", str(INITIA
 
 m.get_root().html.add_child(folium.Element(ui_and_sidebar_html))
 
-# ==================================
-# 5. REGROUPEMENT PAR GPS & GENERATION
-# ==================================
 MAP_ANCRAGE = {
     "droite": "right",
     "bas": "bottom",
@@ -812,11 +805,9 @@ def get_style_ancrage(actor, couleur):
     raw = get_text(actor, "Ancrage_label", "Ancrage_Label", default="haut")
     if isinstance(raw, list):
         raw = raw[0] if raw else "haut"
-    
     val = str(raw).strip().lower()
     if not val:
         val = "haut"
-        
     direction = MAP_ANCRAGE.get(val, "top")
     
     if direction == "bottom":
@@ -846,18 +837,15 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     def est_acteur_ensemble(item):
         act_fields = item[1]
         type_fiche = get_text(act_fields, "type_fiche", "Type_fiche", "Type").strip().lower()
-        # Tri strict basé sur la colonne Excel type_fiche
         return type_fiche == "ensemble de projets"
 
     groupe.sort(key=lambda x: 0 if est_acteur_ensemble(x) else 1)
     nb_dependants = len(groupe) - 1
 
-    # --- FICHES INDIVIDUELLES (SIDEBAR) ---
     for pos_in_group, (idx, actor) in enumerate(groupe):
         rec_id = actor.get("_record_id", f"rec_{idx}")
         is_host_attr = "true" if (pos_in_group == 0 and nb_dependants > 0) else "false"
         
-        # Récupération séparée du nom court et du nom complet (brut)
         nom_brut = get_text(actor, "Nom", default="Sans nom")
         nom_court, nom_detail = parse_nom(nom_brut)
 
@@ -881,13 +869,10 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         site_web = format_url(get_text(actor, "Website", "Site Web", "Site_web", default=""))
         url_interview = format_url(get_text(actor, "ITW", "Interview", default=""))
 
-        # TÉLÉCHARGEMENT ET ATTRIBUTION DES IMAGES LOCALES
         logo_url = download_airtable_image(rec_id, actor.get("Logo"), prefix="logo")
         photo_url = download_airtable_image(rec_id, actor.get("Main illustration"), prefix="main")
 
         bloc_photo = f'<img src="{photo_url}" style="width:100%; height:100%; object-fit:cover; display:block;" />' if photo_url else '<div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div>'
-        
-        # LOGO AGRANDI X 1.5 (165px x 75px)
         bloc_logo = f'<img src="{logo_url}" style="max-width:165px; max-height:75px; object-fit:contain;" />' if logo_url else 'LOGO'
 
         video_raw = actor.get("Video") or actor.get("Vidéo") or actor.get("Lien_video")
@@ -940,7 +925,6 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         bouton_site_web_html = f'<a href="{site_web}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:black; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-bottom:10px;">🌐 SITE WEB</button></a>' if site_web else ""
         bouton_interview_html = f'<a href="{url_interview}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><button style="width:100%; background:#2D3277; color:white; border:none; border-radius:6px; padding:9px; font-weight:bold; cursor:pointer; margin-top:10px;">📝 PORTRAIT</button></a>' if url_interview else ""
 
-        # Utilisation de nom_brut pour le titre complet dans la fiche (incluant ce qui est entre parenthèses)
         fiche_html = f"""
         <div id="fiche-acteur-{idx}" data-is-host="{is_host_attr}" style="display:none;">
             <div style="display:flex; flex-direction:column; width:100%;">
@@ -992,6 +976,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     # --- MARQUEURS SUR LA CARTE ---
     hote_idx, hote_actor = groupe[0]
     nom_hote_court, nom_hote_detail = parse_nom(get_text(hote_actor, "Nom"))
+    nom_hote_affiche = formater_nom_etiquette(hote_actor, nom_hote_court)
+    
     couleur_hote = get_couleur(get_text(hote_actor, "Taille"))
     taille_hote = get_text(hote_actor, "Taille", default="").replace("\n", " ").replace("\r", "")
     trl_hote_attr = "|||".join(get_liste_trls_record(hote_actor))
@@ -1004,7 +990,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="openSidebarSingle({hote_idx})" ontouchstart="openSidebarSingle({hote_idx}); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:14px; height:14px; background:{couleur_hote}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;"></div>
             <div style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_court}</div>
+                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
                 <div style="width:0; height:0; {arrow_style_h}"></div>
             </div>
         </div>
@@ -1017,8 +1003,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
             <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; white-space:normal; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
-                    🏢 {nom_hote_court}
+                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
+                    🏢 {nom_hote_affiche}
                     <span style="background:#FFF; color:{couleur_hote}; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;">+{nb_dependants}</span>
                 </div>
                 <div style="width:0; height:0; {arrow_style_hub}"></div>
@@ -1032,6 +1018,8 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                 continue
 
             nom_actor_court, nom_actor_detail = parse_nom(get_text(actor, "Nom"))
+            nom_actor_affiche = formater_nom_etiquette(actor, nom_actor_court)
+            
             couleur_actor = get_couleur(get_text(actor, "Taille"))
             taille_actor = get_text(actor, "Taille", default="").replace("\n", " ").replace("\r", "")
             trl_actor_attr = "|||".join(get_liste_trls_record(actor))
@@ -1046,16 +1034,13 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" ontouchstart="openSidebarSingle({idx}); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
                 <div style="position:absolute; top:0; left:0; width:12px; height:12px; background:{couleur_actor}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;"></div>
                 <div style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
-                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;">{nom_actor_court}</div>
+                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;">{nom_actor_affiche}</div>
                     <div style="width:0; height:0; {arrow_style_s}"></div>
                 </div>
             </div>
             """
             folium.Marker(location=coords_second, icon=folium.DivIcon(html=sub_marker_html, icon_size=(0, 0))).add_to(m)
 
-# ==================================
-# 6. AFFICHAGE / EXPORT
-# ==================================
 nom_fichier = f"carte_{MODE}.html"
 m.save(nom_fichier)
 print(f"✅ Carte exportée : {nom_fichier} (mode = '{MODE}')")
