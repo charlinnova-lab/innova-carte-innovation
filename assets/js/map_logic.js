@@ -1,5 +1,7 @@
 // =========================================================
 // CARTOGRAPHIE FILIERE - LOGIQUE JAVASCRIPT
+// (c) Charlotte Piau - innov'a
+// Last Modification : Les filtres multiples
 // ==================================
 
 var mapObject = null;
@@ -115,8 +117,7 @@ function applyFilters() {
         });
     }
 
-    // 1. Filtrage des marqueurs simples et hôtes
-    document.querySelectorAll('.marker-wrapper-host').forEach(function(el) {
+    function elementMatchesCriteria(el) {
         var rawTaille = cleanTaille(el.getAttribute('data-taille'));
         var actorId = el.getAttribute('data-actor-id');
 
@@ -125,7 +126,26 @@ function applyFilters() {
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliereByElement(el);
 
-        var shouldShow = matchTaille && matchTrlVal && matchSearch && matchFiliere;
+        return matchTaille && matchTrlVal && matchSearch && matchFiliere;
+    }
+
+    // 1. Filtrage des marqueurs simples et hôtes
+    document.querySelectorAll('.marker-wrapper-host').forEach(function(el) {
+        var selfMatch = elementMatchesCriteria(el);
+        var groupClass = Array.from(el.classList).find(function(c) { return c.startsWith('hub-marker-'); });
+        
+        var subMatch = false;
+        if (groupClass) {
+            var subElements = document.querySelectorAll('.sub-' + groupClass);
+            subElements.forEach(function(sub) {
+                if (elementMatchesCriteria(sub)) {
+                    subMatch = true;
+                }
+            });
+        }
+
+        // L'hôte reste visible s'il correspond lui-même ou si l'un de ses enfants/labos correspond
+        var shouldShow = selfMatch || subMatch;
         
         if (el.getAttribute('data-hub-opened') === 'true') {
             el.style.display = 'none';
@@ -134,19 +154,10 @@ function applyFilters() {
         }
     });
 
-    // 2. Filtrage des sous-marqueurs (les labos dans les hubs)
+    // 2. Filtrage des sous-marqueurs (les labos dans les hubs ouverts)
     document.querySelectorAll('.marker-wrapper-sub').forEach(function(el) {
         if (el.getAttribute('data-active-hub') !== 'true') return;
-
-        var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var actorId = el.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrlVal = matchesTrl(el.getAttribute('data-trl'));
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliereByElement(el);
-
-        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
+        el.style.display = elementMatchesCriteria(el) ? 'flex' : 'none';
     });
 }
 
@@ -221,91 +232,4 @@ function handleHubClick(lat, lng, hubClass, hoteId) {
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliere(el);
 
-        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
-    });
-
-    var btnDezoom = document.getElementById('btn-dezoom');
-    if (btnDezoom) btnDezoom.style.display = 'block';
-}
-
-function fitGroupToVisible(hubClass, hostLat, hostLng) {
-    if (!mapObject) return;
-    
-    var subMarkers = document.querySelectorAll('.sub-' + hubClass);
-    var bounds = L.latLngBounds([[hostLat, hostLng]]);
-    
-    subMarkers.forEach(function(sub) {
-        var lat = parseFloat(sub.getAttribute('data-lat'));
-        var lng = parseFloat(sub.getAttribute('data-lng'));
-        if (!isNaN(lat) && !isNaN(lng)) {
-            bounds.extend([lat, lng]);
-        }
-    });
-
-    mapObject.fitBounds(bounds, {
-        padding: [80, 80],
-        maxZoom: 17,
-        animate: true
-    });
-}
-
-function resetZoomHub() {
-    if (!mapObject) return;
-
-    document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
-        host.removeAttribute('data-hub-opened');
-        host.style.display = 'flex';
-    });
-
-    document.querySelectorAll('.marker-wrapper-sub').forEach(function(sub) {
-        sub.style.display = 'none';
-        sub.removeAttribute('data-active-hub');
-    });
-
-    var btnDezoom = document.getElementById('btn-dezoom');
-    if (btnDezoom) btnDezoom.style.display = 'none';
-
-    mapObject.setView([49.89, 2.30], initialZoom, { animate: true });
-    closeSidebar();
-}
-
-function openSidebarSingle(actorId) {
-    var fiche = document.getElementById('fiche-acteur-' + actorId);
-    var sidebarContainer = document.getElementById('sidebar-container');
-    var sidebar = document.getElementById('sidebar');
-
-    if (fiche && sidebarContainer && sidebar) {
-        sidebarContainer.innerHTML = fiche.innerHTML;
-        sidebar.style.right = '0';
-    }
-}
-
-function closeSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.style.right = '-720px';
-    }
-}
-
-function togglePopupInfo(event, btnElement) {
-    event.stopPropagation();
-    var container = btnElement.closest('.tooltip-container');
-    if (!container) return;
-    
-    var tooltip = container.querySelector('.tooltip-text');
-    if (!tooltip) return;
-
-    document.querySelectorAll('.tooltip-text').forEach(function(tip) {
-        if (tip !== tooltip) tip.style.display = 'none';
-    });
-
-    tooltip.style.display = (tooltip.style.display === 'block') ? 'none' : 'block';
-}
-
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.tooltip-container')) {
-        document.querySelectorAll('.tooltip-text').forEach(function(tip) {
-            tip.style.display = 'none';
-        });
-    }
-});
+        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex'
