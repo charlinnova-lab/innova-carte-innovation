@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Fix nom_court et ligne retour (retour au nowrap compact)
+#            15/10 - Fix nom_court, ligne_retour & badge hub empilé
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -665,7 +665,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         """
         folium.Marker(location=coords, icon=folium.DivIcon(html=marker_html, icon_size=(0, 0))).add_to(m)
 
-else:
+    else:
         label_pos_hub, arrow_style_hub = get_style_ancrage(hote_actor, couleur_hote)
         marker_hub_html = f"""
         <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
@@ -680,7 +680,6 @@ else:
         </div>
         """
         folium.Marker(location=coords, icon=folium.DivIcon(html=marker_hub_html, icon_size=(0, 0))).add_to(m)
-
 
         for sub_i, (idx, actor) in enumerate(groupe):
             if sub_i == 0:
