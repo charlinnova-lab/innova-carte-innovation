@@ -15,6 +15,11 @@
 #   6. génère la carte
 # =========================================================
 
+# =========================================================
+# CARTOGRAPHIE FILIERE
+#   innov'a (c) Charlotte Piau
+#   Version Modulaire (CSS & JS externes)
+# =========================================================
 
 import os
 import re
@@ -36,17 +41,17 @@ CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
 os.makedirs("assets/images", exist_ok=True)
 
 COULEURS = {
-    "Etablissement de santé":                       "#2D3277", #bleu marine
-    "Etablissement de formation":                    "#845EC2", #violet
-    "Laboratoire ou activité de recherche":          "#FBC9D4", #rose pâle
-    "Plateforme technologique ou centre technique": "#FB6F92", #rose
-    "Structure d'accompagnement à l'innovation":    "#FDC500", #jaune
-    "Start-up":                                      "#9BC045", #vert
-    "TPE ou PME":                                    "#00EBF5", #bleu ciel
-    "Grande entreprise":                            "#2583F2", #bleu moyen
-    "Association":                                  "#FFC27F", #orange pâle
-    "Projet collaboratif":                          "#E8873A", #orange
-    "Autre":                                        "#888888", #gris
+    "Etablissement de santé":                       "#2D3277",
+    "Etablissement de formation":                    "#845EC2",
+    "Laboratoire ou activité de recherche":          "#FBC9D4",
+    "Plateforme technologique ou centre technique": "#FB6F92",
+    "Structure d'accompagnement à l'innovation":    "#FDC500",
+    "Start-up":                                      "#9BC045",
+    "TPE ou PME":                                    "#00EBF5",
+    "Grande entreprise":                            "#2583F2",
+    "Association":                                  "#FFC27F",
+    "Projet collaboratif":                          "#E8873A",
+    "Autre":                                        "#888888",
 }
 
 def get_couleur(taille_valeur):
@@ -191,10 +196,7 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
-    """Gère le retour à la ligne uniquement si la colonne Ligne_retour est explicitement cochée à True"""
     ligne_retour_val = actor.get("Ligne_retour") or actor.get("Saut_ligne")
-    
-    # Vérification stricte si c'est True (booléen) ou une liste contenant True/vrai
     est_coche = False
     if isinstance(ligne_retour_val, bool):
         est_coche = ligne_retour_val
@@ -204,11 +206,9 @@ def formater_nom_etiquette(actor, nom_court):
         est_coche = str(ligne_retour_val).strip().lower() in ["true", "1", "oui", "yes", "x"]
 
     if est_coche:
-        # Si c'est coché, on coupe au premier espace pour forcer le retour à la ligne
         parts = nom_court.split(" ", 1)
         return f"{parts[0]}<br>{parts[1]}" if len(parts) > 1 else nom_court
     else:
-        # Sinon, pas de retour à la ligne du tout
         return nom_court
 
 def get_media_url_and_type(record_id, video_field, second_illu):
@@ -267,7 +267,6 @@ def tri_trl_key(val):
     return (1, 0, val)
 
 liste_trls = sorted(list(set_trls), key=tri_trl_key)
-
 liste_domaines = sorted(set(
     v for a in acteurs for v in (get_liste_valeurs(a, "Filières", "Filiere", "Domaine") or ["Autre"])
 ))
@@ -317,83 +316,31 @@ html_boutons_filiere = (
     for d in liste_domaines
 ])
 
-ui_and_sidebar_html = """
+# Chargement propre des fichiers externes CSS et JS
+css_content = ""
+if os.path.exists("assets/css/style.css"):
+    with open("assets/css/style.css", "r", encoding="utf-8") as f:
+        css_content = f.read()
+
+js_content = ""
+if os.path.exists("assets/js/map_logic.js"):
+    with open("assets/js/map_logic.js", "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+ui_and_sidebar_html = f"""
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- Google Analytics / Suivi stat (Remplacez G-XXXXXXXXXX par votre ID Google Analytics) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
 </script>
 
 <style>
-.fiche-description p { margin:0 0 6px 0; }
-.fiche-description ul, .fiche-description ol { margin:2px 0 8px 0; padding-left:16px; break-inside:avoid-column; }
-.fiche-description li { margin-bottom:2px; }
-.fiche-description strong { color:#2C3E50; }
-
-.tooltip-text {
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: anywhere !important;
-    max-width: min(320px, 80vw) !important;
-    width: max-content;
-    max-height: 260px;
-    overflow-y: auto;
-    overflow-x: hidden !important;
-}
-.tooltip-text p { margin:0 0 6px 0; }
-.tooltip-text ul, .tooltip-text ol { margin:2px 0 8px 0; padding-left:18px; }
-.tooltip-text li { margin-bottom:3px; }
-.tooltip-text a { color:#8FD3FF; text-decoration:underline; }
-
-#sidebar.open {
-    right: 0 !important;
-}
-
-@media (max-width: 768px) {
-    #sidebar {
-        width: 100% !important;
-        right: -100% !important;
-        top: 0 !important;
-        height: 100vh !important;
-        z-index: 999999 !important;
-    }
-    .fiche-grid {
-        grid-template-columns: 1fr !important;
-        min-height: auto !important;
-    }
-    .fiche-grid > div:first-child {
-        height: 180px !important;
-        min-height: 180px !important;
-    }
-    .fiche-description {
-        column-count: 1 !important;
-        height: auto !important;
-        max-height: 220px;
-        overflow-y: auto;
-    }
-    #filiere-bar {
-        left: 15px !important;
-        top: 10px !important;
-        max-width: calc(100vw - 30px) !important;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    #legend-cartouche {
-        left: 15px !important;
-        right: 15px !important;
-        bottom: 10px !important;
-        max-width: calc(100vw - 30px) !important;
-    }
-    #panel-search, #panel-filter {
-        left: 15px !important;
-        width: calc(100vw - 30px) !important;
-    }
-}
+{css_content}
 </style>
 
 <div id="icon-search-btn" onclick="togglePanel('panel-search', 'icon-search-btn')" title="Recherche" style="
@@ -415,7 +362,7 @@ box-shadow:0 3px 10px rgba(0,0,0,0.2); font-family:Arial,sans-serif;
 display:flex; flex-wrap:nowrap; gap:6px; align-items:center; overflow-x:auto;
 ">
     <span style="font-weight:bold; font-size:13px; color:#2D3277; margin-right:5px; flex-shrink:0;">Filière :</span>
-    __HTML_BOUTONS_FILIERE__
+    {html_boutons_filiere}
 </div>
 
 <div id="panel-search" style="
@@ -445,7 +392,7 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y
             <span style="font-weight:bold; font-size:12px; color:#444;">Type de structure</span>
             <span id="accordion-tailles-arrow" style="font-size:11px; color:#2D3277; transition:transform 0.2s ease;">▾</span>
         </div>
-        <div id="accordion-tailles" style="display:none; padding-bottom:10px;">__HTML_CHECKBOX_TAILLES__</div>
+        <div id="accordion-tailles" style="display:none; padding-bottom:10px;">{html_checkbox_tailles}</div>
     </div>
 
     <div class="accordion-section" style="margin-bottom:4px;">
@@ -453,7 +400,7 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y
             <span style="font-weight:bold; font-size:12px; color:#444;">Échelle TRL</span>
             <span id="accordion-trls-arrow" style="font-size:11px; color:#2D3277; transition:transform 0.2s ease;">▾</span>
         </div>
-        <div id="accordion-trls" style="display:none; padding-bottom:5px;">__HTML_CHECKBOX_TRLS__</div>
+        <div id="accordion-trls" style="display:none; padding-bottom:5px;">{html_checkbox_trls}</div>
     </div>
 </div>
 
@@ -474,7 +421,7 @@ font-family:Arial,sans-serif; max-width:80vw; backdrop-filter:blur(4px);
          Légende des structures
     </div>
     <div style="display:flex; flex-direction:row; flex-wrap:wrap; gap:12px; align-items:center;">
-        __HTML_LEGENDE_ITEMS__
+        {html_legende_items}
     </div>
 </div>
 
@@ -500,312 +447,10 @@ font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.3); cursor:pointer; z-index:9
 </div>
 
 <script>
-var mapObject = null;
-var initialZoom = __INITIAL_ZOOM__;
-
-document.addEventListener("DOMContentLoaded", function() {
-    for (var key in window) {
-        if (key.startsWith("map_") && window[key] instanceof L.Map) {
-            mapObject = window[key];
-            break;
-        }
-    }
-    
-    var sidebar = document.getElementById('sidebar');
-    if (sidebar && typeof L !== 'undefined') {
-        L.DomEvent.disableScrollPropagation(sidebar);
-        L.DomEvent.disableClickPropagation(sidebar);
-    }
-});
-
-function cleanTaille(val) {
-    return (val || '').replace(/\\n/g, ' ').replace(/\\r/g, '').trim().toLowerCase();
-}
-
-function toggleAccordion(contentId) {
-    var content = document.getElementById(contentId);
-    var arrow = document.getElementById(contentId + '-arrow');
-    var isOpen = content.style.display === 'block';
-    content.style.display = isOpen ? 'none' : 'block';
-    if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(-180deg)';
-}
-
-function togglePanel(panelId, iconId) {
-    var panel = document.getElementById(panelId);
-    var isOpen = panel.style.display === 'block';
-    document.querySelectorAll('#panel-search, #panel-filter').forEach(function(p) {
-        p.style.display = 'none';
-    });
-    panel.style.display = isOpen ? 'none' : 'block';
-}
-
-function toggleAllFilters(className, masterCheckbox) {
-    var checkboxes = document.querySelectorAll('.' + className);
-    checkboxes.forEach(function(cb) {
-        cb.checked = masterCheckbox.checked;
-    });
-    applyFilters();
-}
-
-document.addEventListener('click', function(e) {
-    var isPanel = e.target.closest('#panel-search, #panel-filter');
-    var isIcon = e.target.closest('#icon-search-btn, #icon-filter-btn');
-    if (!isPanel && !isIcon) {
-        document.querySelectorAll('#panel-search, #panel-filter').forEach(function(p) {
-            p.style.display = 'none';
-        });
-    }
-});
-
-var selectedFiliere = 'all';
-
-function filterFiliere(filiere, btnEl) {
-    selectedFiliere = filiere;
-    document.querySelectorAll('#filiere-bar .filter-btn').forEach(function(btn) {
-        btn.style.background = '#EAEAEA';
-        btn.style.color = '#333';
-    });
-    btnEl.style.background = '#2D3277';
-    btnEl.style.color = 'white';
-    applyFilters();
-}
-
-function applyFilters() {
-    var selectedTailles = Array.from(document.querySelectorAll('.filter-taille:checked'))
-        .map(function(cb) { return cleanTaille(cb.value); });
-    var selectedTrls = Array.from(document.querySelectorAll('.filter-trl:checked'))
-        .map(function(cb) { return cb.value.trim().toLowerCase(); });
-    
-    var searchInputVal = document.getElementById('global-search-input');
-    var searchQuery = searchInputVal ? searchInputVal.value.trim().toLowerCase() : "";
-
-    function matchesSearch(actorId) {
-        if (!searchQuery) return true;
-        var ficheElem = document.getElementById('fiche-acteur-' + actorId);
-        if (!ficheElem) return false;
-        return ficheElem.innerText.toLowerCase().indexOf(searchQuery) !== -1;
-    }
-
-    function matchesFiliere(el) {
-        if (selectedFiliere === 'all') return true;
-        var vals = (el.getAttribute('data-filiere') || '').split('|||').map(function(s) { return s.trim(); });
-        return vals.indexOf(selectedFiliere) !== -1;
-    }
-
-    document.querySelectorAll('.marker-wrapper-host').forEach(function(hostEl) {
-        if (hostEl.getAttribute('data-hub-opened') === 'true') return;
-
-        var hubClass = Array.from(hostEl.classList).find(function(c) { return c.startsWith('hub-marker-'); });
-        var rawTaille = cleanTaille(hostEl.getAttribute('data-taille'));
-        var elTrlsList = (hostEl.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
-        var actorId = hostEl.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliere(hostEl);
-
-        var hostVisible = (matchTaille && matchTrl && matchSearch && matchFiliere);
-        hostEl.style.display = hostVisible ? 'flex' : 'none';
-
-        if (hubClass) {
-            document.querySelectorAll('.sub-' + hubClass).forEach(function(subEl) {
-                var subRawTaille = cleanTaille(subEl.getAttribute('data-taille'));
-                var subElTrlsList = (subEl.getAttribute('data-trl') || '').toLowerCase()
-                                 .split('|||').map(function(s) { return s.trim(); });
-                var subActorId = subEl.getAttribute('data-actor-id');
-
-                var subMatchTaille = selectedTailles.indexOf(subRawTaille) !== -1;
-                var subMatchTrl = subElTrlsList.length === 0 || subElTrlsList.some(function(trl) {
-                    return trl === '' || selectedTrls.indexOf(trl) !== -1;
-                });
-                var subMatchSearch = matchesSearch(subActorId);
-                var subMatchFiliere = matchesFiliere(subEl);
-
-                var shouldShow = (!hostVisible || searchQuery) && subMatchTaille && subMatchTrl && subMatchSearch && subMatchFiliere;
-                subEl.style.display = shouldShow ? 'flex' : 'none';
-            });
-        }
-    });
-
-    document.querySelectorAll('.marker-wrapper-host:not([class*="hub-marker-"])').forEach(function(el) {
-        if (el.getAttribute('data-hub-opened') === 'true') return;
-        var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var elTrlsList = (el.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
-        var actorId = el.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliere(el);
-
-        el.style.display = (matchTaille && matchTrl && matchSearch && matchFiliere) ? 'flex' : 'none';
-    });
-}
-
-function fitGroupToVisible(hubClass, hoteLat, hoteLng) {
-    if (!mapObject) return;
-    var pts = [[hoteLat, hoteLng]];
-    document.querySelectorAll('.sub-' + hubClass).forEach(function(el) {
-        var la = parseFloat(el.getAttribute('data-lat'));
-        var lo = parseFloat(el.getAttribute('data-lng'));
-        if (!isNaN(la) && !isNaN(lo)) pts.push([la, lo]);
-    });
-
-    var sidebarEl = document.getElementById('sidebar');
-    var sidebarWidth = (sidebarEl && window.innerWidth > 768) ? sidebarEl.offsetWidth : 0;
-
-    mapObject.flyToBounds(L.latLngBounds(pts), {
-        paddingTopLeft: [70, 140],
-        paddingBottomRight: [sidebarWidth + 50, 70],
-        maxZoom: 17,
-        animate: true,
-        duration: 1.2
-    });
-}
-
-function handleHubClick(lat, lng, hubClass, hoteId) {
-    if (!mapObject) return;
-    fitGroupToVisible(hubClass, lat, lng);
-
-    var mainMarker = document.querySelector('.' + hubClass);
-    if (mainMarker) {
-        mainMarker.style.display = 'none';
-        mainMarker.setAttribute('data-hub-opened', 'true');
-    }
-
-    if (hoteId !== undefined && hoteId !== null) {
-        openSidebarSingle(hoteId);
-    }
-
-    var selectedTailles = Array.from(document.querySelectorAll('.filter-taille:checked'))
-        .map(function(cb) { return cleanTaille(cb.value); });
-    var selectedTrls = Array.from(document.querySelectorAll('.filter-trl:checked'))
-        .map(function(cb) { return cb.value.trim().toLowerCase(); });
-    
-    var searchInputVal = document.getElementById('global-search-input');
-    var searchQuery = searchInputVal ? searchInputVal.value.trim().toLowerCase() : "";
-
-    function matchesSearch(actorId) {
-        if (!searchQuery) return true;
-        var ficheElem = document.getElementById('fiche-acteur-' + actorId);
-        if (!ficheElem) return false;
-        return ficheElem.innerText.toLowerCase().indexOf(searchQuery) !== -1;
-    }
-
-    function matchesFiliere(el) {
-        if (selectedFiliere === 'all') return true;
-        var vals = (el.getAttribute('data-filiere') || '').split('|||').map(function(s) { return s.trim(); });
-        return vals.indexOf(selectedFiliere) !== -1;
-    }
-
-    document.querySelectorAll('.sub-' + hubClass).forEach(function(el) {
-        el.setAttribute('data-active-hub', 'true');
-
-        var rawTaille = cleanTaille(el.getAttribute('data-taille'));
-        var elTrlsList = (el.getAttribute('data-trl') || '').toLowerCase()
-                         .split('|||').map(function(s) { return s.trim(); });
-        var actorId = el.getAttribute('data-actor-id');
-
-        var matchTaille = selectedTailles.indexOf(rawTaille) !== -1;
-        var matchTrl = elTrlsList.length === 0 || elTrlsList.some(function(trl) {
-            return trl === '' || selectedTrls.indexOf(trl) !== -1;
-        });
-        var matchSearch = matchesSearch(actorId);
-        var matchFiliere = matchesFiliere(el);
-
-        el.style.display = (matchTaille && matchTrl && matchSearch && matchFiliere) ? 'flex' : 'none';
-    });
-
-    document.getElementById('btn-dezoom').style.display = 'block';
-}
-
-function resetZoomHub() {
-    if (!mapObject) return;
-    mapObject.flyTo([49.89, 2.30], initialZoom, { animate: true, duration: 1.0 });
-
-    document.querySelectorAll('.marker-wrapper-host').forEach(function(el) {
-        el.removeAttribute('data-hub-opened');
-    });
-    document.querySelectorAll('.marker-wrapper-sub').forEach(function(el) {
-        el.style.display = 'none';
-        el.removeAttribute('data-active-hub');
-    });
-
-    applyFilters();
-    document.getElementById('btn-dezoom').style.display = 'none';
-}
-
-function togglePopupInfo(event, btnElement) {
-    event.stopPropagation();
-    var container = btnElement.closest('.tooltip-container');
-    var popup = container.querySelector('.tooltip-text');
-    document.querySelectorAll('.tooltip-text').forEach(function(p) {
-        if (p !== popup) p.style.display = 'none';
-    });
-    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
-}
-
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.tooltip-container')) {
-        document.querySelectorAll('.tooltip-text').forEach(function(popup) {
-            popup.style.display = 'none';
-        });
-    }
-});
-
-function openSidebarSingle(id) {
-    var container = document.getElementById('sidebar-container');
-    container.innerHTML = '';
-    var elem = document.getElementById('fiche-acteur-' + id);
-    if (elem) {
-        var wrapper = document.createElement('div');
-        wrapper.style.cssText = "margin-bottom:25px; background:#FFF; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.1); overflow:hidden;";
-        var contentNode = elem.cloneNode(true);
-        contentNode.style.display = 'block';
-        
-        if (typeof gtag === 'function') {
-            var titleElem = contentNode.querySelector('h1');
-            var actorName = titleElem ? titleElem.innerText : ('ID ' + id);
-            gtag('event', 'consultation_fiche', {
-                'event_category': 'Acteur',
-                'event_label': actorName
-            });
-        }
-
-        contentNode.querySelectorAll('a').forEach(function(link) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener noreferrer');
-        });
-
-        wrapper.appendChild(contentNode);
-        container.appendChild(wrapper);
-    }
-    var sidebar = document.getElementById('sidebar');
-    sidebar.scrollTop = 0;
-    sidebar.classList.add('open');
-    sidebar.style.right = '0px';
-}
-
-function closeSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    sidebar.classList.remove('open');
-    sidebar.style.right = '-100%';
-}
+var initialZoom = {INITIAL_ZOOM};
+{js_content}
 </script>
 """
-
-ui_and_sidebar_html = ui_and_sidebar_html.replace("__HTML_CHECKBOX_TAILLES__", html_checkbox_tailles)
-ui_and_sidebar_html = ui_and_sidebar_html.replace("__HTML_CHECKBOX_TRLS__", html_checkbox_trls)
-ui_and_sidebar_html = ui_and_sidebar_html.replace("__HTML_LEGENDE_ITEMS__", html_legende_items)
-ui_and_sidebar_html = ui_and_sidebar_html.replace("__HTML_BOUTONS_FILIERE__", html_boutons_filiere)
-ui_and_sidebar_html = ui_and_sidebar_html.replace("__INITIAL_ZOOM__", str(INITIAL_ZOOM))
 
 m.get_root().html.add_child(folium.Element(ui_and_sidebar_html))
 
@@ -1005,7 +650,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="openSidebarSingle({hote_idx})" ontouchstart="openSidebarSingle({hote_idx}); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:14px; height:14px; background:{couleur_hote}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;"></div>
             <div style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
+                <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:nowrap; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
                 <div style="width:0; height:0; {arrow_style_h}"></div>
             </div>
         </div>
@@ -1018,7 +663,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
             <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
-                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:180px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
+                <div style="background:{couleur_hote}; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:nowrap; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
                     🏢 {nom_hote_affiche}
                     <span style="background:#FFF; color:{couleur_hote}; padding:2px 7px; border-radius:10px; font-size:11px; margin-left:5px; font-weight:900;">+{nb_dependants}</span>
                 </div>
@@ -1049,7 +694,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" ontouchstart="openSidebarSingle({idx}); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
                 <div style="position:absolute; top:0; left:0; width:12px; height:12px; background:{couleur_actor}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;"></div>
                 <div style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
-                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.35); max-width:160px; border:1px solid white;">{nom_actor_affiche}</div>
+                    <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; max-width:200px; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.35); border:1px solid white;">{nom_actor_affiche}</div>
                     <div style="width:0; height:0; {arrow_style_s}"></div>
                 </div>
             </div>
