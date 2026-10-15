@@ -195,29 +195,33 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
-    """Gère le retour à la ligne si Ligne_retour est coché (sur espace ou tiret)"""
-    ligne_retour_val = actor.get("Ligne_retour") or actor.get("Saut_ligne")
+    """Force le retour à la ligne et affiche la valeur brute pour diagnostic"""
+    ligne_retour_val = actor.get("Ligne_retour")
     
+    # Debug pour voir dans votre terminal Python ce que contient Airtable pour chaque acteur
+    print(f"Acteur: {nom_court} | Ligne_retour brute: {repr(ligne_retour_val)}")
+    
+    # On teste toutes les variantes possibles (True, "true", "True", 1, "1", "oui", "yes", True dans une liste)
     est_coche = False
-    if isinstance(ligne_retour_val, bool):
-        est_coche = ligne_retour_val
+    if isinstance(ligne_retour_val, bool) and ligne_retour_val is True:
+        est_coche = True
     elif isinstance(ligne_retour_val, list):
-        est_coche = any(v is True or str(v).lower() in ["true", "1", "oui", "yes"] for v in ligne_retour_val)
+        est_coche = any(v is True or str(v).lower() in ["true", "1", "oui", "yes", "x"] for v in ligne_retour_val)
     elif ligne_retour_val is not None:
-        est_coche = str(ligne_retour_val).strip().lower() in ["true", "1", "oui", "yes", "x"]
+        val_str = str(ligne_retour_val).strip().lower()
+        if val_str in ["true", "1", "oui", "yes", "x", "on"]:
+            est_coche = True
 
     if est_coche:
-        if "\n" in nom_court:
-            return nom_court.replace("\n", "<br>")
+        # On coupe au premier espace rencontré
         if " " in nom_court:
             parts = nom_court.split(" ", 1)
             return f"{parts[0]}<br>{parts[1]}"
         elif "-" in nom_court:
             parts = nom_court.split("-", 1)
             return f"{parts[0]}-<br>{parts[1]}"
-        return nom_court
-    else:
-        return nom_court
+    
+    return nom_court
         
 def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
