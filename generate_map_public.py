@@ -4,7 +4,7 @@
 #   Création : 17 août 2026
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Ajout boutons zoom +/-, fix TRL et Name_group hubs
+#            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -317,6 +317,7 @@ INITIAL_ZOOM = 13
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
+    zoom_control=False,  # Suppression des boutons de zoom par défaut de Leaflet
     tiles=f"https://{{s}}.basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={CARTO_KEY}",
     attr="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>",
     max_zoom=19,
@@ -382,6 +383,11 @@ ui_and_sidebar_html = f"""
 
 <style>
 {css_content}
+
+/* Sésame pour garantir que les boutons et barres flottantes restent cliquables au-dessus de la carte Leaflet */
+#icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #logo-innova, #legend-cartouche, #btn-dezoom {{
+    pointer-events: auto !important;
+}}
 </style>
 
 <div id="icon-search-btn" onclick="togglePanel('panel-search', 'icon-search-btn')" title="Recherche" style="
