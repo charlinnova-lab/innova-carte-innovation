@@ -40,17 +40,25 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python generate_map_public.py
 
+      - name: Générer la carte HTML et télécharger les images
+        env:
+          PYTHONIOENCODING: utf-8
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          git stash --include-untracked
+          python generate_map_public.py
+
       - name: Sauvegarder les images et données sur le dépôt (Git Push)
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git stash
           git fetch origin main
           git rebase origin/main || git rebase --abort
           git stash pop || true
           git add assets/images/ *.html
           git diff --staged --quiet || git commit -m "Auto-update map & downloaded images"
           git push origin HEAD:main
+          
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
