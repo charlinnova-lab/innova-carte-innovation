@@ -3,6 +3,9 @@
 // (c) Charlotte Piau - innov'a
 // Last Modification : Les filtres multiples
 // ==================================
+// =========================================================
+// CARTOGRAPHIE FILIERE - LOGIQUE JAVASCRIPT
+// ==================================
 
 var mapObject = null;
 var selectedFiliere = 'all';
@@ -104,7 +107,6 @@ function applyFilters() {
         return vals.indexOf(selectedFiliere) !== -1;
     }
 
-    // Correspondance TRL souple (gère les phrases complètes d'Airtable)
     function matchesTrl(elTrlAttr) {
         if (selectedTrls.length === 0) return false;
         var elTrlsList = (elTrlAttr || '').toLowerCase().split('|||').map(function(s) { return s.trim(); });
@@ -144,7 +146,6 @@ function applyFilters() {
             });
         }
 
-        // L'hôte reste visible s'il correspond lui-même ou si l'un de ses enfants/labos correspond
         var shouldShow = selfMatch || subMatch;
         
         if (el.getAttribute('data-hub-opened') === 'true') {
@@ -164,7 +165,6 @@ function applyFilters() {
 function handleHubClick(lat, lng, hubClass, hoteId) {
     if (!mapObject) return;
 
-    // Fermeture propre des autres hubs ouverts
     document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
         if (host.getAttribute('data-hub-opened') === 'true') {
             host.removeAttribute('data-hub-opened');
@@ -232,4 +232,91 @@ function handleHubClick(lat, lng, hubClass, hoteId) {
         var matchSearch = matchesSearch(actorId);
         var matchFiliere = matchesFiliere(el);
 
-        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex'
+        el.style.display = (matchTaille && matchTrlVal && matchSearch && matchFiliere) ? 'flex' : 'none';
+    });
+
+    var btnDezoom = document.getElementById('btn-dezoom');
+    if (btnDezoom) btnDezoom.style.display = 'block';
+}
+
+function fitGroupToVisible(hubClass, hostLat, hostLng) {
+    if (!mapObject) return;
+    
+    var subMarkers = document.querySelectorAll('.sub-' + hubClass);
+    var bounds = L.latLngBounds([[hostLat, hostLng]]);
+    
+    subMarkers.forEach(function(sub) {
+        var lat = parseFloat(sub.getAttribute('data-lat'));
+        var lng = parseFloat(sub.getAttribute('data-lng'));
+        if (!isNaN(lat) && !isNaN(lng)) {
+            bounds.extend([lat, lng]);
+        }
+    });
+
+    mapObject.fitBounds(bounds, {
+        padding: [80, 80],
+        maxZoom: 17,
+        animate: true
+    });
+}
+
+function resetZoomHub() {
+    if (!mapObject) return;
+
+    document.querySelectorAll('.marker-wrapper-host').forEach(function(host) {
+        host.removeAttribute('data-hub-opened');
+        host.style.display = 'flex';
+    });
+
+    document.querySelectorAll('.marker-wrapper-sub').forEach(function(sub) {
+        sub.style.display = 'none';
+        sub.removeAttribute('data-active-hub');
+    });
+
+    var btnDezoom = document.getElementById('btn-dezoom');
+    if (btnDezoom) btnDezoom.style.display = 'none';
+
+    mapObject.setView([49.89, 2.30], initialZoom, { animate: true });
+    closeSidebar();
+}
+
+function openSidebarSingle(actorId) {
+    var fiche = document.getElementById('fiche-acteur-' + actorId);
+    var sidebarContainer = document.getElementById('sidebar-container');
+    var sidebar = document.getElementById('sidebar');
+
+    if (fiche && sidebarContainer && sidebar) {
+        sidebarContainer.innerHTML = fiche.innerHTML;
+        sidebar.style.right = '0';
+    }
+}
+
+function closeSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.style.right = '-720px';
+    }
+}
+
+function togglePopupInfo(event, btnElement) {
+    event.stopPropagation();
+    var container = btnElement.closest('.tooltip-container');
+    if (!container) return;
+    
+    var tooltip = container.querySelector('.tooltip-text');
+    if (!tooltip) return;
+
+    document.querySelectorAll('.tooltip-text').forEach(function(tip) {
+        if (tip !== tooltip) tip.style.display = 'none';
+    });
+
+    tooltip.style.display = (tooltip.style.display === 'block') ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.tooltip-container')) {
+        document.querySelectorAll('.tooltip-text').forEach(function(tip) {
+            tip.style.display = 'none';
+        });
+    }
+});
