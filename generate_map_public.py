@@ -13,13 +13,8 @@
 #   4. génère la carte, les filtres, la légende
 #   5. prépare l'affichage et l'ancrage GPS
 #   6. génère la carte
-
 # =========================================================
-# CARTOGRAPHIE FILIERE
-#   innov'a (c) Charlotte Piau
-#   Création : 17 août 2026
-#   Last Modification : Option 2 - Saut de ligne personnalisé & Analytics
-#========================================================= 
+
 
 import os
 import re
@@ -196,15 +191,17 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
-    """Gère le retour à la ligne selon la colonne Ligne_retour d'Airtable"""
+    """Gère le retour à la ligne uniquement si la colonne Ligne_retour est activée"""
     ligne_retour_val = get_text(actor, "Ligne_retour", "Saut_ligne")
-    if ligne_retour_val:
-        if ligne_retour_val.lower() in ["oui", "true", "1", "x"]:
-            parts = nom_court.split(" ", 1)
-            return f"{parts[0]}<br>{parts[1]}" if len(parts) > 1 else nom_court
-        else:
-            return ligne_retour_val
-    return nom_court
+    est_coche = str(ligne_retour_val).strip().lower() in ["oui", "true", "1", "x", "yes"]
+    
+    if est_coche:
+        parts = re.split(r'[\s-]+', nom_court, 1)
+        if len(parts) > 1:
+            return f"{parts[0]}<br>{parts[1]}"
+        return nom_court
+    else:
+        return nom_court
 
 def get_media_url_and_type(record_id, video_field, second_illu):
     if video_field:
@@ -765,7 +762,6 @@ function openSidebarSingle(id) {
         var contentNode = elem.cloneNode(true);
         contentNode.style.display = 'block';
         
-        # Enregistrement de l'événement de consultation de fiche dans Google Analytics
         if (typeof gtag === 'function') {
             var titleElem = contentNode.querySelector('h1');
             var actorName = titleElem ? titleElem.innerText : ('ID ' + id);
