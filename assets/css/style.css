@@ -1,0 +1,68 @@
+/* =========================================================
+   CARTOGRAPHIE FILIERE - STYLES PRINCIPAUX
+   ========================================================= */
+
+.fiche-description p { margin: 0 0 6px 0; }
+.fiche-description ul, .fiche-description ol { margin: 2px 0 8px 0; padding-left: 16px; break-inside: avoid-column; }
+.fiche-description li { margin-bottom: 2px; }
+.fiche-description strong { color: #2C3E50; }
+
+.tooltip-text {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    max-width: min(320px, 80vw) !important;
+    width: max-content;
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+}
+.tooltip-text p { margin: 0 0 6px 0; }
+.tooltip-text ul, .tooltip-text ol { margin: 2px 0 8px 0; padding-left: 18px; }
+.tooltip-text li { margin-bottom: 3px; }
+.tooltip-text a { color: #8FD3FF; text-decoration: underline; }
+
+#sidebar.open {
+    right: 0 !important;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100% !important;
+        right: -100% !important;
+        top: 0 !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
+    }
+    .fiche-grid {
+        grid-template-columns: 1fr !important;
+        min-height: auto !important;
+    }
+    .fiche-grid > div:first-child {
+        height: 180px !important;
+        min-height: 180px !important;
+    }
+    .fiche-description {
+        column-count: 1 !important;
+        height: auto !important;
+        max-height: 220px;
+        overflow-y: auto;
+    }
+    #filiere-bar {
+        left: 15px !important;
+        top: 10px !important;
+        max-width: calc(100vw - 30px) !important;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    #legend-cartouche {
+        left: 15px !important;
+        right: 15px !important;
+        bottom: 10px !important;
+        max-width: calc(100vw - 30px) !important;
+    }
+    #panel-search, #panel-filter {
+        left: 15px !important;
+        width: calc(100vw - 30px) !important;
+    }
+}
