@@ -5,6 +5,7 @@
 #   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
 #            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
+#            15/10 - Filtres : type de structure normalisé (data-taille), compteur +N dynamique, alerte fichiers JS/CSS manquants
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
 #   1. stocke les images pour permettre une visualisation tout au long de la journée
@@ -17,6 +18,7 @@
 
 import os
 import re
+import unicodedata
 import requests
 import folium
 import markdown
@@ -48,17 +50,28 @@ COULEURS = {
     "Autre":                                        "#888888",
 }
 
+def _norm(s):
+    """Texte comparable : sans accents, apostrophes droites, espaces simples, minuscules"""
+    s = str(s).replace("\u2019", "'").replace("\u2018", "'").replace("\n", " ").replace("\r", "")
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    return " ".join(s.split()).lower()
+
+def get_taille_key(valeur):
+    """Renvoie toujours le nom exact d'une clé de COULEURS (ou 'Autre').
+    Sert à la fois pour la couleur, la légende, les cases du filtre et data-taille."""
+    if not valeur:
+        return "Autre"
+    v = _norm(valeur).replace("etablissement medical", "etablissement de sante")
+    for nom in COULEURS:
+        if _norm(nom) == v:
+            return nom
+    for nom in COULEURS:
+        if _norm(nom) in v:
+            return nom
+    return "Autre"
+
 def get_couleur(taille_valeur):
-    if not taille_valeur:
-        return COULEURS["Autre"]
-    val_str = str(taille_valeur).strip().replace("\n", " ").replace("\r", "")
-    val_str = val_str.replace("Etablissement médical", "Etablissement de santé").replace("Établissement médical", "Etablissement de santé")
-    if val_str in COULEURS:
-        return COULEURS[val_str]
-    for nom_taille, couleur in COULEURS.items():
-        if nom_taille.lower() in val_str.lower():
-            return couleur
-    return COULEURS["Autre"]
+    return COULEURS[get_taille_key(taille_valeur)]
 
 def format_url(url):
     if not url:
@@ -293,7 +306,7 @@ print(f"✅ {len(acteurs)}/{nb_avant_filtre} fiches conservées (case 'Checked' 
 
 liste_tailles = list(COULEURS.keys())
 liste_tailles_presentes = [t for t in liste_tailles if any(
-    get_couleur(get_text(a, "Taille")) == COULEURS[t] for a in acteurs
+    get_taille_key(get_text(a, "Taille")) == t for a in acteurs
 )]
 
 set_trls = set()
@@ -368,6 +381,11 @@ js_content = ""
 if os.path.exists("assets/js/map_logic.js"):
     with open("assets/js/map_logic.js", "r", encoding="utf-8") as f:
         js_content = f.read()
+
+if not css_content:
+    print("⚠️ assets/css/style.css introuvable ou vide : la carte sera sans mise en forme externe")
+if not js_content:
+    print("❌ assets/js/map_logic.js introuvable ou vide : la carte n'aura aucune interaction (filtres, fiches, zoom)")
 
 ui_and_sidebar_html = f"""
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -698,7 +716,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     nom_hote_affiche = formater_nom_etiquette(hote_actor, nom_hote_court)
     
     couleur_hote = get_couleur(get_text(hote_actor, "Taille"))
-    taille_hote = get_text(hote_actor, "Taille", default="").replace("\n", " ").replace("\r", "")
+    taille_hote = get_taille_key(get_text(hote_actor, "Taille"))
     trl_hote_attr = "|||".join(get_liste_trls_record(hote_actor))
     filiere_hote = "|||".join(get_liste_valeurs(hote_actor, "Filières", "Filiere", "Domaine") or ["Autre"])
     hub_class = f"hub-marker-{group_id}"
@@ -726,7 +744,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                 <div style="background:{couleur_hote}; color:white; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:260px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
                     <span style="display:inline-block; line-height:1.3; white-space:nowrap;">{nom_hote_affiche}</span>
                     <div style="margin-top:4px;">
-                        <span style="background:#FFF; color:{couleur_hote}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:900; display:inline-block;">+{nb_dependants}</span>
+                        <span class="hub-count" style="background:#FFF; color:{couleur_hote}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:900; display:inline-block;">+{nb_dependants}</span>
                     </div>
                 </div>
                 <div style="width:0; height:0; {arrow_style_hub}"></div>
@@ -743,7 +761,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             nom_actor_affiche = formater_nom_etiquette(actor, nom_actor_court)
             
             couleur_actor = get_couleur(get_text(actor, "Taille"))
-            taille_actor = get_text(actor, "Taille", default="").replace("\n", " ").replace("\r", "")
+            taille_actor = get_taille_key(get_text(actor, "Taille"))
             trl_actor_attr = "|||".join(get_liste_trls_record(actor))
             filiere_actor = "|||".join(get_liste_valeurs(actor, "Filières", "Filiere", "Domaine") or ["Autre"])
 
