@@ -6,7 +6,9 @@
 .fiche-description ul, .fiche-description ol { margin: 2px 0 8px 0; padding-left: 16px; break-inside: avoid-column; }
 .fiche-description li { margin-bottom: 2px; }
 .fiche-description strong { color: #2C3E50; }
-
+.map-zoomed-out .marker-label-container {
+    display: none !important;
+}
 .tooltip-text {
     white-space: normal !important;
     word-break: break-word !important;
