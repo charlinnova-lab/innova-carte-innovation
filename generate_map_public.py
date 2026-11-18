@@ -667,9 +667,12 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                     <div style="padding:20px; position:relative;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
                             <div style="display:flex; align-items:center; gap:8px;">
-                                <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
-                                <span class="click-counter-badge" data-record-id="{rec_id}" data-clicks="{clics_val}" style="background:#EAEAEA; color:#333; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:bold;">👁️ {clics_val}</span>
-                            </div>
+                               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:8px;">
+        <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
+    </div>
+    <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
+</div>
                             <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
                         </div>
                         
