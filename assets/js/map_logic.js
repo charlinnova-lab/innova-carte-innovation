@@ -346,6 +346,45 @@ function checkZoomDisplay() {
     }
 }
 
+// ==================================
+// GESTION DU DOUBLE COMPTEUR (CARTO + AIRTABLE)
+// ==================================
+function registerActorClick(actorId, elementDOM) {
+    if (!actorId) return;
+
+    // 1. Mise à jour visuelle immédiate dans le DOM de la carte si un compteur y est affiché
+    var counterSpan = elementDOM ? elementDOM.querySelector('.click-counter-badge') : null;
+    let currentClicks = 0;
+    
+    if (counterSpan) {
+        currentClicks = parseInt(counterSpan.getAttribute('data-clicks') || '0', 10);
+        currentClicks++;
+        counterSpan.textContent = '👁️ ' + currentClicks;
+        counterSpan.setAttribute('data-clicks', currentClicks);
+    }
+
+    // 2. Appel asynchrone vers Airtable (via ton API ou un worker sécurisé)
+    // Renseigne ici ton endpoint ou ta logique de mise à jour PATCH Airtable
+    syncClickToAirtable(actorId, currentClicks);
+}
+
+function syncClickToAirtable(recordId, newClicks) {
+    // Exemple d'appel PATCH (pense à sécuriser ta clé ou passer par ton script Python/backend si nécessaire)
+    const AIRTABLE_API_KEY = 'TON_TOKEN'; // ou via un proxy sécurisé
+    const BASE_ID = 'TON_BASE_ID';
+    const TABLE_NAME = 'TA_TABLE';
+
+    /* 
+    fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${recordId}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fields: { "Clics": newClicks } })
+    }).catch(err => console.error("Erreur synchro clics Airtable", err));
+    */
+}
 
 // ==================================
 // FICHE LATÉRALE ET INFOBULLES
