@@ -477,9 +477,12 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y
 <div id="logo-innova" style="
 position:fixed; bottom:15px; left:15px; z-index:9999; background:#2D3277;
 padding:10px 16px; border-radius:8px; box-shadow:0 3px 12px rgba(0,0,0,0.25);
-display:flex; align-items:center;
+display:flex; flex-direction:column; align-items:center; gap:6px;
 ">
     <img src="https://www.innov-a.com/wp-content/themes/skin/assets/images/svg/innov-a_blanc.svg" style="height:26px; display:block;" alt="Innov'A" />
+    <div id="global-consult-counter" style="color:white; font-size:11px; font-family:Arial,sans-serif; opacity:0.9; font-weight:bold;">
+        👁️ Total visites : <span id="global-consult-count">0</span>
+    </div>
 </div>
 
 <div id="legend-cartouche" style="
