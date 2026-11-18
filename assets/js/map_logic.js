@@ -4,6 +4,10 @@
 // Last Modification : 15/10 - Filtres unifiés (marqueurs simples, hubs,
 //                     sous-fiches, recherche) + diagnostic console
 // =========================================================
+// ==================================
+// CONFIGURATION WORKER CLOUDFLARE
+// ==================================
+var WORKER_CLICK_URL = "https://flat-forest-26c8.charlottepiau-innova.workers.dev/";
 
 var mapObject = null;
 var selectedFiliere = 'all';
@@ -18,6 +22,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         } catch (e) { /* propriété inaccessible : on ignore */ }
     }
+
+    // Activation de la détection de zoom dès le chargement et à chaque mouvement
+    if (mapObject) {
+        checkZoomDisplay();
+        mapObject.on('zoomend', checkZoomDisplay);
+    }
+
     diagnosticFiltres();
 });
 
@@ -347,25 +358,48 @@ function checkZoomDisplay() {
 }
 
 // ==================================
-// GESTION DU DOUBLE COMPTEUR (CARTO + AIRTABLE)
+// GESTION DU COMPTEUR (CARTO + AIRTABLE)
 // ==================================
-function registerActorClick(actorId, elementDOM) {
-    if (!actorId) return;
+function registerActorClick(recordId, elementDOM) {
+    if (!recordId) return;
 
-    // 1. Mise à jour visuelle immédiate dans le DOM de la carte si un compteur y est affiché
-    var counterSpan = elementDOM ? elementDOM.querySelector('.click-counter-badge') : null;
-    let currentClicks = 0;
-    
-    if (counterSpan) {
-        currentClicks = parseInt(counterSpan.getAttribute('data-clicks') || '0', 10);
-        currentClicks++;
-        counterSpan.textContent = '👁️ ' + currentClicks;
-        counterSpan.setAttribute('data-clicks', currentClicks);
+    // 1. Mise à jour visuelle des badges de clics correspondants dans la page
+    var badges = document.querySelectorAll('.click-counter-badge[data-record-id="' + recordId + '"]');
+    var newClicks = 1;
+
+    badges.forEach(function(badge) {
+        var current = parseInt(badge.getAttribute('data-clicks') || '0', 10);
+        newClicks = current + 1;
+        badge.textContent = '👁️ ' + newClicks;
+        badge.setAttribute('data-clicks', newClicks);
+    });
+
+    // Si un élément DOM direct est passé et possède un badge
+    if (elementDOM) {
+        var localBadge = elementDOM.querySelector('.click-counter-badge');
+        if (localBadge) {
+            var current = parseInt(localBadge.getAttribute('data-clicks') || '0', 10);
+            newClicks = current + 1;
+            localBadge.textContent = '👁️ ' + newClicks;
+            localBadge.setAttribute('data-clicks', newClicks);
+        }
     }
 
-    // 2. Appel asynchrone vers Airtable (via ton API ou un worker sécurisé)
-    // Renseigne ici ton endpoint ou ta logique de mise à jour PATCH Airtable
-    syncClickToAirtable(actorId, currentClicks);
+    // 2. Envoi asynchrone vers Airtable via le Worker Cloudflare
+    syncClickToAirtable(recordId, newClicks);
+}
+
+function syncClickToAirtable(recordId, clicksCount) {
+    fetch(WORKER_CLICK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            recordId: recordId,
+            clics: clicksCount
+        })
+    }).catch(function(err) {
+        console.warn('[Compteur] Erreur de synchronisation Airtable :', err);
+    });
 }
 
 function getActeurClicks(element) {
