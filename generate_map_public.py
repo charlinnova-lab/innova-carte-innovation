@@ -15,6 +15,16 @@
 #   5. prépare l'affichage et l'ancrage GPS
 #   6. génère la carte
 # =========================================================
+# =========================================================
+# CARTOGRAPHIE FILIERE
+#   innov'a (c) Charlotte Piau
+#   Création : 17 août 2026
+#   Last Modification : 
+#            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
+#            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
+#            15/10 - Filtres : type de structure normalisé (data-taille), compteur +N dynamique, alerte fichiers JS/CSS manquants
+#            16/10 - Intégration du double compteur de clics (Airtable via Worker) & masquage étiquettes dézoom
+# =========================================================
 
 import os
 import re
@@ -176,10 +186,8 @@ def _nettoyer_marqueurs_gras_casses(text):
     return text
 
 def get_liste_trls_record(record):
-    """Récupère et découpe proprement les TRL même si Airtable les renvoie groupés en bloc"""
     brut = get_liste_valeurs(record, "TRL_scale", "TRL")
     trls_nettoyes = []
-    
     for item in brut:
         if "TRL" in item and item.count("TRL") > 1:
             morceaux = re.split(r'(?=\bTRL\s+\d+)', item)
@@ -191,7 +199,6 @@ def get_liste_trls_record(record):
             item_clean = item.strip()
             if item_clean:
                 trls_nettoyes.append(item_clean)
-                
     return trls_nettoyes
 
 def get_liste_valeurs(record, *keys):
@@ -219,10 +226,7 @@ def parse_nom(nom_brut):
     return nom_brut, nom_brut
 
 def formater_nom_etiquette(actor, nom_court):
-    """Gère l'icône et Name_group pour les ensembles de projets, et la règle de ligne_retour pour les fiches uniques"""
     type_fiche = get_text(actor, "type_fiche", "Type_fiche", "Type").strip().lower()
-    
-    # 1. Si c'est un ensemble de projets (Hub), on utilise Name_group (ou nom_court) avec l'icône
     if type_fiche == "ensemble de projets":
         nom_groupe_field = ""
         for k in ["Name_group", "name_group", "Name group", "Nom_groupe", "nom_groupe"]:
@@ -231,12 +235,10 @@ def formater_nom_etiquette(actor, nom_court):
                 if val:
                     nom_groupe_field = val
                     break
-        
         nom_a_utiliser = nom_groupe_field if nom_groupe_field else nom_court
         nom_a_utiliser_html = nom_a_utiliser.replace("\n", "<br>")
         return f"🏢 {nom_a_utiliser_html}"
 
-    # 2. Pour les autres fiches (uniques, etc.), on vérifie la case Ligne_retour
     ligne_retour_val = None
     for k, v in actor.items():
         if k.lower() in ["ligne_retour", "saut_ligne", "retour_ligne"]:
@@ -262,7 +264,6 @@ def formater_nom_etiquette(actor, nom_court):
         elif "-" in nom_court:
             parts = nom_court.split("-", 1)
             return f"{parts[0]}-<br>{parts[1]}"
-    
     return nom_court
 
 def get_media_url_and_type(record_id, video_field, second_illu):
@@ -330,7 +331,7 @@ INITIAL_ZOOM = 13
 m = folium.Map(
     location=[49.89, 2.30],
     zoom_start=INITIAL_ZOOM,
-    zoom_control=False,  # Suppression des boutons de zoom par défaut de Leaflet
+    zoom_control=False,
     tiles=f"https://{{s}}.basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={CARTO_KEY}",
     attr="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>",
     max_zoom=19,
@@ -371,7 +372,6 @@ html_boutons_filiere = (
     for d in liste_domaines
 ])
 
-# Chargement propre des fichiers externes CSS et JS
 css_content = ""
 if os.path.exists("assets/css/style.css"):
     with open("assets/css/style.css", "r", encoding="utf-8") as f:
@@ -382,15 +382,9 @@ if os.path.exists("assets/js/map_logic.js"):
     with open("assets/js/map_logic.js", "r", encoding="utf-8") as f:
         js_content = f.read()
 
-if not css_content:
-    print("⚠️ assets/css/style.css introuvable ou vide : la carte sera sans mise en forme externe")
-if not js_content:
-    print("❌ assets/js/map_logic.js introuvable ou vide : la carte n'aura aucune interaction (filtres, fiches, zoom)")
-
 ui_and_sidebar_html = f"""
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -402,7 +396,6 @@ ui_and_sidebar_html = f"""
 <style>
 {css_content}
 
-/* Sésame pour garantir que les boutons et barres flottantes restent cliquables au-dessus de la carte Leaflet */
 #icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #logo-innova, #legend-cartouche, #btn-dezoom {{
     pointer-events: auto !important;
 }}
@@ -605,6 +598,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         adresse = get_text(actor, "Adresse", default="")
         site_web = format_url(get_text(actor, "Website", "Site Web", "Site_web", default=""))
         url_interview = format_url(get_text(actor, "ITW", "Interview", default=""))
+        clics_val = get_text(actor, "Clics", "Vues", default="0")
 
         logo_url = download_airtable_image(rec_id, actor.get("Logo"), prefix="logo")
         photo_url = download_airtable_image(rec_id, actor.get("Main illustration"), prefix="main")
@@ -669,7 +663,10 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                     <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column; min-height:180px;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
-                            <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
+                                <span class="click-counter-badge" data-record-id="{rec_id}" data-clicks="{clics_val}" style="background:#EAEAEA; color:#333; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:bold;">👁️ {clics_val}</span>
+                            </div>
                             <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
                         </div>
                         
@@ -712,6 +709,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
     # --- MARQUEURS SUR LA CARTE ---
     hote_idx, hote_actor = groupe[0]
+    rec_hote_id = hote_actor.get("_record_id", f"rec_{hote_idx}")
     nom_hote_court, nom_hote_detail = parse_nom(get_text(hote_actor, "Nom"))
     nom_hote_affiche = formater_nom_etiquette(hote_actor, nom_hote_court)
     
@@ -725,9 +723,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
     if len(groupe) == 1 or nb_dependants <= 0:
         label_pos_h, arrow_style_h = get_style_ancrage(hote_actor, couleur_hote)
         marker_html = f"""
-        <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" data-clics="{clics_hote}" onclick="openSidebarSingle({hote_idx})" ontouchstart="openSidebarSingle({hote_idx}); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
+        <div class="marker-wrapper-host" data-actor-id="{hote_idx}" data-record-id="{rec_hote_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" data-clics="{clics_hote}" onclick="openSidebarSingle({hote_idx}); registerActorClick('{rec_hote_id}', this);" ontouchstart="openSidebarSingle({hote_idx}); registerActorClick('{rec_hote_id}', this); event.stopPropagation();" title="{nom_hote_detail}" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:14px; height:14px; background:{couleur_hote}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 1px 3px rgba(0,0,0,0.4); z-index:2;"></div>
-            <div style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
+            <div class="marker-label-container" style="position:absolute; {label_pos_h} display:flex; align-items:center; z-index:1;">
                 <div style="background:{couleur_hote}; color:white; padding:5px 9px; border-radius:6px; font-size:12px; font-weight:bold; text-align:center; max-width:220px; white-space:nowrap; box-shadow:0 2px 5px rgba(0,0,0,0.3);">{nom_hote_affiche}</div>
                 <div style="width:0; height:0; {arrow_style_h}"></div>
             </div>
@@ -739,9 +737,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         label_pos_hub, arrow_style_hub = get_style_ancrage(hote_actor, couleur_hote)
 
         marker_hub_html = f"""
-        <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" data-clics="{clics_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx})" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
+        <div class="marker-wrapper-host {hub_class}" data-actor-id="{hote_idx}" data-record-id="{rec_hote_id}" data-group-id="{group_id}" data-taille="{taille_hote}" data-trl="{trl_hote_attr}" data-filiere="{filiere_hote}" data-clics="{clics_hote}" onclick="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); registerActorClick('{rec_hote_id}', this);" ontouchstart="handleHubClick({coords[0]}, {coords[1]}, '{hub_class}', {hote_idx}); registerActorClick('{rec_hote_id}', this); event.stopPropagation();" title="Hôte : {nom_hote_detail} (+{nb_dependants} projets)" style="display:flex; position:relative; cursor:pointer;">
             <div style="position:absolute; top:0; left:0; width:16px; height:16px; background:{couleur_hote}; border:3px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.4); transform:translate(-50%, -50%); z-index:2;"></div>
-            <div style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
+            <div class="marker-label-container" style="position:absolute; {label_pos_hub} display:flex; align-items:center; z-index:1;">
                 <div style="background:{couleur_hote}; color:white; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; text-align:center; max-width:260px; box-shadow:0 3px 8px rgba(0,0,0,0.4); border:2px solid #FFFFFF;">
                     <span style="display:inline-block; line-height:1.3; white-space:nowrap;">{nom_hote_affiche}</span>
                     <div style="margin-top:4px;">
@@ -758,6 +756,7 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
             if sub_i == 0:
                 continue
 
+            sub_rec_id = actor.get("_record_id", f"rec_{idx}")
             nom_actor_court, nom_actor_detail = parse_nom(get_text(actor, "Nom"))
             nom_actor_affiche = formater_nom_etiquette(actor, nom_actor_court)
             
@@ -773,9 +772,9 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
 
             label_pos_s, arrow_style_s = get_style_ancrage(actor, couleur_actor)
             sub_marker_html = f"""
-            <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-clics="{clics_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx})" ontouchstart="openSidebarSingle({idx}); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
+            <div class="marker-wrapper marker-wrapper-sub sub-{hub_class}" data-actor-id="{idx}" data-record-id="{sub_rec_id}" data-taille="{taille_actor}" data-trl="{trl_actor_attr}" data-filiere="{filiere_actor}" data-clics="{clics_actor}" data-lat="{coords_second[0]}" data-lng="{coords_second[1]}" onclick="openSidebarSingle({idx}); registerActorClick('{sub_rec_id}', this);" ontouchstart="openSidebarSingle({idx}); registerActorClick('{sub_rec_id}', this); event.stopPropagation();" title="{nom_actor_detail}" style="display:none; position:relative; cursor:pointer; z-index:10000;">
                 <div style="position:absolute; top:0; left:0; width:12px; height:12px; background:{couleur_actor}; border:2px solid white; border-radius:50%; transform:translate(-50%, -50%); z-index:2;"></div>
-                <div style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
+                <div class="marker-label-container" style="position:absolute; {label_pos_s} display:flex; align-items:center; z-index:1;">
                     <div style="background:{couleur_actor}; color:white; padding:5px 9px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; max-width:200px; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.35); border:1px solid white;">{nom_actor_affiche}</div>
                     <div style="width:0; height:0; {arrow_style_s}"></div>
                 </div>
