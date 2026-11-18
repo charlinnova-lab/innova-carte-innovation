@@ -368,22 +368,9 @@ function registerActorClick(actorId, elementDOM) {
     syncClickToAirtable(actorId, currentClicks);
 }
 
-function syncClickToAirtable(recordId, newClicks) {
-    // Exemple d'appel PATCH (pense à sécuriser ta clé ou passer par ton script Python/backend si nécessaire)
-    const AIRTABLE_API_KEY = 'TON_TOKEN'; // ou via un proxy sécurisé
-    const BASE_ID = 'TON_BASE_ID';
-    const TABLE_NAME = 'TA_TABLE';
-
-    /* 
-    fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${recordId}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fields: { "Clics": newClicks } })
-    }).catch(err => console.error("Erreur synchro clics Airtable", err));
-    */
+function getActeurClicks(element) {
+    const clics = element.getAttribute('data-clics');
+    return clics ? parseInt(clics, 10) : 0;
 }
 
 // ==================================
