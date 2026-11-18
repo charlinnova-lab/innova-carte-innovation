@@ -360,32 +360,52 @@ function checkZoomDisplay() {
 // ==================================
 // GESTION DU COMPTEUR (CARTO + AIRTABLE)
 // ==================================
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Calcule et affiche le total cumulé de toutes les fiches dès le chargement de la carte
+    calculerTotalGlobal();
+});
+
+function calculerTotalGlobal() {
+    var total = 0;
+    // Additionne les clics stockés dans l'attribut data-clics de chaque marqueur
+    document.querySelectorAll('[data-clics]').forEach(function(el) {
+        var clics = parseInt(el.getAttribute('data-clics') || '0', 10);
+        if (!isNaN(clics)) {
+            total += clics;
+        }
+    });
+    
+    var counterEl = document.getElementById('global-consult-count');
+    if (counterEl) {
+        counterEl.textContent = total;
+    }
+}
+
 function registerActorClick(recordId, elementDOM) {
     if (!recordId) return;
 
-    // 1. Mise à jour visuelle des badges de clics correspondants dans la page
-    var badges = document.querySelectorAll('.click-counter-badge[data-record-id="' + recordId + '"]');
-    var newClicks = 1;
-
-    badges.forEach(function(badge) {
-        var current = parseInt(badge.getAttribute('data-clicks') || '0', 10);
-        newClicks = current + 1;
-        badge.textContent = '👁️ ' + newClicks;
-        badge.setAttribute('data-clicks', newClicks);
-    });
-
-    // Si un élément DOM direct est passé et possède un badge
+    // 1. Récupère les clics actuels de l'acteur cliqué
+    var currentClicks = 0;
     if (elementDOM) {
-        var localBadge = elementDOM.querySelector('.click-counter-badge');
-        if (localBadge) {
-            var current = parseInt(localBadge.getAttribute('data-clicks') || '0', 10);
-            newClicks = current + 1;
-            localBadge.textContent = '👁️ ' + newClicks;
-            localBadge.setAttribute('data-clicks', newClicks);
-        }
+        var rawClicks = elementDOM.getAttribute('data-clics');
+        currentClicks = rawClicks ? parseInt(rawClicks, 10) : 0;
+    }
+    var newClicks = currentClicks + 1;
+
+    // Met à jour l'attribut local de l'élément pour les clics suivants dans la même session
+    if (elementDOM) {
+        elementDOM.setAttribute('data-clics', newClicks);
     }
 
-    // 2. Envoi asynchrone vers Airtable via le Worker Cloudflare
+    // 2. Met à jour en direct le compteur global affiché sous le logo d'innov'a
+    var counterEl = document.getElementById('global-consult-count');
+    if (counterEl) {
+        var currentTotal = parseInt(counterEl.textContent || '0', 10);
+        counterEl.textContent = currentTotal + 1;
+    }
+
+    // 3. Envoi asynchrone vers le Worker Cloudflare pour persistance dans Airtable (par fiche)
     syncClickToAirtable(recordId, newClicks);
 }
 
@@ -397,6 +417,10 @@ function syncClickToAirtable(recordId, clicksCount) {
             recordId: recordId,
             clics: clicksCount
         })
+    }).then(function(res) {
+        if (!res.ok) {
+            console.warn('[Airtable Sync] Réponse non OK du worker :', res.status);
+        }
     }).catch(function(err) {
         console.warn('[Compteur] Erreur de synchronisation Airtable :', err);
     });
@@ -406,7 +430,6 @@ function getActeurClicks(element) {
     const clics = element.getAttribute('data-clics');
     return clics ? parseInt(clics, 10) : 0;
 }
-
 // ==================================
 // FICHE LATÉRALE ET INFOBULLES
 // ==================================
