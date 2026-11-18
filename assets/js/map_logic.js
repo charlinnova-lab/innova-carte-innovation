@@ -330,6 +330,24 @@ function resetZoomHub() {
 }
 
 // ==================================
+// GESTION DU DÉZOOM (MASQUAGE DES ÉTIQUETTES)
+// ==================================
+var ZOOM_THRESHOLD = 11; // Seuil en dessous duquel on cache les étiquettes textuelles
+
+function checkZoomDisplay() {
+    if (!mapObject) return;
+    var currentZoom = mapObject.getZoom();
+    var mapContainer = mapObject.getContainer();
+
+    if (currentZoom < ZOOM_THRESHOLD) {
+        mapContainer.classList.add('map-zoomed-out');
+    } else {
+        mapContainer.classList.remove('map-zoomed-out');
+    }
+}
+
+
+// ==================================
 // FICHE LATÉRALE ET INFOBULLES
 // ==================================
 
