@@ -666,18 +666,11 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
                     <div style="background:#EAEAEA; overflow:hidden; display:flex; flex-direction:column; min-height:180px;">{bloc_photo}</div>
                     <div style="padding:20px; position:relative;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
-                            <div style="display:flex; align-items:center; gap:8px;">
-                               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
-    <div style="display:flex; align-items:center; gap:8px;">
-        <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
-    </div>
-    <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
-</div>
+                            <div style="display:inline-block; background:{couleur}; color:white; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px;">{domaine.upper()}</div>
                             <div style="width:165px; height:75px; border:1px dashed #CCC; display:flex; justify-content:center; align-items:center; flex-shrink:0;">{bloc_logo}</div>
                         </div>
                         
                         <h1 style="margin-top:10px; margin-bottom:6px; font-size:24px; color:#2C3E50; word-break:break-word;">{nom_brut}</h1>
-                        
                         <div style="color:{couleur}; font-size:14px; font-weight:600; margin-bottom:12px; line-height:1.4;">
                             {icone_sous_thematiques} {sous_thematiques}<br>
                             | <span style="font-weight:normal; font-style:italic;">{taille}</span>
