@@ -13,25 +13,6 @@ var mapObject = null;
 var selectedFiliere = 'all';
 var _ficheTextCache = {};
 
-document.addEventListener("DOMContentLoaded", function() {
-    for (var key in window) {
-        try {
-            if (window[key] instanceof L.Map) {
-                mapObject = window[key];
-                break;
-            }
-        } catch (e) { /* propriété inaccessible : on ignore */ }
-    }
-
-    // Activation de la détection de zoom dès le chargement et à chaque mouvement
-    if (mapObject) {
-        checkZoomDisplay();
-        mapObject.on('zoomend', checkZoomDisplay);
-    }
-
-    diagnosticFiltres();
-});
-
 // ==================================
 // OUTILS DE NORMALISATION
 // ==================================
@@ -357,14 +338,29 @@ function checkZoomDisplay() {
     }
 }
 
+function attacherZoomLabels() {
+    if (!mapObject && typeof L !== 'undefined') {
+        for (var key in window) {
+            try {
+                if (window[key] instanceof L.Map) {
+                    mapObject = window[key];
+                    break;
+                }
+            } catch (e) {}
+        }
+    }
+    if (mapObject && !mapObject._zoomLabelsReady) {
+        mapObject._zoomLabelsReady = true;
+        checkZoomDisplay();
+        mapObject.on('zoomend', checkZoomDisplay);
+        return true;
+    }
+    return false;
+}
+
 // ==================================
 // GESTION DU COMPTEUR (CARTO + AIRTABLE)
 // ==================================
-
-document.addEventListener("DOMContentLoaded", function() {
-    // Calcule et affiche le total cumulé de toutes les fiches dès le chargement de la carte
-    calculerTotalGlobal();
-});
 
 function calculerTotalGlobal() {
     var total = 0;
@@ -375,12 +371,27 @@ function calculerTotalGlobal() {
             total += clics;
         }
     });
-    
+
     var counterEl = document.getElementById('global-consult-count');
     if (counterEl) {
         counterEl.textContent = total;
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    calculerTotalGlobal();
+    diagnosticFiltres();
+
+    if (!attacherZoomLabels()) {
+        var essais = 0;
+        var intervalle = setInterval(function() {
+            essais++;
+            if (attacherZoomLabels() || essais >= 25) {
+                clearInterval(intervalle);
+            }
+        }, 200);
+    }
+});
 
 function registerActorClick(recordId, elementDOM) {
     if (!recordId) return;
