@@ -339,7 +339,7 @@ function resetZoomHub() {
 // ==================================
 // GESTION DU DÉZOOM (MASQUAGE DES ÉTIQUETTES)
 // ==================================
-var ZOOM_THRESHOLD = 11; // Seuil en dessous duquel on cache les étiquettes textuelles
+var ZOOM_THRESHOLD = 10; // Seuil en dessous duquel on cache les étiquettes textuelles
 
 function checkZoomDisplay() {
     if (!mapObject) return;
