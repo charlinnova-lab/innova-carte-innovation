@@ -13,6 +13,21 @@ var mapObject = null;
 var selectedFiliere = 'all';
 var _ficheTextCache = {};
 
+document.addEventListener("DOMContentLoaded", function() {
+    calculerTotalGlobal();
+    diagnosticFiltres();
+
+    if (!attacherZoomLabels()) {
+        var essais = 0;
+        var intervalle = setInterval(function() {
+            essais++;
+            if (attacherZoomLabels() || essais >= 25) {
+                clearInterval(intervalle);
+            }
+        }, 200);
+    }
+});
+
 // ==================================
 // OUTILS DE NORMALISATION
 // ==================================
@@ -371,27 +386,12 @@ function calculerTotalGlobal() {
             total += clics;
         }
     });
-
+    
     var counterEl = document.getElementById('global-consult-count');
     if (counterEl) {
         counterEl.textContent = total;
     }
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    calculerTotalGlobal();
-    diagnosticFiltres();
-
-    if (!attacherZoomLabels()) {
-        var essais = 0;
-        var intervalle = setInterval(function() {
-            essais++;
-            if (attacherZoomLabels() || essais >= 25) {
-                clearInterval(intervalle);
-            }
-        }, 200);
-    }
-});
 
 function registerActorClick(recordId, elementDOM) {
     if (!recordId) return;
@@ -441,6 +441,7 @@ function getActeurClicks(element) {
     const clics = element.getAttribute('data-clics');
     return clics ? parseInt(clics, 10) : 0;
 }
+
 // ==================================
 // FICHE LATÉRALE ET INFOBULLES
 // ==================================
