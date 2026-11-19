@@ -474,13 +474,23 @@ box-shadow:0 3px 12px rgba(0,0,0,0.25); font-family:Arial,sans-serif; overflow-y
     </div>
 </div>
 
-<div id="logo-innova" style="
-position:fixed; bottom:15px; left:15px; z-index:9999; background:#2D3277;
-padding:10px 16px; border-radius:8px; box-shadow:0 3px 12px rgba(0,0,0,0.25);
-display:flex; flex-direction:column; align-items:center; gap:6px;
+<div id="bottom-left-stack" style="
+position:fixed; bottom:15px; left:15px; z-index:9999;
+display:flex; flex-direction:column; align-items:stretch; gap:6px;
+pointer-events:auto !important;
 ">
-    <img src="https://www.innov-a.com/wp-content/themes/skin/assets/images/svg/innov-a_blanc.svg" style="height:26px; display:block;" alt="Innov'A" />
-    <div id="global-consult-counter" style="color:white; font-size:11px; font-family:Arial,sans-serif; opacity:0.9; font-weight:bold;">
+    <div id="logo-innova" style="
+    background:#2D3277; padding:10px 16px; border-radius:8px;
+    box-shadow:0 3px 12px rgba(0,0,0,0.25);
+    display:flex; justify-content:center; align-items:center;
+    ">
+        <img src="https://www.innov-a.com/wp-content/themes/skin/assets/images/svg/innov-a_blanc.svg" style="height:26px; display:block;" alt="innov'a" />
+    </div>
+    <div id="global-consult-counter" style="
+    background:#F4F5F7; color:#2D3277; border:1px solid #D8DCE3;
+    padding:6px 12px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.12);
+    font-size:11px; font-family:Arial,sans-serif; font-weight:bold; text-align:center;
+    ">
         👁️ Total visites : <span id="global-consult-count">0</span>
     </div>
 </div>
