@@ -63,11 +63,14 @@
         bottom: 10px !important;
         max-width: calc(100vw - 30px) !important;
     }
-    #panel-search, #panel-filter {
+     #panel-search, #panel-filter {
         left: 15px !important;
         width: calc(100vw - 30px) !important;
-    #icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #bottom-left-stack, #logo-innova, #global-consult-counter, #legend-cartouche, #btn-dezoom {
-    pointer-events: auto !important;
+    }
 }
-   
+
+#icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar,
+#panel-search, #panel-filter, #bottom-left-stack, #logo-innova,
+#global-consult-counter, #legend-cartouche, #btn-dezoom {
+    pointer-events: auto !important;
 }
