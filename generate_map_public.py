@@ -393,13 +393,7 @@ ui_and_sidebar_html = f"""
   gtag('config', 'G-XXXXXXXXXX');
 </script>
 
-<style>
-{css_content}
 
-#icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #bottom-left-stack, #logo-innova, #global-consult-counter, #legend-cartouche, #btn-dezoom {
-    pointer-events: auto !important;
-}}
-</style>
 
 <div id="icon-search-btn" onclick="togglePanel('panel-search', 'icon-search-btn')" title="Recherche" style="
 position:fixed; top:calc(50% - 82px); left:15px; width:44px; height:44px; background:white; border-radius:50%;
