@@ -396,7 +396,7 @@ ui_and_sidebar_html = f"""
 <style>
 {css_content}
 
-#icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #logo-innova, #legend-cartouche, #btn-dezoom {{
+#icon-search-btn, #icon-filter-btn, #icon-zoom-in, #icon-zoom-out, #filiere-bar, #panel-search, #panel-filter, #bottom-left-stack, #logo-innova, #global-consult-counter, #legend-cartouche, #btn-dezoom {
     pointer-events: auto !important;
 }}
 </style>
