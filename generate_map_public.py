@@ -385,7 +385,12 @@ if os.path.exists("assets/js/map_logic.js"):
 ui_and_sidebar_html = f"""
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<style>
+{css_content}
+</style>
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}
