@@ -377,57 +377,49 @@ function attacherZoomLabels() {
 // GESTION DU COMPTEUR (CARTO + AIRTABLE)
 // ==================================
 
+// Au chargement : lit le total réel des clics dans Airtable (via le Worker)
 function calculerTotalGlobal() {
-    var total = 0;
-    // Additionne les clics stockés dans l'attribut data-clics de chaque marqueur
-    document.querySelectorAll('[data-clics]').forEach(function(el) {
-        var clics = parseInt(el.getAttribute('data-clics') || '0', 10);
-        if (!isNaN(clics)) {
-            total += clics;
-        }
-    });
-    
     var counterEl = document.getElementById('global-consult-count');
-    if (counterEl) {
-        counterEl.textContent = total;
-    }
+    if (!counterEl) return;
+
+    fetch(WORKER_CLICK_URL + '?stats=1')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (typeof data.total === 'number') {
+                counterEl.textContent = data.total;
+            }
+        })
+        .catch(function(err) {
+            console.warn('[Compteur] Impossible de lire le total :', err);
+        });
 }
+
+var _lastClick = {};
 
 function registerActorClick(recordId, elementDOM) {
     if (!recordId) return;
 
-    // 1. Récupère les clics actuels de l'acteur cliqué
-    var currentClicks = 0;
-    if (elementDOM) {
-        var rawClicks = elementDOM.getAttribute('data-clics');
-        currentClicks = rawClicks ? parseInt(rawClicks, 10) : 0;
-    }
-    var newClicks = currentClicks + 1;
+    // Anti-doublon : ignore un 2e appel pour la même fiche en moins de 800 ms
+    // (évite le double comptage onclick + ontouchstart sur mobile)
+    var now = Date.now();
+    if (_lastClick[recordId] && now - _lastClick[recordId] < 800) return;
+    _lastClick[recordId] = now;
 
-    // Met à jour l'attribut local de l'élément pour les clics suivants dans la même session
-    if (elementDOM) {
-        elementDOM.setAttribute('data-clics', newClicks);
-    }
-
-    // 2. Met à jour en direct le compteur global affiché sous le logo d'innov'a
+    // Compteur global affiché : +1 en direct
     var counterEl = document.getElementById('global-consult-count');
     if (counterEl) {
-        var currentTotal = parseInt(counterEl.textContent || '0', 10);
-        counterEl.textContent = currentTotal + 1;
+        counterEl.textContent = (parseInt(counterEl.textContent || '0', 10) || 0) + 1;
     }
 
-    // 3. Envoi asynchrone vers le Worker Cloudflare pour persistance dans Airtable (par fiche)
-    syncClickToAirtable(recordId, newClicks);
+    // Le Worker lit la valeur dans Airtable et fait +1 lui-même
+    syncClickToAirtable(recordId);
 }
 
-function syncClickToAirtable(recordId, clicksCount) {
+function syncClickToAirtable(recordId) {
     fetch(WORKER_CLICK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            recordId: recordId,
-            clics: clicksCount
-        })
+        body: JSON.stringify({ recordId: recordId })
     }).then(function(res) {
         if (!res.ok) {
             console.warn('[Airtable Sync] Réponse non OK du worker :', res.status);
@@ -435,11 +427,6 @@ function syncClickToAirtable(recordId, clicksCount) {
     }).catch(function(err) {
         console.warn('[Compteur] Erreur de synchronisation Airtable :', err);
     });
-}
-
-function getActeurClicks(element) {
-    const clics = element.getAttribute('data-clics');
-    return clics ? parseInt(clics, 10) : 0;
 }
 
 // ==================================
