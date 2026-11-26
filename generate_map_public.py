@@ -2,30 +2,23 @@
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification :  
+#   Last Modification : 
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
 #            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
 #            15/10 - Filtres : type de structure normalisé (data-taille), compteur +N dynamique, alerte fichiers JS/CSS manquants
+#            16/10 - Intégration du double compteur de clics (Airtable via Worker) & masquage étiquettes dézoom
+#            26/11 - Compression des images (Pillow) & chargement différé (loading="lazy")
 #   Le fichier :
 #   0. interroge le Worker Cloudflare
-#   1. stocke les images pour permettre une visualisation tout au long de la journée
+#   1. stocke les images (compressées) pour permettre une visualisation tout au long de la journée
 #   2. associe chaque catégorie à sa couleur
 #   3. récupère les données depuis la base de données Airtable (formulaire de cartographie)
 #   4. génère la carte, les filtres, la légende
 #   5. prépare l'affichage et l'ancrage GPS
 #   6. génère la carte
 # =========================================================
-# =========================================================
-# CARTOGRAPHIE FILIERE
-#   innov'a (c) Charlotte Piau
-#   Création : 17 août 2026
-#   Last Modification : 
-#            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
-#            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
-#            15/10 - Filtres : type de structure normalisé (data-taille), compteur +N dynamique, alerte fichiers JS/CSS manquants
-#            16/10 - Intégration du double compteur de clics (Airtable via Worker) & masquage étiquettes dézoom
-# =========================================================
 
+import io
 import os
 import re
 import unicodedata
@@ -35,6 +28,14 @@ import markdown
 from urllib.parse import quote
 from collections import defaultdict
 
+# Pillow : compression des images (pip install pillow)
+try:
+    from PIL import Image, ImageOps
+    PIL_OK = True
+except ImportError:
+    PIL_OK = False
+    print("⚠️ Pillow n'est pas installé : les images ne seront PAS compressées (pip install pillow)")
+
 # ==================================
 # 0. CONFIGURATION
 # ==================================
@@ -43,6 +44,11 @@ TABLE = "Cartographie"
 MODE = "public"
 CONTACT_PUBLIC_EMAIL = "contact@innov-a.com"
 CONTACT_PUBLIC_SUJET = "Demande de mise en relation"
+
+# Compression des images
+MAX_WIDTH_PHOTO = 1200   # largeur max (px) des photos et illustrations
+MAX_WIDTH_LOGO = 400     # largeur max (px) des logos
+JPEG_QUALITY = 85
 
 os.makedirs("assets/images", exist_ok=True)
 
@@ -93,6 +99,41 @@ def format_url(url):
         return f"https://{url_clean}"
     return url_clean
 
+def sauvegarder_image(contenu, chemin_base, prefix, ext):
+    """Enregistre l'image en la compressant si possible. Renvoie le chemin final.
+    - logos : redimensionnés (400 px) et gardés en PNG (transparence conservée)
+    - autres images : redimensionnées (1200 px), en JPEG qualité 85
+      (ou PNG si l'image contient réellement de la transparence)
+    - SVG / GIF, ou si Pillow est absent ou échoue : enregistrés tels quels"""
+    if PIL_OK and ext not in ("svg", "gif"):
+        try:
+            img = Image.open(io.BytesIO(contenu))
+            img = ImageOps.exif_transpose(img)
+            img = img.convert("RGBA")
+
+            largeur_max = MAX_WIDTH_LOGO if prefix == "logo" else MAX_WIDTH_PHOTO
+            if img.width > largeur_max:
+                hauteur = round(img.height * largeur_max / img.width)
+                resample = Image.Resampling.LANCZOS if hasattr(Image, "Resampling") else Image.LANCZOS
+                img = img.resize((largeur_max, hauteur), resample)
+
+            a_transparence = img.getchannel("A").getextrema()[0] < 255
+
+            if prefix == "logo" or a_transparence:
+                chemin = f"{chemin_base}.png"
+                img.save(chemin, "PNG", optimize=True)
+            else:
+                chemin = f"{chemin_base}.jpg"
+                img.convert("RGB").save(chemin, "JPEG", quality=JPEG_QUALITY, optimize=True, progressive=True)
+            return chemin
+        except Exception as e:
+            print(f"⚠️ Compression impossible ({chemin_base}) : {e} -> image enregistrée telle quelle")
+
+    chemin = f"{chemin_base}.{ext}"
+    with open(chemin, "wb") as f:
+        f.write(contenu)
+    return chemin
+
 def download_airtable_image(record_id, field_value, prefix="img"):
     if not field_value:
         return ""
@@ -118,13 +159,11 @@ def download_airtable_image(record_id, field_value, prefix="img"):
     if ext not in ["jpg", "jpeg", "png", "gif", "webp", "svg"]:
         ext = "png"
 
-    local_path = f"assets/images/{record_id}_{prefix}.{ext}"
+    chemin_base = f"assets/images/{record_id}_{prefix}"
     try:
         res = requests.get(airtable_url, timeout=10)
         if res.status_code == 200:
-            with open(local_path, "wb") as f:
-                f.write(res.content)
-            return local_path
+            return sauvegarder_image(res.content, chemin_base, prefix, ext)
     except Exception as e:
         print(f"⚠️ Erreur téléch. {prefix} ({record_id}) : {e}")
     return ""
@@ -615,19 +654,19 @@ for group_id, (coords, groupe) in enumerate(acteurs_par_gps.items()):
         logo_url = download_airtable_image(rec_id, actor.get("Logo"), prefix="logo")
         photo_url = download_airtable_image(rec_id, actor.get("Main illustration"), prefix="main")
 
-        bloc_photo = f'<img src="{photo_url}" style="width:100%; height:100%; object-fit:cover; display:block;" />' if photo_url else '<div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div>'
-        bloc_logo = f'<img src="{logo_url}" style="max-width:165px; max-height:75px; object-fit:contain;" />' if logo_url else 'LOGO'
+        bloc_photo = f'<img src="{photo_url}" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />' if photo_url else '<div style="background:#EAEAEA; display:flex; justify-content:center; align-items:center; color:#666; font-size:18px; font-weight:bold; height:100%; min-height:100%;">PHOTO</div>'
+        bloc_logo = f'<img src="{logo_url}" loading="lazy" decoding="async" style="max-width:165px; max-height:75px; object-fit:contain;" />' if logo_url else 'LOGO'
 
         video_raw = actor.get("Video") or actor.get("Vidéo") or actor.get("Lien_video")
         second_illu_raw = actor.get("Second_illustration") or actor.get("SecondIllustration") or actor.get("Illustration_secondaire") or actor.get("Second illustration")
         media_url, media_type = get_media_url_and_type(rec_id, video_raw, second_illu_raw)
 
         if media_type in ["youtube", "vimeo"]:
-            bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; position:relative; padding-bottom:56.25%; height:0; overflow:hidden;"><iframe src="{media_url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>'
+            bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; position:relative; padding-bottom:56.25%; height:0; overflow:hidden;"><iframe src="{media_url}" loading="lazy" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>'
         elif media_type == "video":
             bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#111; padding:10px; text-align:center;"><video controls preload="metadata" style="width:100%; max-height:250px; display:block; margin:0 auto; background:black;"><source src="{media_url}" type="video/mp4">Votre navigateur ne prend pas en charge la lecture de vidéos.</video></div>'
         elif media_type == "image":
-            bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="{media_url}" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>'
+            bloc_image_secondaire = f'<div style="width:100%; border-top:2px solid #E5E5E5; background:#F8F8F8; padding:0; overflow:hidden;"><img src="{media_url}" loading="lazy" decoding="async" style="width:100%; max-height:200px; object-fit:cover; display:block;" /></div>'
         else:
             bloc_image_secondaire = ""
 
