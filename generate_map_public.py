@@ -2,7 +2,7 @@
 # CARTOGRAPHIE FILIERE
 #   innov'a (c) Charlotte Piau
 #   Création : 17 août 2026
-#   Last Modification : 
+#   Last Modification :  
 #            25 septembre - Fix Full Mobile Touch & Responsive Sidebar
 #            15/10 - Fix icône, Name_group multi-lignes, Zoom personnalisé & suppression doublon Leaflet
 #            15/10 - Filtres : type de structure normalisé (data-taille), compteur +N dynamique, alerte fichiers JS/CSS manquants
